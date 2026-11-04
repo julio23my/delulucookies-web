@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import { X, Trash2, MessageCircle, ShoppingBag } from 'lucide-react';
-import { ENV_CONFIG, buildWhatsAppUrl } from '../data/cookiesData';
+import { X, Trash2, MessageCircle, ShoppingBag, RefreshCw } from 'lucide-react';
+import {
+  ENV_CONFIG,
+  buildWhatsAppUrl,
+  formatCookiePrice,
+  formatDualPrice,
+} from '../data/cookiesData';
 
 export default function WhatsAppCartDrawer({
   isOpen,
@@ -9,14 +14,18 @@ export default function WhatsAppCartDrawer({
   onUpdateQty,
   onRemoveItem,
   onClearCart,
+  currencyMode,
+  onToggleCurrency,
+  bcvRate,
 }) {
   const [customerName, setCustomerName] = useState('');
-  const [deliveryMethod, setDeliveryMethod] = useState('Envío a domicilio');
+  const [deliveryMethod, setDeliveryMethod] = useState('Delivery en Caracas');
+  const [paymentMethod, setPaymentMethod] = useState('Pago Móvil (Tasa BCV)');
   const [giftNote, setGiftNote] = useState('');
 
   if (!isOpen) return null;
 
-  const totalAmount = cartItems.reduce(
+  const totalUsdAmount = cartItems.reduce(
     (sum, item) => sum + item.unitPrice * item.quantity,
     0
   );
@@ -32,20 +41,27 @@ export default function WhatsAppCartDrawer({
     const itemsLines = cartItems
       .map(
         (item) =>
-          `• ${item.quantity}x *${item.name}* (${item.packLabel}) — ${
-            ENV_CONFIG.currencySymbol
-          }${item.unitPrice * item.quantity}`
+          `• ${item.quantity}x *${item.name}* (${item.packLabel}) — ${formatDualPrice(
+            item.unitPrice * item.quantity,
+            bcvRate
+          )}`
       )
       .join('\n');
 
     const messageParts = [
-      `¡Hola *${ENV_CONFIG.brandName}*! 🍪✨`,
+      `¡Hola *${ENV_CONFIG.brandName}*! 🍪🇻🇪`,
       `Quiero confirmar el siguiente pedido desde la web:`,
       ``,
       itemsLines,
       ``,
-      `*Total Estimado:* ${ENV_CONFIG.currencySymbol}${totalAmount}`,
-      `*Modalidad:* ${deliveryMethod}`,
+      `*Total en Dólares:* ${formatCookiePrice(totalUsdAmount, 'USD', bcvRate)}`,
+      `*Total en Bolívares (BCV Bs. ${bcvRate.toFixed(2)}):* ${formatCookiePrice(
+        totalUsdAmount,
+        'VES',
+        bcvRate
+      )}`,
+      `*Método de Pago:* ${paymentMethod}`,
+      `*Modalidad de Entrega:* ${deliveryMethod}`,
     ];
 
     if (customerName.trim()) {
@@ -71,23 +87,46 @@ export default function WhatsAppCartDrawer({
         <header className="drawer-header">
           <div>
             <h3>Tu Selección de Galletas</h3>
-            <p style={{ fontSize: '0.76rem', color: 'var(--color-secondary-muted)' }}>
-              Confirmación directa y personalizada vía WhatsApp
+            <p style={{ fontSize: '0.75rem', color: 'var(--color-secondary-muted)' }}>
+              Tasa BCV del día: <strong>Bs. {bcvRate.toFixed(2)} / $1 USD</strong>
             </p>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            style={{
-              border: 'none',
-              background: 'transparent',
-              cursor: 'pointer',
-              padding: '0.35rem',
-            }}
-            aria-label="Cerrar bolsa"
-          >
-            <X size={22} />
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <button
+              type="button"
+              onClick={() => onToggleCurrency(currencyMode === 'USD' ? 'VES' : 'USD')}
+              style={{
+                border: '1px solid var(--color-tertiary)',
+                backgroundColor: 'var(--color-tertiary-light)',
+                padding: '0.3rem 0.6rem',
+                borderRadius: 'var(--radius-pill)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.68rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+              }}
+              title="Alternar entre USD ($) y Bolívares (Bs. BCV)"
+            >
+              <RefreshCw size={11} />
+              {currencyMode === 'USD' ? 'Ver Bs.' : 'Ver USD'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer',
+                padding: '0.35rem',
+              }}
+              aria-label="Cerrar bolsa"
+            >
+              <X size={22} />
+            </button>
+          </div>
         </header>
 
         <div className="drawer-body">
@@ -112,58 +151,75 @@ export default function WhatsAppCartDrawer({
             </div>
           ) : (
             <>
-              {cartItems.map((item) => (
-                <div key={item.cartKey} className="cart-item-row">
-                  <img src={item.image} alt={item.name} />
-                  <div className="cart-item-info">
-                    <h4>{item.name}</h4>
-                    <p>{item.packLabel}</p>
-                    <div className="qty-controls">
-                      <button
-                        type="button"
-                        onClick={() => onUpdateQty(item.cartKey, item.quantity - 1)}
+              {cartItems.map((item) => {
+                const subTotalUsd = item.unitPrice * item.quantity;
+                return (
+                  <div key={item.cartKey} className="cart-item-row">
+                    <img src={item.image} alt={item.name} />
+                    <div className="cart-item-info">
+                      <h4>{item.name}</h4>
+                      <p>{item.packLabel}</p>
+                      <div className="qty-controls">
+                        <button
+                          type="button"
+                          onClick={() => onUpdateQty(item.cartKey, item.quantity - 1)}
+                        >
+                          −
+                        </button>
+                        <span style={{ fontSize: '0.78rem', fontWeight: 600 }}>
+                          {item.quantity}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onUpdateQty(item.cartKey, item.quantity + 1)}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <strong
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.88rem',
+                          display: 'block',
+                        }}
                       >
-                        −
-                      </button>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 600 }}>
-                        {item.quantity}
+                        {formatCookiePrice(subTotalUsd, currencyMode, bcvRate)}
+                      </strong>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.68rem',
+                          color: 'var(--color-secondary-muted)',
+                          display: 'block',
+                        }}
+                      >
+                        ≈{' '}
+                        {formatCookiePrice(
+                          subTotalUsd,
+                          currencyMode === 'USD' ? 'VES' : 'USD',
+                          bcvRate
+                        )}
                       </span>
                       <button
                         type="button"
-                        onClick={() => onUpdateQty(item.cartKey, item.quantity + 1)}
+                        onClick={() => onRemoveItem(item.cartKey)}
+                        style={{
+                          border: 'none',
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          color: 'var(--color-secondary-muted)',
+                          marginTop: '0.3rem',
+                        }}
+                        title="Eliminar"
                       >
-                        +
+                        <Trash2 size={15} />
                       </button>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <strong
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.9rem',
-                        display: 'block',
-                      }}
-                    >
-                      {ENV_CONFIG.currencySymbol}
-                      {item.unitPrice * item.quantity}
-                    </strong>
-                    <button
-                      type="button"
-                      onClick={() => onRemoveItem(item.cartKey)}
-                      style={{
-                        border: 'none',
-                        background: 'transparent',
-                        cursor: 'pointer',
-                        color: 'var(--color-secondary-muted)',
-                        marginTop: '0.35rem',
-                      }}
-                      title="Eliminar"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
 
               <form onSubmit={handleSendOrderToWhatsApp} className="drawer-form-group">
                 <span
@@ -175,7 +231,7 @@ export default function WhatsAppCartDrawer({
                     color: 'var(--color-secondary-muted)',
                   }}
                 >
-                  Personaliza tu envío a WhatsApp:
+                  Datos para tu pedido en Venezuela:
                 </span>
                 <input
                   type="text"
@@ -186,11 +242,23 @@ export default function WhatsAppCartDrawer({
                 />
                 <select
                   className="drawer-input"
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                >
+                  <option value="Pago Móvil (Tasa BCV)">
+                    📱 Pago Móvil en Bs. (Tasa BCV del día)
+                  </option>
+                  <option value="Zelle (USD)">💵 Zelle ($ USD)</option>
+                  <option value="Efectivo USD / Divisas">💶 Efectivo ($ USD)</option>
+                  <option value="Binance Pay / Zinli">⚡ Binance Pay / Zinli</option>
+                </select>
+                <select
+                  className="drawer-input"
                   value={deliveryMethod}
                   onChange={(e) => setDeliveryMethod(e.target.value)}
                 >
-                  <option value="Envío a domicilio">🛵 Envío a domicilio hoy</option>
-                  <option value="Pick-up en Boutique">🛍️ Pick-up en Atelier</option>
+                  <option value="Delivery en Caracas">🛵 Delivery en Caracas hoy</option>
+                  <option value="Pick-up en Atelier">🛍️ Pick-up en Atelier</option>
                   <option value="Envío como Regalo Sorpresa">
                     🎁 Envío como Regalo Sorpresa
                   </option>
@@ -209,14 +277,35 @@ export default function WhatsAppCartDrawer({
 
         <footer className="drawer-footer">
           {cartItems.length > 0 && (
-            <div className="drawer-total-row">
-              <span style={{ fontSize: '0.85rem', color: 'var(--color-secondary-light)' }}>
-                Total Estimado
-              </span>
-              <strong>
-                {ENV_CONFIG.currencySymbol}
-                {totalAmount}
-              </strong>
+            <div style={{ marginBottom: '1rem' }}>
+              <div className="drawer-total-row" style={{ marginBottom: '0.2rem' }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--color-secondary-light)' }}>
+                  Total ({currencyMode === 'USD' ? 'Dólares USD' : 'Bolívares BCV'})
+                </span>
+                <strong>
+                  {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)}
+                </strong>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: '0.76rem',
+                  fontFamily: 'var(--font-mono)',
+                  color: 'var(--color-secondary-muted)',
+                }}
+              >
+                <span>
+                  Equivalente en {currencyMode === 'USD' ? 'Bolívares (BCV)' : 'Dólares ($)'}:
+                </span>
+                <span>
+                  {formatCookiePrice(
+                    totalUsdAmount,
+                    currencyMode === 'USD' ? 'VES' : 'USD',
+                    bcvRate
+                  )}
+                </span>
+              </div>
             </div>
           )}
 

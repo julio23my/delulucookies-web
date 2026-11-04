@@ -8,10 +8,22 @@ import {
   MapPin,
   Camera,
   ExternalLink,
+  RefreshCw,
 } from 'lucide-react';
-import { ENV_CONFIG, COOKIES_CATALOG, buildWhatsAppUrl } from '../data/cookiesData';
+import {
+  ENV_CONFIG,
+  COOKIES_CATALOG,
+  buildWhatsAppUrl,
+  formatCookiePrice,
+} from '../data/cookiesData';
 
-export default function LinkHubView({ onEnterMainSite, onQuickOrderCookie }) {
+export default function LinkHubView({
+  onEnterMainSite,
+  onQuickOrderCookie,
+  currencyMode,
+  onToggleCurrency,
+  bcvRate,
+}) {
   const handleDirectWhatsApp = (customText) => {
     window.open(buildWhatsAppUrl(customText), '_blank', 'noopener,noreferrer');
   };
@@ -19,11 +31,46 @@ export default function LinkHubView({ onEnterMainSite, onQuickOrderCookie }) {
   return (
     <main className="linkhub-wrapper">
       <section className="linkhub-card" aria-label="Enlaces principales de Delulu Cookies">
-        <div style={{ textAlign: 'center' }}>
-          <span className="linkhub-status-pill">
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+            marginBottom: '1.1rem',
+          }}
+        >
+          <span className="linkhub-status-pill" style={{ marginBottom: 0 }}>
             <span className="status-dot-live" />
-            Horneando lote fresco hoy · Pedidos abiertos
+            Horneando hoy en Venezuela
           </span>
+
+          {/* Botón rápido para alternar USD ($) y Bolívares (Bs. BCV) desde el Linktree */}
+          <button
+            type="button"
+            onClick={() => onToggleCurrency(currencyMode === 'USD' ? 'VES' : 'USD')}
+            style={{
+              border: '1px solid var(--color-tertiary)',
+              backgroundColor: 'var(--color-tertiary-light)',
+              color: 'var(--color-secondary)',
+              padding: '0.32rem 0.75rem',
+              borderRadius: 'var(--radius-pill)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+            }}
+            title="Cambiar moneda entre Dólares ($) y Bolívares (Bs. BCV)"
+          >
+            <RefreshCw size={12} />
+            {currencyMode === 'USD'
+              ? `Ver en Bs. (BCV: ${bcvRate.toFixed(2)})`
+              : 'Ver precios en USD ($)'}
+          </button>
         </div>
 
         {/* Cabecera del Linktree Editorial */}
@@ -55,7 +102,7 @@ export default function LinkHubView({ onEnterMainSite, onQuickOrderCookie }) {
           />
           <div className="linkhub-featured-overlay">
             <span className="linkhub-featured-tag">
-              COLECCIÓN DE TEMPORADA · INSPIRACIÓN ITALIANA & NY
+              CACAO VENEZOLANO DE ORIGEN · PRECIOS EN USD ($) Y BS. (BCV)
             </span>
             <div className="linkhub-featured-title">
               <span>Explorar Sitio Principal & Menú Completo</span>
@@ -80,7 +127,7 @@ export default function LinkHubView({ onEnterMainSite, onQuickOrderCookie }) {
                   Entrar al Sitio Web Principal
                 </span>
                 <span className="linkhub-btn-subtitle">
-                  Catálogo interactivo, armador de cajas, notas de cata y prensa
+                  Catálogo en USD / Bs. BCV, armador de cajas y notas de cata
                 </span>
               </div>
             </div>
@@ -105,7 +152,7 @@ export default function LinkHubView({ onEnterMainSite, onQuickOrderCookie }) {
                   Pedir Directo por WhatsApp Ahora
                 </span>
                 <span className="linkhub-btn-subtitle">
-                  Atención personalizada inmediata · Envío hoy mismo
+                  Pago Móvil (Tasa BCV), Zelle o Efectivo · Delivery hoy
                 </span>
               </div>
             </div>
@@ -138,7 +185,7 @@ export default function LinkHubView({ onEnterMainSite, onQuickOrderCookie }) {
             className="linkhub-action-btn"
             onClick={() =>
               handleDirectWhatsApp(
-                `¡Hola ${ENV_CONFIG.brandName}! 🍪 Me interesa cotizar cajas de regalo corporativas o para un evento especial.`
+                `¡Hola ${ENV_CONFIG.brandName}! 🍪 Me interesa cotizar cajas de regalo corporativas o para un evento especial en Venezuela.`
               )
             }
           >
@@ -163,7 +210,7 @@ export default function LinkHubView({ onEnterMainSite, onQuickOrderCookie }) {
         <div className="linkhub-quick-flavors">
           <div className="linkhub-quick-header">
             <span>Sabores recién salidos del horno</span>
-            <span>Pide en 1 clic</span>
+            <span>Moneda activa: {currencyMode === 'USD' ? 'USD ($)' : 'Bs. (BCV)'}</span>
           </div>
           <div className="linkhub-flavor-pills">
             {COOKIES_CATALOG.slice(0, 4).map((cookie) => (
@@ -178,8 +225,7 @@ export default function LinkHubView({ onEnterMainSite, onQuickOrderCookie }) {
                 <div className="flavor-mini-info">
                   <h5>{cookie.name}</h5>
                   <span>
-                    {ENV_CONFIG.currencySymbol}
-                    {cookie.basePrice} · Pedir →
+                    {formatCookiePrice(cookie.basePrice, currencyMode, bcvRate)} · Pedir →
                   </span>
                 </div>
               </button>

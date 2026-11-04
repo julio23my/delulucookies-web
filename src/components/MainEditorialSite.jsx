@@ -8,6 +8,7 @@ import {
   Check,
   ArrowUpRight,
   Palette,
+  RefreshCw,
 } from 'lucide-react';
 import {
   ENV_CONFIG,
@@ -16,29 +17,33 @@ import {
   PRESS_QUOTES,
   MASTER_COLOR_PRESETS,
   buildWhatsAppUrl,
+  formatCookiePrice,
+  formatDualPrice,
 } from '../data/cookiesData';
 
 const CATEGORIES = [
   { id: 'todas', label: 'Toda la Colección' },
-  { id: 'chocolate', label: 'Cacao de Origen' },
+  { id: 'chocolate', label: 'Cacao Venezolano' },
   { id: 'rellenas', label: 'Corazón Cremoso' },
   { id: 'especiales', label: 'Edición Glazed' },
   { id: 'cajas', label: 'Cajas de Regalo' },
 ];
 
 const BOX_SIZES = [
-  { count: 4, title: 'Cofre Petit (4 Galletas)', price: 340, subtitle: 'Ideal para degustación' },
-  { count: 6, title: 'Cofre Clásico (6 Galletas)', price: 485, subtitle: 'Nuestro favorito · Envío Gratis' },
-  { count: 12, title: 'Gran Cofre Editorial (12 Galletas)', price: 920, subtitle: 'Para compartir · Listón de Seda' },
+  { count: 4, title: 'Cofre Petit (4 Galletas)', priceUsd: 14.5, subtitle: 'Ideal para degustación' },
+  { count: 6, title: 'Cofre Clásico (6 Galletas)', priceUsd: 21.0, subtitle: 'Nuestro favorito · Delivery Gratis' },
+  { count: 12, title: 'Gran Cofre Editorial (12 Galletas)', priceUsd: 39.0, subtitle: 'Para compartir · Listón de Seda' },
 ];
 
 export default function MainEditorialSite({
   onAddToCart,
   activePresetId,
   onSelectColorPreset,
+  currencyMode,
+  onToggleCurrency,
+  bcvRate,
 }) {
   const [selectedCategory, setSelectedCategory] = useState('todas');
-  // Estado de presentación elegida por cada galleta (single, box4, box6)
   const [selectedPacks, setSelectedPacks] = useState(() =>
     COOKIES_CATALOG.reduce((acc, item) => {
       acc[item.id] = PACK_OPTIONS[0];
@@ -63,9 +68,9 @@ export default function MainEditorialSite({
     setSelectedPacks((prev) => ({ ...prev, [cookieId]: packObj }));
   };
 
-  const computePrice = (cookie, pack) => {
-    if (cookie.isFixedBox) return cookie.basePrice;
-    return Math.round(cookie.basePrice * pack.multiplier * pack.discount);
+  const computeUsdPrice = (cookie, pack) => {
+    if (cookie.isFixedBox) return Number(cookie.basePrice.toFixed(2));
+    return Number((cookie.basePrice * pack.multiplier * pack.discount).toFixed(2));
   };
 
   const handleAddCookie = (cookie) => {
@@ -73,14 +78,14 @@ export default function MainEditorialSite({
       ? { id: 'fixed', label: 'Caja 6 Piezas', multiplier: 1, discount: 1 }
       : selectedPacks[cookie.id] || PACK_OPTIONS[0];
 
-    const finalPrice = computePrice(cookie, chosenPack);
+    const finalUsdPrice = computeUsdPrice(cookie, chosenPack);
 
     onAddToCart({
       cartKey: `${cookie.id}-${chosenPack.id}`,
       id: cookie.id,
       name: cookie.name,
       packLabel: chosenPack.label,
-      unitPrice: finalPrice,
+      unitPrice: finalUsdPrice,
       image: cookie.image,
     });
 
@@ -92,12 +97,12 @@ export default function MainEditorialSite({
     const chosenPack = cookie.isFixedBox
       ? { label: 'Cofre de 6 Piezas' }
       : selectedPacks[cookie.id] || PACK_OPTIONS[0];
-    const finalPrice = computePrice(cookie, chosenPack);
+    const finalUsdPrice = computeUsdPrice(cookie, chosenPack);
 
     const text =
-      `¡Hola ${ENV_CONFIG.brandName}! 🍪\n\n` +
+      `¡Hola ${ENV_CONFIG.brandName}! 🍪🇻🇪\n\n` +
       `Me gustaría pedir directamente:\n` +
-      `• *${cookie.name}* (${chosenPack.label}) — ${ENV_CONFIG.currencySymbol}${finalPrice}\n\n` +
+      `• *${cookie.name}* (${chosenPack.label}) — ${formatDualPrice(finalUsdPrice, bcvRate)}\n\n` +
       `¿Tienen disponibilidad para entrega hoy?`;
 
     window.open(buildWhatsAppUrl(text), '_blank', 'noopener,noreferrer');
@@ -135,9 +140,9 @@ export default function MainEditorialSite({
 
     const msg =
       `¡Hola ${ENV_CONFIG.brandName}! 🎁🍪\n\n` +
-      `Acabo de armar mi *${boxSize.title}* (${ENV_CONFIG.currencySymbol}${boxSize.price}) en la web con la siguiente selección:\n` +
+      `Acabo de armar mi *${boxSize.title}* — ${formatDualPrice(boxSize.priceUsd, bcvRate)} con la siguiente selección:\n` +
       `${lines || '  - Selección del Chef'}\n\n` +
-      `¿Me ayudan a confirmar mi pedido?`;
+      `¿Me indican los datos de Pago Móvil (BCV) o Zelle para confirmar?`;
 
     window.open(buildWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };
@@ -148,8 +153,8 @@ export default function MainEditorialSite({
       cartKey: `custom-box-${boxSize.count}-${Date.now()}`,
       id: `custom-box-${boxSize.count}`,
       name: boxSize.title,
-      packLabel: `Sabores: ${summaryNames || 'Surpise Mix'}`,
-      unitPrice: boxSize.price,
+      packLabel: `Sabores: ${summaryNames || 'Selección del Chef'}`,
+      unitPrice: boxSize.priceUsd,
       image: '/images/cookie-box.jpg',
     });
   };
@@ -160,7 +165,7 @@ export default function MainEditorialSite({
       <section className="hero-section" id="top">
         <div className="hero-editorial-copy">
           <span className="editorial-eyebrow">
-            <Sparkles size={14} /> REPOSTERÍA DE AUTOR · PEQUEÑOS LOTES DIARIOS
+            <Sparkles size={14} /> REPOSTERÍA DE AUTOR EN VENEZUELA · LOTES DIARIOS
           </span>
           <h1 className="hero-headline">
             El arte de la galleta tibia,{' '}
@@ -169,30 +174,35 @@ export default function MainEditorialSite({
           <p className="hero-lead">
             {ENV_CONFIG.brandTagline} Inspirados en las chocolaterías históricas de
             Italia, el minimalismo táctil y la calma de un domingo por la mañana.
-            Pide tu selección y recíbela recién salida del horno vía WhatsApp.
+            Puedes ver todos nuestros precios en <strong>Dólares ($ USD)</strong> o en{' '}
+            <strong>Bolívares (Bs.) a tasa oficial del BCV</strong>.
           </p>
 
           <div className="hero-cta-group">
             <a href="#catalogo" className="btn-editorial-primary">
-              <ShoppingBag size={17} /> Explorar Menú de Galletas
+              <ShoppingBag size={17} /> Explorar Menú ({currencyMode === 'USD' ? 'USD $' : 'Bs. BCV'})
             </a>
-            <a href="#caja-regalo" className="btn-editorial-outline">
-              <Gift size={17} /> Armar Cofre de Regalo
-            </a>
+            <button
+              type="button"
+              className="btn-editorial-outline"
+              onClick={() => onToggleCurrency(currencyMode === 'USD' ? 'VES' : 'USD')}
+            >
+              <RefreshCw size={16} /> Cambiar a {currencyMode === 'USD' ? 'Bolívares (Bs. BCV)' : 'Dólares ($ USD)'}
+            </button>
           </div>
 
           <div className="hero-Specs-grid">
             <div className="spec-item">
-              <span>Fermentación Lenta</span>
-              <strong>48 Horas</strong>
+              <span>Cacao Venezolano</span>
+              <strong>Chuao 70%</strong>
             </div>
             <div className="spec-item">
-              <span>Cacao de Origen</span>
-              <strong>70% Puro</strong>
+              <span>Tasa Oficial Día</span>
+              <strong>Bs. {bcvRate.toFixed(2)}</strong>
             </div>
             <div className="spec-item">
-              <span>Gramaje Generoso</span>
-              <strong>145g – 155g</strong>
+              <span>Desde Individual</span>
+              <strong>{formatCookiePrice(3.5, currencyMode, bcvRate)}</strong>
             </div>
           </div>
         </div>
@@ -204,8 +214,8 @@ export default function MainEditorialSite({
           />
           <div className="hero-floating-card">
             <div>
-              <h4>Lote Matutino Disponible</h4>
-              <p>Cajas de 4, 6 y 12 galletas listas para envío hoy</p>
+              <h4>Aceptamos Pago Móvil (BCV), Zelle y Efectivo</h4>
+              <p>Toca el botón de moneda arriba para alternar entre $ USD y Bs.</p>
             </div>
             <button
               type="button"
@@ -223,19 +233,21 @@ export default function MainEditorialSite({
       {/* CINTA RITUAL (DEAR SUNDAY VIBE) */}
       <div className="editorial-ticker">
         <div className="editorial-ticker-inner">
-          <span>✦ Mantequilla Avellana Francesa</span>
+          <span>✦ Cacao Venezolano Chuao 70%</span>
           <span>✦ Praliné de Pistacho Siciliano</span>
-          <span>✦ Sal de Mar Maldon</span>
-          <span>✦ Horneadas al Momento</span>
+          <span>✦ Sal Marina de Araya</span>
+          <span>✦ Precios en USD ($) y Bs. a Tasa BCV</span>
           <span>✦ Atención Directa por WhatsApp</span>
         </div>
       </div>
 
-      {/* 2. CATÁLOGO INTERACTIVO DE GALLETAS CON MÚLTIPLES OPCIONES */}
+      {/* 2. CATÁLOGO INTERACTIVO DE GALLETAS CON MÚLTIPLES OPCIONES Y CONVERSOR BCV */}
       <section className="catalog-section" id="catalogo">
         <div className="section-header-row">
           <div>
-            <span className="editorial-eyebrow">COLECCIÓN PERMANENTE & EDICIONES LIMITADAS</span>
+            <span className="editorial-eyebrow">
+              PRECIOS EN {currencyMode === 'USD' ? 'DÓLARES ($ USD)' : `BOLÍVARES (TASA BCV: Bs. ${bcvRate.toFixed(2)})`}
+            </span>
             <h2 className="section-title">Nuestras Galletas de Autor</h2>
           </div>
 
@@ -256,7 +268,13 @@ export default function MainEditorialSite({
         <div className="cookies-grid">
           {filteredCookies.map((cookie) => {
             const currentPack = selectedPacks[cookie.id] || PACK_OPTIONS[0];
-            const finalPrice = computePrice(cookie, currentPack);
+            const finalUsdPrice = computeUsdPrice(cookie, currentPack);
+            const primaryPriceStr = formatCookiePrice(finalUsdPrice, currencyMode, bcvRate);
+            const secondaryPriceStr = formatCookiePrice(
+              finalUsdPrice,
+              currencyMode === 'USD' ? 'VES' : 'USD',
+              bcvRate
+            );
             const isAdded = addedFeedbackId === cookie.id;
 
             return (
@@ -271,10 +289,20 @@ export default function MainEditorialSite({
                   <span className="cookie-number">{cookie.number}</span>
                   <div className="cookie-title-row">
                     <h3 className="cookie-title">{cookie.name}</h3>
-                    <span className="cookie-price">
-                      {ENV_CONFIG.currencySymbol}
-                      {finalPrice}
-                    </span>
+                    <div style={{ textAlign: 'right' }}>
+                      <span className="cookie-price" style={{ display: 'block' }}>
+                        {primaryPriceStr}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.68rem',
+                          color: 'var(--color-secondary-muted)',
+                        }}
+                      >
+                        ≈ {secondaryPriceStr}
+                      </span>
+                    </div>
                   </div>
 
                   <p className="cookie-desc">{cookie.description}</p>
@@ -287,15 +315,15 @@ export default function MainEditorialSite({
                     ))}
                   </div>
 
-                  {/* Selector de Opciones (1 pieza, Caja x4, Caja x6) */}
+                  {/* Selector de Opciones (1 galleta, Caja x4, Caja x6) */}
                   {!cookie.isFixedBox ? (
                     <>
                       <span className="pack-selector-label">
-                        Elige tu presentación:
+                        Elige tu presentación ({currencyMode === 'USD' ? 'USD' : 'Bs. BCV'}):
                       </span>
                       <div className="pack-options-row">
                         {PACK_OPTIONS.map((pack) => {
-                          const packPrice = computePrice(cookie, pack);
+                          const packUsd = computeUsdPrice(cookie, pack);
                           const isSelected = currentPack.id === pack.id;
                           return (
                             <button
@@ -306,8 +334,7 @@ export default function MainEditorialSite({
                             >
                               <span className="pack-option-name">{pack.label}</span>
                               <span className="pack-option-price">
-                                {ENV_CONFIG.currencySymbol}
-                                {packPrice} ({pack.tag})
+                                {formatCookiePrice(packUsd, currencyMode, bcvRate)} ({pack.tag})
                               </span>
                             </button>
                           );
@@ -341,9 +368,7 @@ export default function MainEditorialSite({
                         </>
                       ) : (
                         <>
-                          <ShoppingBag size={16} /> Agregar (
-                          {ENV_CONFIG.currencySymbol}
-                          {finalPrice})
+                          <ShoppingBag size={16} /> Agregar ({primaryPriceStr})
                         </>
                       )}
                     </button>
@@ -396,8 +421,8 @@ export default function MainEditorialSite({
                 color: 'var(--color-secondary-muted)',
               }}
             >
-              <span>✦ Incluye tarjeta de dedicatoria sin costo</span>
-              <span>✦ Envío directo por WhatsApp</span>
+              <span>✦ Tarjeta de dedicatoria incluida</span>
+              <span>✦ Pago Móvil BCV / Zelle / Efectivo</span>
             </div>
           </div>
 
@@ -412,10 +437,7 @@ export default function MainEditorialSite({
                   onClick={() => handleChangeBoxSize(sz)}
                 >
                   <strong>{sz.count} Galletas</strong>
-                  <span>
-                    {ENV_CONFIG.currencySymbol}
-                    {sz.price}
-                  </span>
+                  <span>{formatCookiePrice(sz.priceUsd, currencyMode, bcvRate)}</span>
                 </button>
               ))}
             </div>
@@ -497,9 +519,8 @@ export default function MainEditorialSite({
                 className="btn-editorial-primary"
                 onClick={handleOrderCustomBoxWhatsApp}
               >
-                <MessageCircle size={17} /> Pedir este Cofre por WhatsApp (
-                {ENV_CONFIG.currencySymbol}
-                {boxSize.price})
+                <MessageCircle size={17} /> Pedir Cofre por WhatsApp (
+                {formatCookiePrice(boxSize.priceUsd, currencyMode, bcvRate)})
               </button>
 
               <button
@@ -516,7 +537,7 @@ export default function MainEditorialSite({
 
       {/* 4. PRENSA Y CULTURA EDITORIAL (INSPIRADO EN DAVELLE NEW YORK #PRESS) */}
       <section className="press-section" id="press">
-        <span className="editorial-eyebrow">DAVELLE NY & EDITORIAL ARCHIVE · #PRESS</span>
+        <span className="editorial-eyebrow">DAVELLE NY & CARACAS EDITORIAL ARCHIVE · #PRESS</span>
         <div
           style={{
             display: 'flex',
@@ -529,7 +550,7 @@ export default function MainEditorialSite({
           <h2 className="section-title">Lo que dice la Prensa</h2>
           <a
             href={buildWhatsAppUrl(
-              `¡Hola ${ENV_CONFIG.brandName}! Me gustaría solicitar su Press Kit o realizar una colaboración editorial.`
+              `¡Hola ${ENV_CONFIG.brandName}! Me gustaría solicitar su Press Kit o realizar una colaboración editorial en Venezuela.`
             )}
             target="_blank"
             rel="noopener noreferrer"

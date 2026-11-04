@@ -1,37 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ShoppingBag,
   MessageCircle,
   Link2,
   Sparkles,
   Camera,
-  MapPin,
+  RefreshCw,
 } from 'lucide-react';
 import LinkHubView from './components/LinkHubView';
 import MainEditorialSite from './components/MainEditorialSite';
 import WhatsAppCartDrawer from './components/WhatsAppCartDrawer';
 import {
   ENV_CONFIG,
-  MASTER_COLOR_PRESETS,
   buildWhatsAppUrl,
+  formatDualPrice,
 } from './data/cookiesData';
 
 export default function App() {
   // Por defecto inicia en la página estilo Linktree ('linkhub') que redirige a WhatsApp o al Sitio Principal ('site')
   const [viewMode, setViewMode] = useState('linkhub');
+  // Moneda de visualización activa: 'USD' ($ Dólares) o 'VES' (Bs. a tasa BCV)
+  const [currencyMode, setCurrencyMode] = useState('USD');
+  const [bcvRate, setBcvRate] = useState(ENV_CONFIG.bcvFallbackRate);
+  const [bcvSource, setBcvSource] = useState('BCV Oficial');
+  const [bcvUpdatedAt, setBcvUpdatedAt] = useState(null);
+
   const [cartItems, setCartItems] = useState([
     {
       cartKey: 'no2-pistacchio-bronte-single',
       id: 'no2-pistacchio-bronte',
       name: 'Pistacchio di Sicilia & Matcha',
-      packLabel: '1 Pieza',
-      unitPrice: 98,
+      packLabel: '1 Galleta',
+      unitPrice: 4.5,
       quantity: 1,
       image: '/images/cookie-pistachio.jpg',
     },
   ]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activePresetId, setActivePresetId] = useState('default');
+
+  // Al iniciar la app, consulta el archivo generado por el script diario (/bcv-rate.json) y luego la API oficial en vivo del BCV
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadDailyBcvRate() {
+      // 1. Leer primero el JSON local actualizado por `npm run update-bcv`
+      try {
+        const localRes = await fetch('/bcv-rate.json', { cache: 'no-store' });
+        if (localRes.ok) {
+          const localData = await localRes.json();
+          if (isMounted && localData?.rate && !Number.isNaN(Number(localData.rate))) {
+            setBcvRate(Number(localData.rate));
+            setBcvSource(localData.source || 'BCV Oficial');
+            setBcvUpdatedAt(localData.updatedAt || localData.fetchedAt);
+          }
+        }
+      } catch {
+        // Continúa hacia la API en vivo
+      }
+
+      // 2. Consultar en tiempo real la API del dólar oficial BCV de Venezuela
+      try {
+        const liveRes = await fetch(ENV_CONFIG.bcvApiUrl);
+        if (liveRes.ok) {
+          const liveData = await liveRes.json();
+          const liveRate = Number(liveData?.promedio || liveData?.venta);
+          if (isMounted && liveRate && !Number.isNaN(liveRate)) {
+            setBcvRate(Number(liveRate.toFixed(2)));
+            setBcvSource('BCV en vivo');
+            setBcvUpdatedAt(liveData?.fechaActualizacion || new Date().toISOString());
+          }
+        }
+      } catch {
+        // Se mantiene el valor de bcv-rate.json o VITE_BCV_FALLBACK_RATE
+      }
+    }
+
+    loadDailyBcvRate();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -53,9 +102,9 @@ export default function App() {
   // Pedido rápido desde las tarjetas miniatura del Linktree
   const handleQuickOrderFromHub = (cookie) => {
     const msg =
-      `¡Hola ${ENV_CONFIG.brandName}! 🍪\n\n` +
+      `¡Hola ${ENV_CONFIG.brandName}! 🍪🇻🇪\n\n` +
       `Vengo desde su Link principal y me gustaría pedir:\n` +
-      `• *${cookie.name}* (${ENV_CONFIG.currencySymbol}${cookie.basePrice})\n\n` +
+      `• *${cookie.name}* — ${formatDualPrice(cookie.basePrice, bcvRate)}\n\n` +
       `¿Tienen disponibles hoy?`;
     window.open(buildWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };
@@ -115,6 +164,41 @@ export default function App() {
       {/* Barra de anuncios superior configurable desde .env */}
       <div className="announcement-bar">{ENV_CONFIG.announcementBar}</div>
 
+      {/* Barra Informativa de Tasa BCV y Selector Claro de Moneda: USD ($) vs Bolívares (Bs. BCV) */}
+      <div className="bcv-currency-banner">
+        <div className="bcv-currency-inner">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+            <span className="bcv-rate-pill">
+              <span className="status-dot-live" />
+              <strong>Tasa BCV del día:</strong> 1 USD = Bs. {bcvRate.toFixed(2)}
+            </span>
+            <span style={{ color: 'var(--color-secondary-light)', fontSize: '0.76rem' }}>
+              Puedes cambiar la visualización de todos los precios entre{' '}
+              <strong>Dólares ($ USD)</strong> y <strong>Bolívares (Bs. BCV)</strong>:
+            </span>
+          </div>
+
+          <div className="currency-switch-group" role="group" aria-label="Selector de moneda">
+            <div className="currency-toggle-pill">
+              <button
+                type="button"
+                className={`currency-toggle-btn ${currencyMode === 'USD' ? 'active' : ''}`}
+                onClick={() => setCurrencyMode('USD')}
+              >
+                💵 Ver en USD ($)
+              </button>
+              <button
+                type="button"
+                className={`currency-toggle-btn ${currencyMode === 'VES' ? 'active' : ''}`}
+                onClick={() => setCurrencyMode('VES')}
+              >
+                🇻🇪 Ver en Bolívares (Bs. BCV)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Navegación Superior con Conmutador entre Linktree y Sitio Principal */}
       <header className="mode-switcher-bar">
         <div className="mode-switcher-inner">
@@ -169,7 +253,7 @@ export default function App() {
               aria-label="Abrir bolsa de pedido"
             >
               <ShoppingBag size={16} />
-              <span>Pedido</span>
+              <span>Pedido ({currencyMode === 'USD' ? '$' : 'Bs.'})</span>
               <span className="cart-count-badge">{totalCartCount}</span>
             </button>
           </div>
@@ -181,6 +265,9 @@ export default function App() {
         <LinkHubView
           onEnterMainSite={handleEnterMainSite}
           onQuickOrderCookie={handleQuickOrderFromHub}
+          currencyMode={currencyMode}
+          onToggleCurrency={setCurrencyMode}
+          bcvRate={bcvRate}
         />
       ) : (
         <>
@@ -188,6 +275,9 @@ export default function App() {
             onAddToCart={handleAddToCart}
             activePresetId={activePresetId}
             onSelectColorPreset={handleSelectColorPreset}
+            currencyMode={currencyMode}
+            onToggleCurrency={setCurrencyMode}
+            bcvRate={bcvRate}
           />
 
           {/* Footer Editorial en el Sitio Principal */}
@@ -200,7 +290,7 @@ export default function App() {
                     fontSize: '0.9rem',
                     opacity: 0.8,
                     maxWidth: '380px',
-                    marginBottom: '1.25rem',
+                    marginBottom: '1rem',
                   }}
                 >
                   {ENV_CONFIG.brandTagline}
@@ -209,10 +299,21 @@ export default function App() {
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.75rem',
-                    opacity: 0.7,
+                    opacity: 0.75,
+                    marginBottom: '0.35rem',
                   }}
                 >
-                  {ENV_CONFIG.brandLocation}
+                  📍 {ENV_CONFIG.brandLocation}
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.72rem',
+                    opacity: 0.65,
+                  }}
+                >
+                  💱 Tasa BCV aplicada: Bs. {bcvRate.toFixed(2)} / $1 USD ({bcvSource})
+                  {bcvUpdatedAt ? ` · Actualizado` : ''}
                 </p>
               </div>
 
@@ -227,7 +328,7 @@ export default function App() {
                     opacity: 0.7,
                   }}
                 >
-                  Navegación Rápida
+                  Moneda y Navegación
                 </h4>
                 <ul
                   style={{
@@ -238,6 +339,26 @@ export default function App() {
                     fontSize: '0.88rem',
                   }}
                 >
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setCurrencyMode(currencyMode === 'USD' ? 'VES' : 'USD')
+                      }
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                      }}
+                    >
+                      <RefreshCw size={14} /> Cambiar precios a{' '}
+                      {currencyMode === 'USD' ? 'Bolívares (Bs. BCV)' : 'Dólares ($ USD)'}
+                    </button>
+                  </li>
                   <li>
                     <button
                       type="button"
@@ -258,9 +379,6 @@ export default function App() {
                   <li>
                     <a href="#caja-regalo">Armar Caja de Regalo</a>
                   </li>
-                  <li>
-                    <a href="#press">Archivo de Prensa (#Press)</a>
-                  </li>
                 </ul>
               </div>
 
@@ -275,11 +393,11 @@ export default function App() {
                     opacity: 0.7,
                   }}
                 >
-                  Pedidos & Contacto Directo
+                  Pedidos en Venezuela
                 </h4>
                 <p style={{ fontSize: '0.86rem', opacity: 0.85, marginBottom: '1rem' }}>
-                  Horneamos de martes a domingo. Todos nuestros pedidos se confirman
-                  de manera personalizada por WhatsApp.
+                  Aceptamos Pago Móvil a tasa oficial BCV del día, Zelle y Efectivo.
+                  Todos nuestros pedidos se confirman directo por WhatsApp.
                 </p>
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                   <a
@@ -289,7 +407,7 @@ export default function App() {
                     className="btn-direct-wa"
                     style={{ textDecoration: 'none' }}
                   >
-                    <MessageCircle size={16} /> WhatsApp ({ENV_CONFIG.whatsappNumber})
+                    <MessageCircle size={16} /> WhatsApp (+{ENV_CONFIG.whatsappNumber})
                   </a>
                   <a
                     href={ENV_CONFIG.instagramUrl}
@@ -322,7 +440,7 @@ export default function App() {
         </span>
       </button>
 
-      {/* Drawer de Pedido que formatea y envía todo a WhatsApp */}
+      {/* Drawer de Pedido que formatea y envía todo a WhatsApp en USD y Bs. BCV */}
       <WhatsAppCartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -330,6 +448,9 @@ export default function App() {
         onUpdateQty={handleUpdateQty}
         onRemoveItem={handleRemoveItem}
         onClearCart={handleClearCart}
+        currencyMode={currencyMode}
+        onToggleCurrency={setCurrencyMode}
+        bcvRate={bcvRate}
       />
     </div>
   );
