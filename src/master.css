@@ -1,0 +1,1575 @@
+/* ==========================================================================
+   DELULU COOKIES — CSS MAESTRO (MASTER DESIGN SYSTEM)
+   Inspirado en:
+   - Lavoratti 1938 (Editorial, tipografía serif clásica, papel cálido, empaque de lujo)
+   - Rhode Skin (Minimalismo táctil, bordes redondeados, tarjetas limpias, tonos piel/crema)
+   - Dear Sunday (Ritual lento, calidez matutina, verde salvia/matcha y crema)
+   - Davelle New York (Cultura de café artesanal, cuadrícula editorial, prensa)
+   ========================================================================== */
+
+:root {
+  /* ========================================================================
+     1. COLORES PRINCIPALES (PRIMARY PALETTE)
+     Fondos cálidos tipo papel artesanal, crema de mantequilla y piedra
+     ======================================================================== */
+  --color-primary: #F7F4EF;           /* Crema papel artesanal (Fondo principal) */
+  --color-primary-light: #FDFBF7;     /* Blanco cálido leche (Tarjetas y superficies elevadas) */
+  --color-primary-dark: #EBE5DC;      /* Piedra travertino / Arena suave (Fondos alternos y bordes) */
+  --color-primary-glass: rgba(247, 244, 239, 0.85); /* Efecto cristal cálido */
+
+  /* ========================================================================
+     2. COLORES SECUNDARIOS (SECONDARY PALETTE)
+     Cacao profundo, espresso tostado y chocolate de origen (Textos y botones)
+     ======================================================================== */
+  --color-secondary: #231915;         /* Cacao espresso profundo (Texto principal y botones primarios) */
+  --color-secondary-light: #5A483F;   /* Marrón avellana tostada (Subtítulos y texto secundario) */
+  --color-secondary-muted: #8C7A6B;   /* Taupe cálido (Etiquetas, metadatos y notas al pie) */
+  --color-secondary-subtle: rgba(35, 25, 21, 0.08); /* Líneas divisorias sutiles */
+
+  /* ========================================================================
+     3. COLORES TERCIARIOS (TERTIARY / ACCENT PALETTE)
+     Terracota caramelo, pistacho siciliano, rubor glazed y WhatsApp
+     ======================================================================== */
+  --color-tertiary: #C87D55;          /* Caramelo terracota / Mantequilla dorada (Acento principal) */
+  --color-tertiary-light: #F3E3D8;    /* Rubor durazno suave (Badges y fondos de acento) */
+  --color-tertiary-dark: #A65E38;     /* Cobre tostado (Hover de acentos) */
+  --color-tertiary-sage: #8A9A86;     /* Verde pistacho / Matcha suave (Inspiración Dear Sunday) */
+  --color-tertiary-sage-light: #E6ECE4; /* Fondo pistacho suave */
+  --color-whatsapp: #25D366;          /* Verde oficial WhatsApp para indicadores en vivo */
+  --color-whatsapp-dark: #1DA851;
+
+  /* ========================================================================
+     4. TIPOGRAFÍA (TYPOGRAPHY)
+     ======================================================================== */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* ========================================================================
+     5. BORDES, SOMBRAS Y ESPACIADO (SHAPES & ELEVATION)
+     ======================================================================== */
+  --radius-xs: 6px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;                  /* Estilo Rhode Skin curvo y táctil */
+  --radius-pill: 9999px;
+
+  --shadow-soft: 0 12px 32px -8px rgba(35, 25, 21, 0.06);
+  --shadow-card: 0 20px 45px -12px rgba(35, 25, 21, 0.09);
+  --shadow-floating: 0 24px 60px -10px rgba(35, 25, 21, 0.18);
+
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --max-width-container: 1280px;
+}
+
+/* ==========================================================================
+   MODO TEMA ALTERNATIVO (OPCIONAL: CACAO NOCTURNO / EDITORIAL DARK)
+   Se puede activar con data-theme="cacao" en el body
+   ========================================================================== */
+[data-theme="cacao"] {
+  --color-primary: #1B1310;
+  --color-primary-light: #261C18;
+  --color-primary-dark: #332620;
+  --color-primary-glass: rgba(27, 19, 16, 0.85);
+  --color-secondary: #F7F4EF;
+  --color-secondary-light: #D5C8BC;
+  --color-secondary-muted: #9E8E80;
+  --color-secondary-subtle: rgba(247, 244, 239, 0.12);
+  --color-tertiary: #D98E66;
+  --color-tertiary-light: #3D281E;
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   BARRA DE ANUNCIOS SUPERIOR (ANNOUNCEMENT MARQUEE)
+   ========================================================================== */
+.announcement-bar {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.65rem 1rem;
+  text-align: center;
+  position: relative;
+  z-index: 60;
+}
+
+/* ==========================================================================
+   CONMUTADOR DE VISTA FLOTANTE (VIEW SWITCHER: LINK HUB <-> SITIO PRINCIPAL)
+   ========================================================================== */
+.mode-switcher-bar {
+  position: sticky;
+  top: 0;
+  z-index: 55;
+  background: var(--color-primary-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-secondary-subtle);
+  padding: 0.75rem 1.5rem;
+}
+
+.mode-switcher-inner {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand-logo {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-tertiary);
+  display: inline-block;
+}
+
+.nav-links-desktop {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nav-links-desktop a {
+  color: var(--color-secondary-light);
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.nav-links-desktop a:hover {
+  color: var(--color-secondary);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.pill-toggle-group {
+  display: inline-flex;
+  background-color: var(--color-primary-dark);
+  padding: 0.25rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-secondary-subtle);
+}
+
+.pill-toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  color: var(--color-secondary-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pill-toggle-btn.active {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-soft);
+}
+
+.cart-trigger-btn {
+  border: 1px solid var(--color-secondary-subtle);
+  background-color: var(--color-primary-light);
+  color: var(--color-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition-smooth);
+}
+
+.cart-trigger-btn:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.cart-count-badge {
+  background-color: var(--color-tertiary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   VISTA 1: LINKTREE EDITORIAL (BIO HUB PRINCIPAL)
+   Inspirado en Rhode Skin & Dear Sunday
+   ========================================================================== */
+.linkhub-wrapper {
+  min-height: calc(100vh - 110px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.25rem 4rem;
+  position: relative;
+  background:
+    radial-gradient(circle at 15% 20%, var(--color-tertiary-light) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, var(--color-primary-dark) 0%, transparent 50%),
+    var(--color-primary);
+}
+
+.linkhub-card {
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-secondary-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.linkhub-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: var(--color-tertiary-sage-light);
+  color: var(--color-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  margin-bottom: 1.25rem;
+}
+
+.status-dot-live {
+  width: 7px;
+  height: 7px;
+  background-color: var(--color-whatsapp);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.2);
+}
+
+.linkhub-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.linkhub-avatar-wrap {
+  width: 104px;
+  height: 104px;
+  margin: 0 auto 1.15rem;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(135deg, var(--color-tertiary), var(--color-primary-dark));
+  position: relative;
+}
+
+.linkhub-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--color-primary-light);
+}
+
+.linkhub-badge-stamp {
+  position: absolute;
+  bottom: -4px;
+  right: -6px;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.06em;
+}
+
+.linkhub-title {
+  font-family: var(--font-serif);
+  font-size: 2.35rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+
+.linkhub-handle {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-tertiary);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+}
+
+.linkhub-bio {
+  font-size: 0.92rem;
+  color: var(--color-secondary-light);
+  max-width: 390px;
+  margin: 0 auto;
+}
+
+/* Destacado visual en el Linktree */
+.linkhub-featured-banner {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  height: 175px;
+  margin-bottom: 1.25rem;
+  cursor: pointer;
+  border: 1px solid var(--color-secondary-subtle);
+}
+
+.linkhub-featured-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linkhub-featured-banner:hover img {
+  transform: scale(1.05);
+}
+
+.linkhub-featured-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(35, 25, 21, 0.82) 0%, rgba(35, 25, 21, 0.15) 70%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.2rem;
+  color: var(--color-primary);
+}
+
+.linkhub-featured-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-tertiary-light);
+  margin-bottom: 0.2rem;
+}
+
+.linkhub-featured-title {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Botones de acción Linktree */
+.linkhub-links-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.linkhub-action-btn {
+  width: 100%;
+  padding: 1.05rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-secondary-subtle);
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-align: left;
+}
+
+.linkhub-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+  border-color: var(--color-tertiary);
+}
+
+.linkhub-action-btn.primary-site {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border-color: var(--color-secondary);
+}
+
+.linkhub-action-btn.primary-site:hover {
+  background-color: var(--color-tertiary);
+  border-color: var(--color-tertiary);
+  color: #fff;
+}
+
+.linkhub-action-btn.whatsapp-direct {
+  background-color: var(--color-tertiary-light);
+  border-color: rgba(200, 125, 85, 0.35);
+}
+
+.linkhub-action-btn.whatsapp-direct:hover {
+  background-color: var(--color-tertiary);
+  color: #fff;
+}
+
+.linkhub-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.linkhub-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.55);
+  color: var(--color-secondary);
+  flex-shrink: 0;
+}
+
+.primary-site .linkhub-icon-box {
+  background-color: rgba(255, 255, 255, 0.14);
+  color: var(--color-primary);
+}
+
+.linkhub-btn-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: block;
+}
+
+.linkhub-btn-subtitle {
+  font-size: 0.76rem;
+  opacity: 0.78;
+  display: block;
+}
+
+/* Mini carrusel de sabores rápidos en el Linktree */
+.linkhub-quick-flavors {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-secondary-subtle);
+}
+
+.linkhub-quick-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-secondary-muted);
+}
+
+.linkhub-flavor-pills {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.flavor-mini-card {
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-secondary-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-align: left;
+}
+
+.flavor-mini-card:hover {
+  border-color: var(--color-tertiary);
+  background-color: var(--color-tertiary-light);
+}
+
+.flavor-mini-card img {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-xs);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.flavor-mini-info h5 {
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.flavor-mini-info span {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-tertiary-dark);
+}
+
+.linkhub-footer {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.linkhub-socials {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.social-circle-link {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--color-secondary-subtle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary-light);
+  transition: var(--transition-smooth);
+}
+
+.social-circle-link:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+/* ==========================================================================
+   VISTA 2: SITIO PRINCIPAL EDITORIAL
+   Inspirado en Lavoratti 1938, Rhode Skin, Dear Sunday y Davelle New York
+   ========================================================================== */
+
+/* HERO EDITORIAL */
+.hero-section {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4.5rem;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.hero-editorial-copy {
+  padding-right: 1rem;
+}
+
+.editorial-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-tertiary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.hero-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 5.2vw, 4.75rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-headline em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-tertiary);
+}
+
+.hero-lead {
+  font-size: 1.08rem;
+  color: var(--color-secondary-light);
+  max-width: 520px;
+  margin-bottom: 2.25rem;
+  line-height: 1.7;
+}
+
+.hero-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.75rem;
+}
+
+.btn-editorial-primary {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: 1px solid var(--color-secondary);
+  padding: 1rem 1.85rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-editorial-primary:hover {
+  background-color: var(--color-tertiary);
+  border-color: var(--color-tertiary);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.btn-editorial-outline {
+  background-color: transparent;
+  color: var(--color-secondary);
+  border: 1px solid var(--color-secondary);
+  padding: 1rem 1.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-editorial-outline:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.hero-Specs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--color-secondary-subtle);
+}
+
+.spec-item span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--color-secondary-muted);
+  letter-spacing: 0.08em;
+}
+
+.spec-item strong {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.hero-visual-frame {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-primary-dark);
+  aspect-ratio: 4 / 4.3;
+  box-shadow: var(--shadow-card);
+}
+
+.hero-visual-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-floating-card {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  background: var(--color-primary-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 1.15rem 1.35rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-secondary-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hero-floating-card h4 {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.hero-floating-card p {
+  font-size: 0.78rem;
+  color: var(--color-secondary-light);
+}
+
+/* CINTA EDITORIAL (DEAR SUNDAY / RHODE SKIN RITUAL) */
+.editorial-ticker {
+  background-color: var(--color-primary-dark);
+  border-top: 1px solid var(--color-secondary-subtle);
+  border-bottom: 1px solid var(--color-secondary-subtle);
+  padding: 1.1rem 1.5rem;
+  overflow: hidden;
+}
+
+.editorial-ticker-inner {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--color-secondary-light);
+}
+
+/* SECCIÓN DE COLECCIÓN DE GALLETAS (CATÁLOGO RHODE + LAVORATTI) */
+.catalog-section {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+}
+
+.section-header-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-bottom: 2.75rem;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.category-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-pill {
+  border: 1px solid var(--color-secondary-subtle);
+  background-color: var(--color-primary-light);
+  color: var(--color-secondary-light);
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.filter-pill:hover,
+.filter-pill.active {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border-color: var(--color-secondary);
+}
+
+/* CUADRÍCULA DE PRODUCTOS */
+.cookies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem;
+}
+
+.cookie-card {
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-secondary-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-smooth);
+}
+
+.cookie-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card);
+}
+
+.cookie-image-box {
+  position: relative;
+  aspect-ratio: 4 / 3.4;
+  background-color: var(--color-primary-dark);
+  overflow: hidden;
+}
+
+.cookie-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cookie-card:hover .cookie-image-box img {
+  transform: scale(1.05);
+}
+
+.cookie-badge-top {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: var(--color-primary-light);
+  color: var(--color-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-secondary-subtle);
+}
+
+.cookie-weight-tag {
+  position: absolute;
+  bottom: 0.85rem;
+  right: 0.85rem;
+  background: rgba(35, 25, 21, 0.78);
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+}
+
+.cookie-body {
+  padding: 1.65rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cookie-number {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.cookie-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.cookie-title {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.cookie-price {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+
+.cookie-desc {
+  font-size: 0.88rem;
+  color: var(--color-secondary-light);
+  margin-bottom: 1rem;
+  flex: 1;
+}
+
+.cookie-notes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.tasting-note-chip {
+  font-size: 0.72rem;
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-secondary-subtle);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  color: var(--color-secondary-light);
+}
+
+/* Selector de presentación dentro de cada tarjeta */
+.pack-selector-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-secondary-muted);
+  margin-bottom: 0.45rem;
+  display: block;
+}
+
+.pack-options-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem;
+  margin-bottom: 1.15rem;
+}
+
+.pack-option-btn {
+  border: 1px solid var(--color-secondary-subtle);
+  background-color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.35rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.pack-option-btn.selected {
+  background-color: var(--color-tertiary-light);
+  border-color: var(--color-tertiary);
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+
+.pack-option-name {
+  display: block;
+  font-size: 0.72rem;
+}
+
+.pack-option-price {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-secondary-muted);
+}
+
+.cookie-actions-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+}
+
+.btn-add-bag {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-add-bag:hover {
+  background-color: var(--color-tertiary);
+  color: #fff;
+}
+
+.btn-direct-wa {
+  background-color: var(--color-tertiary-light);
+  color: var(--color-secondary);
+  border: 1px solid rgba(200, 125, 85, 0.35);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-direct-wa:hover {
+  background-color: var(--color-whatsapp);
+  border-color: var(--color-whatsapp);
+  color: #fff;
+}
+
+/* ==========================================================================
+   ARMADOR DE CAJA DE REGALO (LAVORATTI 1938 GIFT BOX CURATOR)
+   ========================================================================== */
+.box-builder-section {
+  background-color: var(--color-primary-dark);
+  border-top: 1px solid var(--color-secondary-subtle);
+  border-bottom: 1px solid var(--color-secondary-subtle);
+  padding: 5rem 1.5rem;
+}
+
+.box-builder-container {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.box-visual-showcase {
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  border: 1px solid var(--color-secondary-subtle);
+  box-shadow: var(--shadow-soft);
+}
+
+.box-visual-showcase img {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+}
+
+.box-size-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.box-size-card {
+  border: 1px solid var(--color-secondary-subtle);
+  background-color: var(--color-primary);
+  padding: 0.9rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: center;
+  transition: var(--transition-smooth);
+}
+
+.box-size-card.active {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border-color: var(--color-secondary);
+}
+
+.box-size-card strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+}
+
+.box-size-card span {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  opacity: 0.85;
+}
+
+.box-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  margin: 1.25rem 0;
+}
+
+.box-slot-pill {
+  background-color: var(--color-primary-light);
+  border: 1px dashed var(--color-secondary-muted);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+}
+
+.box-slot-pill.filled {
+  border-style: solid;
+  border-color: var(--color-tertiary);
+  background-color: var(--color-tertiary-light);
+  font-weight: 600;
+}
+
+.slot-remove-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.box-picker-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.box-picker-item {
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-secondary-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.box-picker-item:hover:not(:disabled) {
+  border-color: var(--color-tertiary);
+  transform: translateY(-2px);
+}
+
+.box-picker-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   SECCIÓN DE PRENSA Y CULTURA (INSPIRADO EN DAVELLE NEW YORK #PRESS)
+   ========================================================================== */
+.press-section {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+}
+
+.press-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.press-card {
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-secondary-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition-smooth);
+}
+
+.press-card:hover {
+  border-color: var(--color-tertiary);
+  box-shadow: var(--shadow-soft);
+}
+
+.press-magazine {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: var(--color-secondary);
+}
+
+.press-quote {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--color-secondary-light);
+  margin-bottom: 1.5rem;
+}
+
+.press-meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-tertiary);
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-secondary-subtle);
+  padding-top: 0.85rem;
+}
+
+/* ==========================================================================
+   PERSONALIZADOR EN VIVO DEL CSS MAESTRO (PALETA DE COLORES INTERACTIVA)
+   Permite probar los colores primarios, secundarios y terciarios al instante
+   ========================================================================== */
+.palette-bar {
+  max-width: var(--max-width-container);
+  margin: 0 auto 3rem;
+  padding: 0 1.5rem;
+}
+
+.palette-card {
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--color-secondary-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.palette-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.preset-theme-btn {
+  border: 1px solid var(--color-secondary-subtle);
+  background-color: var(--color-primary);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition-smooth);
+}
+
+.preset-theme-btn.active {
+  border-color: var(--color-secondary);
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.swatch-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.swatch-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+/* ==========================================================================
+   DRAWER DE PEDIDO / CARRITO DIRECTO A WHATSAPP
+   ========================================================================== */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(35, 25, 21, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.drawer-panel {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--color-primary-light);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-floating);
+  border-left: 1px solid var(--color-secondary-subtle);
+}
+
+.drawer-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-secondary-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drawer-header h3 {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.drawer-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cart-item-row {
+  display: flex;
+  gap: 0.9rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-secondary-subtle);
+  align-items: center;
+}
+
+.cart-item-row img {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-info h4 {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+}
+
+.cart-item-info p {
+  font-size: 0.76rem;
+  color: var(--color-secondary-muted);
+}
+
+.qty-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-secondary-subtle);
+  border-radius: var(--radius-pill);
+  padding: 0.15rem 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.qty-controls button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0 0.25rem;
+}
+
+.drawer-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-secondary-subtle);
+}
+
+.drawer-input {
+  width: 100%;
+  padding: 0.75rem 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-secondary-subtle);
+  background-color: var(--color-primary);
+  font-size: 0.85rem;
+}
+
+.drawer-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-secondary-subtle);
+  background-color: var(--color-primary);
+}
+
+.drawer-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.drawer-total-row strong {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+}
+
+.btn-checkout-whatsapp {
+  width: 100%;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: none;
+  padding: 1.05rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-checkout-whatsapp:hover {
+  background-color: var(--color-whatsapp-dark);
+  color: #fff;
+}
+
+/* BOTÓN FLOTANTE DE WHATSAPP */
+.floating-wa-pill {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 70;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  padding: 0.8rem 1.25rem;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-floating);
+  border: 1px solid var(--color-secondary-subtle);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.floating-wa-pill:hover {
+  background-color: var(--color-tertiary);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* FOOTER EDITORIAL */
+.site-footer {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  padding: 4.5rem 1.5rem 3rem;
+  margin-top: 3rem;
+}
+
+.site-footer-inner {
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.footer-brand-title {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  margin-bottom: 0.75rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  .hero-section,
+  .box-builder-container,
+  .site-footer-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links-desktop {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .cookies-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .linkhub-flavor-pills,
+  .box-picker-list {
+    grid-template-columns: 1fr;
+  }
+
+  .mode-switcher-inner {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
