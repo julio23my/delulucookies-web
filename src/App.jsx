@@ -102,9 +102,9 @@ export default function App() {
   // Pedido rápido desde las tarjetas miniatura del Linktree
   const handleQuickOrderFromHub = (cookie) => {
     const msg =
-      `¡Hola ${ENV_CONFIG.brandName}! 🍪🇻🇪\n\n` +
+      `¡Hola *${ENV_CONFIG.brandName}*!\n\n` +
       `Vengo desde su Link principal y me gustaría pedir:\n` +
-      `• *${cookie.name}* — ${formatDualPrice(cookie.basePrice, bcvRate)}\n\n` +
+      `- *${cookie.name}* — ${formatDualPrice(cookie.basePrice, bcvRate)}\n\n` +
       `¿Tienen disponibles hoy?`;
     window.open(buildWhatsAppUrl(msg), '_blank', 'noopener,noreferrer');
   };

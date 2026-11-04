@@ -41,7 +41,7 @@ export default function WhatsAppCartDrawer({
     const itemsLines = cartItems
       .map(
         (item) =>
-          `• ${item.quantity}x *${item.name}* (${item.packLabel}) — ${formatDualPrice(
+          `- ${item.quantity}x *${item.name}* (${item.packLabel}) — ${formatDualPrice(
             item.unitPrice * item.quantity,
             bcvRate
           )}`
@@ -49,7 +49,7 @@ export default function WhatsAppCartDrawer({
       .join('\n');
 
     const messageParts = [
-      `¡Hola *${ENV_CONFIG.brandName}*! 🍪🇻🇪`,
+      `¡Hola *${ENV_CONFIG.brandName}*!`,
       `Quiero confirmar el siguiente pedido desde la web:`,
       ``,
       itemsLines,

@@ -3,7 +3,7 @@ export const ENV_CONFIG = {
   whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '584121234567',
   whatsappDefaultMessage:
     import.meta.env.VITE_WHATSAPP_DEFAULT_MESSAGE ||
-    '¡Hola Delulu Cookies! 🍪 Me gustaría hacer un pedido de galletas recién horneadas.',
+    '¡Hola Delulu Cookies! Me gustaría hacer un pedido de galletas recién horneadas.',
   brandName: import.meta.env.VITE_BRAND_NAME || 'DELULU COOKIES',
   brandTagline:
     import.meta.env.VITE_BRAND_TAGLINE ||
@@ -52,12 +52,15 @@ export function formatDualPrice(amountUsd, bcvRate = ENV_CONFIG.bcvFallbackRate)
 }
 
 /**
- * Construye el enlace oficial de WhatsApp (wa.me) con el mensaje codificado
+ * Construye el enlace oficial de WhatsApp (api.whatsapp.com/send) con codificación UTF-8 limpia
  */
 export function buildWhatsAppUrl(customMessage) {
   const cleanPhone = String(ENV_CONFIG.whatsappNumber).replace(/[^\d]/g, '');
-  const message = customMessage || ENV_CONFIG.whatsappDefaultMessage;
-  return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+  const rawMessage = customMessage || ENV_CONFIG.whatsappDefaultMessage;
+  const normalizedMessage = String(rawMessage).normalize('NFC');
+  return `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(
+    normalizedMessage
+  )}`;
 }
 
 // Presentaciones disponibles para cada galleta (Precios en USD pensados para Venezuela)

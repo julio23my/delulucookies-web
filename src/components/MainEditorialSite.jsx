@@ -100,9 +100,9 @@ export default function MainEditorialSite({
     const finalUsdPrice = computeUsdPrice(cookie, chosenPack);
 
     const text =
-      `¡Hola ${ENV_CONFIG.brandName}! 🍪🇻🇪\n\n` +
+      `¡Hola *${ENV_CONFIG.brandName}*!\n\n` +
       `Me gustaría pedir directamente:\n` +
-      `• *${cookie.name}* (${chosenPack.label}) — ${formatDualPrice(finalUsdPrice, bcvRate)}\n\n` +
+      `- *${cookie.name}* (${chosenPack.label}) — ${formatDualPrice(finalUsdPrice, bcvRate)}\n\n` +
       `¿Tienen disponibilidad para entrega hoy?`;
 
     window.open(buildWhatsAppUrl(text), '_blank', 'noopener,noreferrer');
@@ -139,7 +139,7 @@ export default function MainEditorialSite({
       .join('\n');
 
     const msg =
-      `¡Hola ${ENV_CONFIG.brandName}! 🎁🍪\n\n` +
+      `¡Hola *${ENV_CONFIG.brandName}*!\n\n` +
       `Acabo de armar mi *${boxSize.title}* — ${formatDualPrice(boxSize.priceUsd, bcvRate)} con la siguiente selección:\n` +
       `${lines || '  - Selección del Chef'}\n\n` +
       `¿Me indican los datos de Pago Móvil (BCV) o Zelle para confirmar?`;

@@ -185,7 +185,7 @@ export default function LinkHubView({
             className="linkhub-action-btn"
             onClick={() =>
               handleDirectWhatsApp(
-                `¡Hola ${ENV_CONFIG.brandName}! 🍪 Me interesa cotizar cajas de regalo corporativas o para un evento especial en Venezuela.`
+                `¡Hola *${ENV_CONFIG.brandName}*! Me interesa cotizar cajas de regalo corporativas o para un evento especial en Venezuela.`
               )
             }
           >
