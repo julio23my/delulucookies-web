@@ -167,8 +167,12 @@ export default function App() {
           ==================================================================== */}
       <div className="wrap">
         <nav className="delulu-top-nav" aria-label="Primary">
-          <a href="#top" className="delulu-brand">
-            {ENV_CONFIG.brandName}
+          <a href="#top" className="delulu-brand" aria-label={ENV_CONFIG.brandName}>
+            <img
+              src="/images/DELULU - logo.png"
+              alt={ENV_CONFIG.brandName}
+              className="delulu-logo-img"
+            />
           </a>
 
           <div className="links">
@@ -466,7 +470,13 @@ export default function App() {
           ==================================================================== */}
       <div className="wrap">
         <footer>
-          <span className="footer-wordmark">{ENV_CONFIG.brandName}</span>
+          <a href="#top" className="footer-wordmark" aria-label={ENV_CONFIG.brandName}>
+            <img
+              src="/images/DELULU - logo.png"
+              alt={ENV_CONFIG.brandName}
+              className="delulu-logo-img footer-logo-img"
+            />
+          </a>
           <p>obrador artesanal · cookies estilo nyc · delivery y pick-up</p>
           <p>
             <a

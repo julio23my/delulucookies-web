@@ -170,8 +170,12 @@ export default function DeluluTakeoutStore({
             </div>
           </div>
 
-          <span className="delulu-brand" style={{ fontSize: '36px' }}>
-            {ENV_CONFIG.brandName}
+          <span className="delulu-brand">
+            <img
+              src="/images/DELULU - logo.png"
+              alt={ENV_CONFIG.brandName}
+              className="delulu-logo-img store-logo-img"
+            />
           </span>
           <div className="to-eyebrow">
             obrador artesanal · cookies estilo nyc · delivery y pick-up

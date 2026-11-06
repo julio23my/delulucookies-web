@@ -121,20 +121,33 @@ nav.delulu-top-nav {
 }
 
 .delulu-brand {
-  font-family: var(--serif);
-  font-size: 32px;
-  font-weight: 500;
-  font-style: italic;
-  text-transform: lowercase;
-  color: var(--accent);
-  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
   line-height: 1;
   text-decoration: none;
 }
 
 .delulu-brand:hover {
-  color: var(--accent);
   text-decoration: none;
+}
+
+.delulu-logo-img {
+  width: 145px;
+  height: 36px;
+  object-fit: cover;
+  object-position: 50% 46.5%;
+  display: block;
+}
+
+.footer-logo-img {
+  width: 135px;
+  height: 34px;
+  margin: 0 auto;
+}
+
+.store-logo-img {
+  width: 160px;
+  height: 40px;
 }
 
 nav.delulu-top-nav .links {
@@ -720,14 +733,12 @@ footer {
 }
 
 footer .footer-wordmark {
-  font-family: var(--serif);
-  font-size: 28px;
-  font-style: italic;
-  text-transform: lowercase;
-  letter-spacing: -0.01em;
-  color: var(--accent);
-  display: block;
+  display: inline-block;
   margin: 0 auto 12px;
+}
+
+footer .footer-wordmark:hover {
+  text-decoration: none;
 }
 
 footer p {
