@@ -7,7 +7,7 @@ import {
   formatDualPrice,
 } from '../data/cookiesData';
 
-export default function DavelleTakeoutStore({
+export default function DeluluTakeoutStore({
   onBackToHome,
   cartItems,
   onAddToCart,
@@ -17,7 +17,7 @@ export default function DavelleTakeoutStore({
   onToggleCurrency,
   bcvRate,
 }) {
-  // 'cookies' vs 'boxes' (equivalente al toggle Food / Drinks de davellenewyork.com/order)
+  // 'cookies' vs 'boxes' (toggle de secciones de la tienda delulucookies)
   const [storeTab, setStoreTab] = useState('cookies');
   // Item abierto en el bottom-sheet (.to-shade / .to-sheet)
   const [activeSheetItem, setActiveSheetItem] = useState(null);
@@ -151,17 +151,9 @@ export default function DavelleTakeoutStore({
   return (
     <div className="cm">
       <div className="to-wrap">
-        {/* Cabecera de la Tienda idéntica a davellenewyork.com/order */}
+        {/* Cabecera de la Tienda delulucookies */}
         <header className="to-mast">
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '6px',
-            }}
-          >
+          <div className="to-mast-bar">
             <button
               type="button"
               className="to-back-pill"
@@ -171,20 +163,26 @@ export default function DavelleTakeoutStore({
                   : onBackToHome
               }
             >
-              ← {storeStep === 'checkout' ? 'Volver al Menú' : 'Volver al Inicio'}
+              ← {storeStep === 'checkout' ? 'Menú' : 'Inicio'}
             </button>
 
-            <div className="currency-pill" role="group" aria-label="Moneda">
+            <div
+              className="currency-switch"
+              role="tablist"
+              aria-label="Seleccionar moneda"
+            >
               <button
                 type="button"
-                className={currencyMode === 'USD' ? 'active' : ''}
+                role="tab"
+                aria-selected={currencyMode === 'USD'}
                 onClick={() => onToggleCurrency('USD')}
               >
-                USD $
+                $ USD
               </button>
               <button
                 type="button"
-                className={currencyMode === 'VES' ? 'active' : ''}
+                role="tab"
+                aria-selected={currencyMode === 'VES'}
                 onClick={() => onToggleCurrency('VES')}
               >
                 Bs. BCV
@@ -192,7 +190,7 @@ export default function DavelleTakeoutStore({
             </div>
           </div>
 
-          <span className="davelle-brand" style={{ fontSize: '36px' }}>
+          <span className="delulu-brand" style={{ fontSize: '36px' }}>
             {ENV_CONFIG.brandName}
           </span>
           <div className="to-eyebrow">
@@ -200,7 +198,7 @@ export default function DavelleTakeoutStore({
           </div>
         </header>
 
-        {/* Tarjeta de estado Pickup / Delivery idéntica a .to-pickup */}
+        {/* Tarjeta de estado Pickup / Delivery (.to-pickup) */}
         <section className="to-pickup">
           <div className="to-k">Pickup &amp; Delivery · Directo por WhatsApp</div>
           <div className="to-big">Hoy · Horneadas al momento, aprox. 25 min</div>
@@ -209,8 +207,11 @@ export default function DavelleTakeoutStore({
             <strong>Bs. {bcvRate.toFixed(2)} / $1 USD</strong>
           </div>
           <div className="to-hold">
-            Puedes ver todos los precios en Dólares ($ USD) o Bolívares (Bs. BCV)
-            usando el selector superior.
+            Precios expresados en{' '}
+            {currencyMode === 'USD'
+              ? 'Dólares ($ USD)'
+              : `Bolívares (Bs. BCV ${bcvRate.toFixed(2)})`}
+            .
           </div>
         </section>
 
@@ -531,7 +532,7 @@ export default function DavelleTakeoutStore({
         )}
       </div>
 
-      {/* Barra fija inferior .to-bar idéntica a davellenewyork.com/order */}
+      {/* Barra fija inferior .to-bar */}
       {totalItemsCount > 0 && (
         <div className="to-bar">
           <button
@@ -554,7 +555,7 @@ export default function DavelleTakeoutStore({
         </div>
       )}
 
-      {/* Modal / Bottom Sheet .to-shade + .to-sheet idéntico a davellenewyork.com/order */}
+      {/* Modal / Bottom Sheet .to-shade + .to-sheet */}
       {activeSheetItem && (
         <div
           className="to-shade"

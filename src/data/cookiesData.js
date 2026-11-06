@@ -1,10 +1,10 @@
-// Configuración centralizada leída desde el archivo .env (Venezuela · Réplica Davelle New York)
+// Configuración centralizada leída desde el archivo .env (delulucookies · Venezuela)
 export const ENV_CONFIG = {
   whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '584121234567',
   whatsappDefaultMessage:
     import.meta.env.VITE_WHATSAPP_DEFAULT_MESSAGE ||
-    '¡Hola Delulu Cookies! Me gustaría hacer un pedido de galletas recién horneadas.',
-  brandName: import.meta.env.VITE_BRAND_NAME || 'delulu cookies',
+    '¡Hola delulucookies! Me gustaría hacer un pedido de galletas recién horneadas.',
+  brandName: import.meta.env.VITE_BRAND_NAME || 'delulucookies',
   brandTagline:
     import.meta.env.VITE_BRAND_TAGLINE ||
     'Un rincón íntimo de galletas artesanales horneadas a diario en pequeños lotes con mantequilla avellana y cacao venezolano de origen.',
@@ -89,7 +89,7 @@ export function getStoreOpenStatus() {
 }
 
 // ============================================================================
-// DATOS DEL MENÚ PRINCIPAL (#menu en la Home, idéntico a Davelle New York)
+// DATOS DEL MENÚ PRINCIPAL (#menu en la Home de delulucookies)
 // ============================================================================
 export const HOME_MENU_COOKIES = {
   blurb:
@@ -185,7 +185,7 @@ export const HOME_MENU_BOXES_DRINKS = {
   sections: [
     {
       title: 'Takeout & Gift Boxes',
-      sub: 'Delulu Cookies · Empaque de colección con guía de calentamiento',
+      sub: 'delulucookies · Empaque de colección con guía de calentamiento',
       items: [
         {
           id: 'takeout-box-4',
@@ -231,7 +231,7 @@ export const HOME_MENU_BOXES_DRINKS = {
 };
 
 // ============================================================================
-// DATOS DE LA TIENDA / ORDER TAKEOUT (Vista exacta a davellenewyork.com/order)
+// DATOS DE LA TIENDA / ORDER TAKEOUT (delulucookies store)
 // ============================================================================
 export const TAKEOUT_STORE_SECTIONS = [
   {

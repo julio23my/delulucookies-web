@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import DavelleTakeoutStore from './components/DavelleTakeoutStore';
+import DeluluTakeoutStore from './components/DeluluTakeoutStore';
 import {
   ENV_CONFIG,
   HOME_MENU_COOKIES,
@@ -14,7 +14,7 @@ export default function App() {
   const [currencyMode, setCurrencyMode] = useState('USD');
   const [bcvRate, setBcvRate] = useState(ENV_CONFIG.bcvFallbackRate);
 
-  // Vista activa: 'home' (davellenewyork.com) | 'store' (davellenewyork.com/order)
+  // Vista activa: 'home' | 'store' (tienda Order Takeout de delulucookies)
   const [viewMode, setViewMode] = useState('home');
 
   // Pestaña activa en #menu ('cookies' | 'boxes')
@@ -148,10 +148,10 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Si el usuario entra a la tienda (Order Takeout), mostramos la réplica exacta de davellenewyork.com/order
+  // Si el usuario entra a la tienda (Order Takeout), mostramos la tienda de delulucookies
   if (viewMode === 'store') {
     return (
-      <DavelleTakeoutStore
+      <DeluluTakeoutStore
         onBackToHome={handleBackToHome}
         cartItems={cartItems}
         onAddToCart={handleAddToCart}
@@ -167,11 +167,11 @@ export default function App() {
   return (
     <div className="site">
       {/* ====================================================================
-          1. NAVBAR (Exacto a davellenewyork.com: logo, links, status, order)
+          1. NAVBAR (4 columnas exactas: logo, links, status, order takeout)
           ==================================================================== */}
       <div className="wrap">
-        <nav className="davelle-top-nav" aria-label="Primary">
-          <a href="#top" className="davelle-brand">
+        <nav className="delulu-top-nav" aria-label="Primary">
+          <a href="#top" className="delulu-brand">
             {ENV_CONFIG.brandName}
           </a>
 
@@ -191,30 +191,6 @@ export default function App() {
             <span>{openStatus.label}</span>
           </div>
 
-          {/* Selector de visualización de precios USD ($) vs Bs. BCV */}
-          <div
-            className="currency-pill"
-            role="group"
-            aria-label="Cambiar visualización de precios entre Dólares y Bolívares BCV"
-          >
-            <button
-              type="button"
-              className={currencyMode === 'USD' ? 'active' : ''}
-              onClick={() => setCurrencyMode('USD')}
-              title="Ver precios en Dólares ($ USD)"
-            >
-              USD $
-            </button>
-            <button
-              type="button"
-              className={currencyMode === 'VES' ? 'active' : ''}
-              onClick={() => setCurrencyMode('VES')}
-              title={`Ver precios en Bolívares (BCV Bs. ${bcvRate.toFixed(2)})`}
-            >
-              Bs. BCV
-            </button>
-          </div>
-
           <button
             type="button"
             className="order"
@@ -230,7 +206,7 @@ export default function App() {
 
       <main id="main">
         {/* ====================================================================
-            2. FULL-BLEED LOOP VIDEO / COLLAGE (100vw como Davelle New York .hero)
+            2. FULL-BLEED LOOP VIDEO / COLLAGE (100vw .hero)
             ==================================================================== */}
         <div className="hero" id="top">
           {ENV_CONFIG.loopVideoUrl ? (
@@ -244,13 +220,13 @@ export default function App() {
               playsInline
               preload="metadata"
               poster="/images/hero-cookies.jpg"
-              aria-label="Delulu Cookies loop video"
+              aria-label="delulucookies loop video"
             />
           ) : (
             <div
               className={`loop-cinematic-reel ${isVideoPaused ? 'paused' : ''}`}
               role="img"
-              aria-label="Collage en loop de galletas recién horneadas de Delulu Cookies"
+              aria-label="Collage en loop de galletas recién horneadas de delulucookies"
             >
               <img
                 src="/images/hero-cookies.jpg"
@@ -269,7 +245,7 @@ export default function App() {
               />
               <img
                 src="/images/cookie-box.jpg"
-                alt="Caja de regalo artesanal de Delulu Cookies"
+                alt="Caja de regalo artesanal de delulucookies"
                 className="reel-slide slide-4"
               />
             </div>
@@ -294,7 +270,7 @@ export default function App() {
 
         <div className="wrap">
           {/* ==================================================================
-              3. SHORT DESCRIPTION (.lede idéntico a Davelle NY)
+              3. SHORT DESCRIPTION (.lede)
               ================================================================== */}
           <div className="lede">
             <svg
@@ -333,21 +309,30 @@ export default function App() {
                 Open Tue–Sun <b>8 AM – 9 PM</b>
               </span>
               <span>
-                Tasa BCV hoy <b>Bs. {bcvRate.toFixed(2)} / $1 USD</b>
+                Tasa BCV <b>Bs. {bcvRate.toFixed(2)}</b>
               </span>
-              <button
-                type="button"
-                onClick={() =>
-                  setCurrencyMode(currencyMode === 'USD' ? 'VES' : 'USD')
-                }
+              <div
+                className="currency-switch"
+                role="tablist"
+                aria-label="Cambiar moneda entre Dólares y Bolívares BCV"
               >
-                Ver precios en{' '}
-                <b>
-                  {currencyMode === 'USD'
-                    ? 'Bolívares (Bs. BCV)'
-                    : 'Dólares ($ USD)'}
-                </b>
-              </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={currencyMode === 'USD'}
+                  onClick={() => setCurrencyMode('USD')}
+                >
+                  $ USD
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={currencyMode === 'VES'}
+                  onClick={() => setCurrencyMode('VES')}
+                >
+                  Bs. BCV
+                </button>
+              </div>
             </div>
           </div>
 
@@ -390,14 +375,14 @@ export default function App() {
                 <div className="ph">
                   <img
                     src="/images/cookie-box.jpg"
-                    alt="Caja de regalo artesanal de Delulu Cookies lista para takeout"
+                    alt="Caja de regalo artesanal de delulucookies lista para takeout"
                     loading="lazy"
                     width="900"
                     height="1125"
                   />
                 </div>
                 <div className="tx">
-                  <div className="mark">delulu takeout</div>
+                  <div className="mark">delulucookies takeout</div>
                   <div className="jp">TIENDA ONLINE · PEDIDOS POR WHATSAPP</div>
                   <p>
                     Arma tu pedido de galletas individuales, cajas de regalo de
@@ -414,7 +399,7 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              5. OUR STORY (#story idéntico a Davelle NY)
+              5. OUR STORY (#story)
               ================================================================== */}
           <section id="story">
             <h2>Our story</h2>
@@ -429,9 +414,9 @@ export default function App() {
                 />
               </div>
               <div>
-                <h3>What Delulu means to us</h3>
+                <h3>What delulucookies means to us</h3>
                 <p>
-                  <em>Delulu Cookies</em> nació de la obsesión por hornear la
+                  <em>delulucookies</em> nació de la obsesión por hornear la
                   galleta perfecta: corteza dorada con mantequilla avellana
                   tostada, interior suave y un corazón fundente hecho con
                   ingredientes reales.
@@ -457,35 +442,60 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              6. THE MENU (#menu exactamente igual a davellenewyork.com)
+              6. THE MENU (#menu)
               ================================================================== */}
           <section id="menu">
             <h2>The menu</h2>
             <div className="menuwrap">
-              <div className="mtabs" role="tablist">
-                <button
-                  type="button"
-                  role="tab"
-                  id="t-food"
-                  aria-selected={menuTab === 'cookies'}
-                  aria-controls="p-food"
-                  onClick={() => setMenuTab('cookies')}
+              <div className="menu-controls-row">
+                <div className="mtabs" role="tablist" aria-label="Categorías del menú">
+                  <button
+                    type="button"
+                    role="tab"
+                    id="t-food"
+                    aria-selected={menuTab === 'cookies'}
+                    aria-controls="p-food"
+                    onClick={() => setMenuTab('cookies')}
+                  >
+                    Cookies
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    id="t-drink"
+                    aria-selected={menuTab === 'boxes'}
+                    aria-controls="p-drink"
+                    onClick={() => setMenuTab('boxes')}
+                  >
+                    Boxes &amp; Drinks
+                  </button>
+                </div>
+
+                <div
+                  className="currency-switch"
+                  role="tablist"
+                  aria-label="Moneda del menú"
                 >
-                  Cookies
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  id="t-drink"
-                  aria-selected={menuTab === 'boxes'}
-                  aria-controls="p-drink"
-                  onClick={() => setMenuTab('boxes')}
-                >
-                  Boxes &amp; Drinks
-                </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={currencyMode === 'USD'}
+                    onClick={() => setCurrencyMode('USD')}
+                  >
+                    $ USD
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={currencyMode === 'VES'}
+                    onClick={() => setCurrencyMode('VES')}
+                  >
+                    Bs. BCV
+                  </button>
+                </div>
               </div>
 
-              {/* PANEL 1: COOKIES (Estructura idéntica a #p-food de Davelle NY) */}
+              {/* PANEL 1: COOKIES (#p-food) */}
               <div
                 id="p-food"
                 role="tabpanel"
@@ -538,7 +548,7 @@ export default function App() {
                 ))}
               </div>
 
-              {/* PANEL 2: BOXES & DRINKS (Estructura idéntica a #p-drink de Davelle NY) */}
+              {/* PANEL 2: BOXES & DRINKS (#p-drink) */}
               <div
                 id="p-drink"
                 role="tabpanel"
@@ -648,7 +658,7 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              7. VISIT (#visit exactamente igual a Davelle NY)
+              7. VISIT (#visit)
               ================================================================== */}
           <section id="visit">
             <h2>Visit</h2>
@@ -670,7 +680,7 @@ export default function App() {
                   </div>
                   <div>
                     <span>
-                      Delulu Takeout Store
+                      delulucookies takeout
                       <small>pedidos online por WhatsApp · USD y Bs. BCV</small>
                     </span>
                     <span>9 AM – 8:30 PM · Mar–Dom</span>
@@ -708,7 +718,7 @@ export default function App() {
               <div className="ph">
                 <img
                   src="/images/cookie-classic.jpg"
-                  alt="Galleta recién horneada de Delulu Cookies"
+                  alt="Galleta recién horneada de delulucookies"
                   loading="lazy"
                   width="900"
                   height="900"
@@ -720,7 +730,7 @@ export default function App() {
       </main>
 
       {/* ====================================================================
-          8. FOOTER (idéntico a Davelle NY)
+          8. FOOTER
           ==================================================================== */}
       <div className="wrap">
         <footer>
