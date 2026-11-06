@@ -1,36 +1,35 @@
-// Configuración centralizada leída desde el archivo .env (Localizado para Venezuela)
+// Configuración centralizada leída desde el archivo .env (Venezuela · Estilo Davelle New York)
 export const ENV_CONFIG = {
   whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '584121234567',
   whatsappDefaultMessage:
     import.meta.env.VITE_WHATSAPP_DEFAULT_MESSAGE ||
     '¡Hola Delulu Cookies! Me gustaría hacer un pedido de galletas recién horneadas.',
-  brandName: import.meta.env.VITE_BRAND_NAME || 'DELULU COOKIES',
+  brandName: import.meta.env.VITE_BRAND_NAME || 'delulu cookies',
   brandTagline:
     import.meta.env.VITE_BRAND_TAGLINE ||
-    'Galletas de autor, horneadas en pequeños lotes en Venezuela con mantequilla avellana y chocolate 70% de origen venezolano.',
+    'Un rincón íntimo de galletas artesanales horneadas a diario en pequeños lotes con mantequilla avellana y cacao venezolano de origen.',
   brandHandle: import.meta.env.VITE_BRAND_HANDLE || '@delulucookies',
   brandLocation:
     import.meta.env.VITE_BRAND_LOCATION ||
-    'Caracas, Venezuela · Delivery y Pick-up',
+    'Caracas, Venezuela · Delivery y Takeout',
   instagramUrl: import.meta.env.VITE_INSTAGRAM_URL || 'https://instagram.com/delulucookies',
   tiktokUrl: import.meta.env.VITE_TIKTOK_URL || 'https://tiktok.com/@delulucookies',
   mapsUrl: import.meta.env.VITE_MAPS_URL || 'https://maps.google.com',
-  announcementBar:
-    import.meta.env.VITE_ANNOUNCEMENT_BAR ||
-    'HORNEADAS HOY EN CARACAS · PRECIOS EN USD ($) O BOLÍVARES (BS.) A TASA BCV DEL DÍA · PEDIDOS POR WHATSAPP',
   currencySymbol: import.meta.env.VITE_CURRENCY_SYMBOL || '$',
   bcvApiUrl:
     import.meta.env.VITE_BCV_API_URL || 'https://ve.dolarapi.com/v1/dolares/oficial',
   bcvFallbackRate: Number(import.meta.env.VITE_BCV_FALLBACK_RATE) || 893.22,
+  loopVideoUrl: import.meta.env.VITE_LOOP_VIDEO_URL || '',
 };
 
 /**
  * Formatea un monto en USD hacia Dólares ($ USD) o Bolívares a tasa BCV (Bs.)
- * @param {number} amountUsd Precio base en dólares
- * @param {'USD' | 'VES'} currencyMode Moneda activa ('USD' o 'VES')
- * @param {number} bcvRate Tasa del BCV vigente (Bs. por 1 USD)
  */
-export function formatCookiePrice(amountUsd, currencyMode = 'USD', bcvRate = ENV_CONFIG.bcvFallbackRate) {
+export function formatCookiePrice(
+  amountUsd,
+  currencyMode = 'USD',
+  bcvRate = ENV_CONFIG.bcvFallbackRate
+) {
   const numUsd = Number(amountUsd) || 0;
   if (currencyMode === 'VES') {
     const amountVes = numUsd * (Number(bcvRate) || ENV_CONFIG.bcvFallbackRate);
@@ -63,161 +62,141 @@ export function buildWhatsAppUrl(customMessage) {
   )}`;
 }
 
-// Presentaciones disponibles para cada galleta (Precios en USD pensados para Venezuela)
+/**
+ * Evalúa si la tienda está Abierta (Open) o Cerrada (Closed) según el horario de Venezuela (UTC-4)
+ * Horario: Martes a Domingo, 9:00 AM a 8:00 PM
+ */
+export function getStoreOpenStatus() {
+  try {
+    const now = new Date();
+    const caracasTimeStr = now.toLocaleString('en-US', {
+      timeZone: 'America/Caracas',
+    });
+    const caracasDate = new Date(caracasTimeStr);
+    const day = caracasDate.getDay(); // 0 = Domingo, 1 = Lunes, ...
+    const hour = caracasDate.getHours();
+
+    // Abierto todos los días de 8:00 AM a 9:00 PM (excepto lunes después de las 6pm si se desea)
+    const isOpen = hour >= 8 && hour < 21 && day !== 1;
+    return {
+      isOpen,
+      label: isOpen ? 'Open Now · 8am–9pm' : 'Closed · Opens 8am',
+    };
+  } catch {
+    return {
+      isOpen: true,
+      label: 'Open Today · 8am–9pm',
+    };
+  }
+}
+
+// Presentaciones disponibles dentro del menú para cada galleta
 export const PACK_OPTIONS = [
-  { id: 'single', label: '1 Galleta', multiplier: 1, discount: 1, tag: 'Individual' },
-  { id: 'box4', label: 'Caja x4', multiplier: 4, discount: 0.92, tag: '-8%' },
-  { id: 'box6', label: 'Caja x6', multiplier: 6, discount: 0.88, tag: 'Regalo -12%' },
+  { id: 'single', label: '1 Pieza', multiplier: 1, discount: 1 },
+  { id: 'box4', label: 'Caja x4 (-8%)', multiplier: 4, discount: 0.92 },
+  { id: 'box6', label: 'Caja x6 (-12%)', multiplier: 6, discount: 0.88 },
 ];
 
-// Catálogo de galletas de autor con precios base en USD ($) y cacao de origen venezolano
+// Categorías para el Menu Toggle (inspirado en Davelle New York)
+export const MENU_CATEGORIES = [
+  { id: 'signature', label: 'Signature Cookies' },
+  { id: 'stuffed', label: 'Cream & Stuffed' },
+  { id: 'boxes', label: 'Takeout Boxes & Pairing' },
+];
+
+// Menú de galletas para el Menu Toggle
 export const COOKIES_CATALOG = [
   {
-    id: 'no1-fleur-cacao-chuao',
-    number: 'N° 01 · EDICIÓN CLÁSICA',
-    name: 'Fleur de Cacao Chuao 70%',
-    category: 'chocolate',
-    badge: 'Bestseller',
-    weight: '145g',
+    id: 'chuao-sea-salt',
+    category: 'signature',
+    name: 'Chuao 70% & Araya Sea Salt',
     basePrice: 3.5,
     image: '/images/cookie-classic.jpg',
     description:
-      'Masa reposada 48 horas con mantequilla avellana, trozos fundentes de chocolate oscuro venezolano 70% de Chuao y escamas de sal marina de Araya.',
-    notes: ['Cacao Chuao 70%', 'Mantequilla Avellana', 'Sal de Araya'],
+      'Masa reposada 48 horas con mantequilla avellana dorada, trozos fundentes de chocolate oscuro venezolano Chuao 70% y escamas de sal de Araya.',
+    notes: ['Cacao Chuao 70%', 'Brown Butter', 'Sal Marina'],
   },
   {
-    id: 'no2-pistacchio-bronte',
-    number: 'N° 02 · COLECCIÓN LAVORATTI',
-    name: 'Pistacchio di Sicilia & Matcha',
-    category: 'rellenas',
-    badge: 'Favorita del Chef',
-    weight: '155g',
+    id: 'sunday-espresso-pecan',
+    category: 'signature',
+    name: 'Roasted Espresso & Gianduja',
+    basePrice: 3.8,
+    image: '/images/hero-cookies.jpg',
+    description:
+      'Infusionada con café de especialidad venezolano recién molido, chocolate con leche avellanado y nueces pecanas tostadas al horno.',
+    notes: ['Espresso Venezolano', 'Gianduja', 'Nuez Pecana'],
+  },
+  {
+    id: 'glazed-vanilla-milk',
+    category: 'signature',
+    name: 'Toasted Milk & Vanilla Glaze',
+    basePrice: 4.0,
+    image: '/images/cookie-classic.jpg',
+    description:
+      'Corteza crujiente con leche tostada en polvo, glaseado translúcido de vainilla en rama y centro suave de caramelo salado.',
+    notes: ['Leche Tostada', 'Vainilla Natural', 'Caramelo'],
+  },
+  {
+    id: 'matcha-pistachio-cream',
+    category: 'stuffed',
+    name: 'Uji Matcha & Sicilian Pistachio',
     basePrice: 4.5,
     image: '/images/cookie-pistachio.jpg',
     description:
-      'Galleta aterciopelada con té verde ceremonial, corazón cremoso de praliné de pistacho tostado y trozos de chocolate blanco caramelizado.',
-    notes: ['Crema de Pistacho', 'Matcha Ceremonial', 'Chocolate Blanco'],
+      'Nuestra galleta insignia inspirada en Davelle: masa de té verde ceremonial de Uji rellena con crema tibia de pistacho tostado y chocolate blanco.',
+    notes: ['Matcha Ceremonial', 'Crema de Pistacho', 'Bestseller'],
   },
   {
-    id: 'no3-glazed-vanilla-peptide',
-    number: 'N° 03 · INSPIRACIÓN RHODE',
-    name: 'Brown Butter Glazed Milk',
-    category: 'especiales',
-    badge: 'Edición Limitada',
-    weight: '140g',
-    basePrice: 4.0,
-    image: '/images/hero-cookies.jpg',
-    description:
-      'Textura suave y brillante con glaseado translúcido de vainilla natural, leche tostada en polvo y corazón de ganache de caramelo salado.',
-    notes: ['Glaseado Vainilla', 'Leche Tostada', 'Caramelo Salado'],
-  },
-  {
-    id: 'no4-sunday-espresso',
-    number: 'N° 04 · RITUAL DEAR SUNDAY',
-    name: 'Sunday Morning Espresso & Nuez',
-    category: 'chocolate',
-    badge: 'Recién Horneada',
-    weight: '150g',
-    basePrice: 3.8,
-    image: '/images/cookie-classic.jpg',
-    description:
-      'Infusionada con café de especialidad venezolano recién extraído, chocolate con leche avellanado (Gianduja) y nueces pecanas tostadas.',
-    notes: ['Café Especialidad VE', 'Gianduja Avellana', 'Nuez Pecana'],
-  },
-  {
-    id: 'no5-davelle-berry-toast',
-    number: 'N° 05 · TRIBUTO DAVELLE NY',
-    name: 'Mascarpone & Frambuesa Silvestre',
-    category: 'rellenas',
-    badge: 'Nueva',
-    weight: '150g',
+    id: 'berry-mascarpone-toast',
+    category: 'stuffed',
+    name: 'Berry Compote & Mascarpone',
     basePrice: 4.2,
     image: '/images/cookie-pistachio.jpg',
     description:
-      'Inspirada en los cafés íntimos de Nueva York: masa dorada rellena de crema suave de mascarpone con reducción artesanal de frutos rojos.',
-    notes: ['Crema Mascarpone', 'Frambuesa Silvestre', 'Vainilla'],
+      'Inspirada en los famosos toasts de Nueva York: galleta tibia rellena de crema de mascarpone batida y reducción artesanal de frutos rojos.',
+    notes: ['Crema Mascarpone', 'Frambuesa Silvestre', 'Mantequilla'],
   },
   {
-    id: 'no6-lavoratti-gift-box',
-    number: 'N° 06 · CAJA DE COLECCIÓN',
-    name: 'Cofre Editorial L’Assortimento (6 Pzas)',
-    category: 'cajas',
-    badge: 'Empaque de Lujo',
-    weight: '900g',
-    basePrice: 22.0,
+    id: 'hazelnut-praline-core',
+    category: 'stuffed',
+    name: 'Dark Cocoa & Hazelnut Praline',
+    basePrice: 4.4,
+    image: '/images/hero-cookies.jpg',
+    description:
+      'Galleta doble cacao oscuro con corazón líquido de praliné artesanal de avellanas piamontesas tostadas.',
+    notes: ['Doble Cacao', 'Praliné Avellana', 'Centro Fundente'],
+  },
+  {
+    id: 'takeout-box-4',
+    category: 'boxes',
+    name: 'The Petit Takeout Box (4 Cookies)',
+    basePrice: 13.5,
     image: '/images/cookie-box.jpg',
     description:
-      'Caja rígida forrada en papel texturizado color crema con listón terracota y sello dorado. Incluye nuestras 6 recetas insignia listas para regalar.',
-    notes: ['6 Galletas de Autor', 'Papel Texturizado', 'Tarjeta Caligrafiada'],
+      'Caja de degustación con 4 galletas de autor a tu elección, envuelta en papel crema con cinta rosa/roja lista para llevar o regalar.',
+    notes: ['4 Galletas a Elección', 'Empaque Regalo', 'Takeout'],
     isFixedBox: true,
   },
-];
-
-// Reseñas editoriales estilo Davelle New York (#press) adaptadas a Venezuela
-export const PRESS_QUOTES = [
   {
-    outlet: 'EL ESTÍMULO · BIENMESABE',
-    quote:
-      '“El nuevo objeto de deseo de la repostería en Caracas: galletas con cacao venezolano que se sienten como una pieza de diseño editorial italiano.”',
-    date: 'OCTUBRE 2026',
-    tag: 'GASTRONOMÍA VENEZOLANA',
+    id: 'takeout-box-6',
+    category: 'boxes',
+    name: 'Davelle Assortment Box (6 Cookies)',
+    basePrice: 19.5,
+    image: '/images/cookie-box.jpg',
+    description:
+      'Nuestra colección completa de 6 galletas recién salidas del horno con tarjeta de notas de cata y guía de calentamiento.',
+    notes: ['6 Galletas de Autor', 'Delivery Gratis CCS', 'Tarjeta Incluida'],
+    isFixedBox: true,
   },
   {
-    outlet: 'OCEAN DRIVE VENEZUELA',
-    quote:
-      '“Desde su cofre en papel algodón hasta el corazón fundente de pistacho y cacao de Chuao, Delulu Cookies convierte el postre en un ritual estético.”',
-    date: 'SEPTIEMBRE 2026',
-    tag: 'ESTILO & SABOR',
-  },
-  {
-    outlet: 'CARACAS CATERING CLUB',
-    quote:
-      '“La corteza crujiente de mantequilla avellana y el centro tibio de cacao 70% logran el equilibrio exacto entre Nueva York, Turín y Caracas.”',
-    date: 'NOVIEMBRE 2026',
-    tag: 'LO MEJOR DEL AÑO',
-  },
-];
-
-// Presets para demostrar cómo el CSS Maestro cambia toda la identidad con 3 variables
-export const MASTER_COLOR_PRESETS = [
-  {
-    id: 'default',
-    name: 'Crema & Terracota (Original)',
-    primary: '#F7F4EF',
-    primaryLight: '#FDFBF7',
-    primaryDark: '#EBE5DC',
-    secondary: '#231915',
-    tertiary: '#C87D55',
-    tertiaryLight: '#F3E3D8',
-  },
-  {
-    id: 'rhode-blush',
-    name: 'Rhode Glazed Blush',
-    primary: '#F9F3F2',
-    primaryLight: '#FFFDFC',
-    primaryDark: '#EFE4E2',
-    secondary: '#2B1E1E',
-    tertiary: '#C97A7E',
-    tertiaryLight: '#F6E2E3',
-  },
-  {
-    id: 'sunday-matcha',
-    name: 'Dear Sunday Matcha',
-    primary: '#F3F5F0',
-    primaryLight: '#FAFCF8',
-    primaryDark: '#E4E9DF',
-    secondary: '#1E261D',
-    tertiary: '#6E8562',
-    tertiaryLight: '#E1E9DC',
-  },
-  {
-    id: 'lavoratti-cacao',
-    name: 'Lavoratti Cacao Gold',
-    primary: '#F5EFE6',
-    primaryLight: '#FCF8F2',
-    primaryDark: '#E7DEC8',
-    secondary: '#1D1612',
-    tertiary: '#B38748',
-    tertiaryLight: '#EFE4CE',
+    id: 'cold-brew-pairing',
+    category: 'boxes',
+    name: 'Cookie & Cold Brew Takeout Duo',
+    basePrice: 7.5,
+    image: '/images/hero-cookies.jpg',
+    description:
+      'Dos galletas recién horneadas a elección acompañadas de nuestro Cold Brew de café venezolano embotellado o leche de avena.',
+    notes: ['2 Galletas', '1 Bebida Artesanal', 'Combo Takeout'],
+    isFixedBox: true,
   },
 ];

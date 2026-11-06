@@ -86,9 +86,9 @@ export default function WhatsAppCartDrawer({
       >
         <header className="drawer-header">
           <div>
-            <h3>Tu Selección de Galletas</h3>
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-secondary-muted)' }}>
-              Tasa BCV del día: <strong>Bs. {bcvRate.toFixed(2)} / $1 USD</strong>
+            <h3>Order Takeout</h3>
+            <p style={{ fontSize: '0.75rem', color: 'var(--color-body)' }}>
+              Tasa BCV hoy: <strong>Bs. {bcvRate.toFixed(2)} / $1 USD</strong>
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -96,8 +96,8 @@ export default function WhatsAppCartDrawer({
               type="button"
               onClick={() => onToggleCurrency(currencyMode === 'USD' ? 'VES' : 'USD')}
               style={{
-                border: '1px solid var(--color-tertiary)',
-                backgroundColor: 'var(--color-tertiary-light)',
+                border: '1.5px solid var(--color-outline)',
+                backgroundColor: 'var(--color-bg)',
                 padding: '0.3rem 0.6rem',
                 borderRadius: 'var(--radius-pill)',
                 fontFamily: 'var(--font-mono)',
@@ -107,6 +107,7 @@ export default function WhatsAppCartDrawer({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.25rem',
+                color: 'var(--color-section-name)',
               }}
               title="Alternar entre USD ($) y Bolívares (Bs. BCV)"
             >
