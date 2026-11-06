@@ -1,22 +1,29 @@
 /* ==========================================================================
-   DELULU COOKIES — CSS MAESTRO (DAVELLE NEW YORK EDITION)
-   Inspirado 100% en https://davellenewyork.com/
+   DELULU COOKIES — CSS MAESTRO (DAVELLE NEW YORK FULL REPLICA)
+   Inspirado fielmente en https://davellenewyork.com/
    ========================================================================== */
 
 :root {
   /* ========================================================================
-     PALETA DE COLORES (PALETTE)
+     PALETTE
+     - cream: #f3efe4
+     - brown: #d69c6e
+     - pink: #f33e4e
+     - black: #000000
+     - gray: #584c40
+     - red: #d32240
+     - light: #fffdf7
      ======================================================================== */
-  --cream: #f3efe4;        /* bg: cream (suave estilo Davelle NY) */
-  --brown: #d69c6e;        /* heading: brown */
-  --pink: #f33e4e;         /* outline: pink */
-  --black: #000000;        /* black */
-  --gray: #584c40;         /* body: gray */
-  --red: #d32240;          /* section name: red */
-  --light: #fffdf7;        /* card bg: light */
+  --cream: #f3efe4;
+  --brown: #d69c6e;
+  --pink: #f33e4e;
+  --black: #000000;
+  --gray: #584c40;
+  --red: #d32240;
+  --light: #fffdf7;
 
   /* ========================================================================
-     MAPEO DE ESTILOS (STYLES MAPPING)
+     STYLES MAPPING
      - bg: cream
      - outline: pink
      - heading: brown
@@ -30,72 +37,38 @@
   --color-body: var(--gray);
   --color-section-name: var(--red);
   --color-card-bg: var(--light);
+  --color-hairline: rgba(243, 62, 78, 0.25);
 
-  /* Aliases semánticos del CSS Maestro (Primarios, Secundarios, Terciarios) */
+  /* Aliases semánticos del CSS Maestro */
   --color-primary: var(--cream);
-  --color-primary-light: var(--light);
   --color-secondary: var(--gray);
-  --color-secondary-heading: var(--brown);
   --color-tertiary: var(--red);
-  --color-tertiary-outline: var(--pink);
 
   /* Tipografía Davelle New York */
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Space Mono', monospace;
-
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-pill: 9999px;
-
-  --max-width: 1160px;
-  --transition: all 0.25s ease;
+  --serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --sans: 'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Jost', sans-serif;
+  --radius-pill: 99px;
 }
 
-/* ==========================================================================
-   RESET & BASE STYLES
-   ========================================================================== */
 *, *::before, *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html {
+  color-scheme: light;
   scroll-behavior: smooth;
-  background-color: var(--color-bg);
-  color: var(--color-body);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
 }
 
 body {
+  margin: 0;
   background-color: var(--color-bg);
   color: var(--color-body);
-  line-height: 1.65;
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-}
-
-h1, h2, h3, h4 {
-  color: var(--color-heading);
-  font-family: var(--font-serif);
-  font-weight: 600;
-  line-height: 1.12;
-}
-
-p {
-  color: var(--color-body);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button, input, select {
-  font-family: inherit;
-  color: inherit;
 }
 
 img, video {
@@ -103,742 +76,766 @@ img, video {
   display: block;
 }
 
-/* Etiqueta de nombre de sección estilo Davelle NY (section name: red) */
-.section-name {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+h1, h2, h3, h4 {
+  color: var(--color-heading);
+  font-family: var(--serif);
+  font-weight: 400;
+}
+
+p {
+  color: var(--color-body);
+}
+
+a {
   color: var(--color-section-name);
-  margin-bottom: 0.85rem;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Contenedor principal Davelle (.wrap) */
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.wrap-nav {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 /* ==========================================================================
    1. NAVBAR (logo, our story, menu, open/closed, order takeout)
    ========================================================================== */
-.davelle-navbar {
-  position: sticky;
-  top: 0;
-  z-index: 60;
-  background-color: var(--color-bg);
-  border-bottom: 1.5px solid var(--color-outline);
-  padding: 0.9rem 1.5rem;
-}
-
-.davelle-navbar-inner {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  display: flex;
+.davelle-nav {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
+  padding: 22px 0 18px;
+  gap: 22px;
 }
 
-.davelle-logo {
-  font-family: var(--font-serif);
-  font-size: 1.95rem;
-  font-weight: 700;
-  color: var(--color-section-name);
-  letter-spacing: 0.04em;
-  text-transform: lowercase;
+.davelle-brand {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 500;
   font-style: italic;
+  color: var(--color-section-name);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-decoration: none;
 }
 
-.davelle-logo span {
-  font-style: normal;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
+.davelle-brand:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.davelle-nav .links {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.davelle-nav .links a {
+  color: var(--color-body);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.davelle-nav .links a:hover {
+  color: var(--color-section-name);
+  text-decoration: none;
+}
+
+/* Open / Closed status */
+.status {
+  font-family: var(--sans);
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-body);
-  display: block;
-  margin-top: -4px;
-}
-
-.davelle-nav-links {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  gap: 8px;
+  white-space: nowrap;
+  line-height: 1;
+  padding-top: 2px;
+  justify-self: end;
 }
 
-.davelle-nav-links a {
-  color: var(--color-body);
-  padding-bottom: 2px;
-  border-bottom: 1.5px solid transparent;
-  transition: var(--transition);
-}
-
-.davelle-nav-links a:hover {
-  color: var(--color-section-name);
-  border-bottom-color: var(--color-outline);
-}
-
-.davelle-nav-right {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-/* Indicador Open / Closed en tiempo real */
-.open-closed-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  background-color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-pill);
-  padding: 0.38rem 0.85rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-body);
-}
-
-.status-dot {
+.status b {
+  display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  background: var(--color-section-name);
 }
 
-.status-dot.open {
-  background-color: #26a65b;
-  box-shadow: 0 0 0 3px rgba(38, 166, 91, 0.2);
+.status.on b {
+  background: #3E8E5B;
 }
 
-.status-dot.closed {
-  background-color: var(--color-section-name);
-}
-
-/* Botón Order Takeout */
-.btn-order-takeout {
-  background-color: var(--color-section-name);
-  color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-pill);
-  padding: 0.5rem 1.15rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  cursor: pointer;
+/* Conmutador rápido USD ($) / Bs. BCV en el Navbar */
+.currency-pill {
   display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  transition: var(--transition);
-}
-
-.btn-order-takeout:hover {
-  background-color: var(--color-card-bg);
-  color: var(--color-section-name);
-}
-
-/* Selector rápido USD / Bs. BCV integrado en el estilo Davelle */
-.currency-mini-switch {
-  display: inline-flex;
-  background-color: var(--color-card-bg);
   border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-pill);
+  border-radius: 99px;
+  background: var(--color-card-bg);
   overflow: hidden;
+  font-family: var(--sans);
 }
 
-.currency-mini-btn {
+.currency-pill button {
   border: none;
   background: transparent;
-  padding: 0.35rem 0.65rem;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--color-body);
-  transition: var(--transition);
-}
-
-.currency-mini-btn.active {
-  background-color: var(--color-outline);
-  color: var(--color-card-bg);
-}
-
-/* ==========================================================================
-   2. LOOP VIDEO SECTION
-   ========================================================================== */
-.loop-video-section {
-  max-width: var(--max-width);
-  margin: 2rem auto 0;
-  padding: 0 1.5rem;
-}
-
-.loop-video-frame {
-  position: relative;
-  border: 2px solid var(--color-outline);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background-color: var(--color-card-bg);
-  height: clamp(340px, 62vh, 580px);
-}
-
-.loop-video-element {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Loop visual cinemático estilo Davelle NY con zoom/paneo continuo + grano analógico */
-.loop-cinematic-reel {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.reel-slide {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  animation: davelleLoopReel 18s infinite ease-in-out;
-}
-
-.reel-slide.slide-1 {
-  animation-delay: 0s;
-}
-.reel-slide.slide-2 {
-  animation-delay: 6s;
-}
-.reel-slide.slide-3 {
-  animation-delay: 12s;
-}
-
-@keyframes davelleLoopReel {
-  0% {
-    opacity: 0;
-    transform: scale(1.02);
-  }
-  8% {
-    opacity: 1;
-  }
-  33% {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-  41% {
-    opacity: 0;
-    transform: scale(1.12);
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.loop-video-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.58) 0%,
-    rgba(0, 0, 0, 0.12) 55%,
-    rgba(0, 0, 0, 0.25) 100%
-  );
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 1.5rem 1.75rem;
-}
-
-.loop-tag-top {
-  align-self: flex-start;
-  background-color: var(--color-card-bg);
-  color: var(--color-section-name);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-pill);
-  padding: 0.3rem 0.85rem;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 700;
+  padding: 7px 12px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.loop-bottom-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.loop-caption-box {
-  background-color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.35rem;
-  max-width: 480px;
-}
-
-.loop-caption-box h1 {
-  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
-  color: var(--color-heading);
-  margin-bottom: 0.25rem;
-}
-
-.loop-caption-box p {
-  font-size: 0.88rem;
   color: var(--color-body);
+  cursor: pointer;
 }
 
-/* ==========================================================================
-   3. SHORT DESCRIPTION SECTION
-   ========================================================================== */
-.short-description-section {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 4.5rem 1.5rem;
-  text-align: center;
+.currency-pill button.active {
+  background: var(--color-outline);
+  color: var(--color-card-bg);
 }
 
-.short-description-card {
-  background-color: var(--color-card-bg);
+/* Order Takeout button (idéntico al botón .order de Davelle NY) */
+.order-btn {
+  font-family: var(--sans);
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  background: var(--color-section-name);
+  color: var(--color-card-bg);
   border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-lg);
-  padding: 3rem 2.25rem;
-}
-
-.short-description-heading {
-  font-size: clamp(2rem, 4vw, 3.1rem);
-  color: var(--color-heading);
-  margin-bottom: 1.15rem;
-}
-
-.short-description-body {
-  font-size: 1.08rem;
-  color: var(--color-body);
-  max-width: 640px;
-  margin: 0 auto 1.5rem;
-}
-
-.bcv-notice-pill {
+  border-radius: 99px;
+  padding: 9px 20px;
+  min-height: 44px;
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
   justify-content: center;
-  background-color: var(--color-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-pill);
-  padding: 0.45rem 1.1rem;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  color: var(--color-body);
+  gap: 4px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.order-btn .ot {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.order-btn .os {
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  opacity: 0.92;
+}
+
+.order-btn:hover {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--color-card-bg);
 }
 
 /* ==========================================================================
-   4. OUR STORY SECTION
+   2. FULL-BLEED LOOP VIDEO (.hero idéntico a Davelle NY)
    ========================================================================== */
-.our-story-section {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 2rem 1.5rem 5rem;
-}
-
-.our-story-grid {
-  background-color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-lg);
+.hero {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  aspect-ratio: 2 / 1;
+  max-height: 70vh;
   overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1.05fr;
+  background: var(--black);
+  border-top: 1.5px solid var(--color-outline);
+  border-bottom: 1.5px solid var(--color-outline);
 }
 
-.our-story-image-wrap {
-  border-right: 1.5px solid var(--color-outline);
-  min-height: 380px;
-}
-
-.our-story-image-wrap img {
+.hero video,
+.hero img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.our-story-content {
-  padding: 3rem 2.75rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.our-story-title {
-  font-size: clamp(2.1rem, 3.6vw, 3rem);
-  color: var(--color-heading);
-  margin-bottom: 1.25rem;
-}
-
-.our-story-text {
-  font-size: 0.98rem;
-  color: var(--color-body);
-  margin-bottom: 1.1rem;
-}
-
-.our-story-signature {
-  margin-top: 0.75rem;
-  padding-top: 1.15rem;
-  border-top: 1px dashed var(--color-outline);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-section-name);
-}
-
-/* ==========================================================================
-   5. MENU TOGGLE SECTION (DAVELLE NEW YORK INTERACTIVE MENU)
-   ========================================================================== */
-.menu-toggle-section {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 1rem 1.5rem 5rem;
-}
-
-.menu-section-header {
-  text-align: center;
-  margin-bottom: 2.25rem;
-}
-
-.menu-section-title {
-  font-size: clamp(2.3rem, 4.2vw, 3.4rem);
-  color: var(--color-heading);
-  margin-bottom: 0.65rem;
-}
-
-/* Botones de pestañas del Menu Toggle */
-.menu-tabs-bar {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  background-color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-pill);
-  padding: 0.35rem;
-  margin: 1.25rem auto 0.75rem;
-}
-
-.menu-tab-btn {
-  border: 1.5px solid transparent;
-  background: transparent;
-  padding: 0.55rem 1.35rem;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--color-body);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.menu-tab-btn.active {
-  background-color: var(--color-section-name);
-  color: var(--color-card-bg);
-  border-color: var(--color-outline);
-}
-
-.menu-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.davelle-menu-card {
-  background-color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1.15rem;
-  transition: var(--transition);
-}
-
-.davelle-menu-card:hover {
-  transform: translateY(-3px);
-}
-
-.menu-card-top {
-  display: grid;
-  grid-template-columns: 96px 1fr;
-  gap: 1.15rem;
-  align-items: start;
-}
-
-.menu-card-thumb {
-  width: 96px;
-  height: 96px;
-  border-radius: var(--radius-sm);
-  border: 1.5px solid var(--color-outline);
-  object-fit: cover;
-}
-
-.menu-card-heading-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.75rem;
-  border-bottom: 1px dotted var(--color-outline);
-  padding-bottom: 0.4rem;
-  margin-bottom: 0.5rem;
-}
-
-.menu-card-title {
-  font-size: 1.45rem;
-  color: var(--color-heading);
-}
-
-.menu-card-price-block {
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.menu-card-price-main {
-  font-family: var(--font-mono);
-  font-size: 0.98rem;
-  font-weight: 700;
-  color: var(--color-section-name);
   display: block;
 }
 
-.menu-card-price-sub {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--color-body);
-}
-
-.menu-card-desc {
-  font-size: 0.88rem;
-  color: var(--color-body);
-  margin-bottom: 0.6rem;
-}
-
-.menu-card-notes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.menu-note-tag {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  text-transform: uppercase;
-  padding: 0.15rem 0.55rem;
+/* Botón Pause/Play en la esquina inferior derecha como en Davelle NY */
+.hvbtn {
+  position: absolute;
+  right: 20px;
+  bottom: 54px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   border: 1px solid var(--color-outline);
-  border-radius: var(--radius-pill);
-  color: var(--color-body);
-  background-color: var(--color-bg);
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--color-card-bg);
+  font-size: 11px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0.78;
+  transition: opacity 0.2s;
 }
 
-.menu-card-bottom {
+.hvbtn:hover {
+  opacity: 1;
+}
+
+/* Barra inferior sobre el video (.cap) */
+.hero .cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18px 24px;
+  color: var(--color-card-bg);
+  font-family: var(--sans);
+  font-size: 11.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   3. SHORT DESCRIPTION (.lede idéntico a Davelle NY)
+   ========================================================================== */
+.lede {
+  text-align: center;
+  padding: 52px 0 44px;
+}
+
+.zig {
+  display: block;
+  margin: 0 auto 20px;
+  color: var(--color-outline);
+}
+
+/* Section Name: red */
+.eyebrow,
+.section-heading {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-section-name);
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 28px;
+}
+
+.lede .eyebrow {
+  margin-bottom: 0;
+}
+
+/* Heading: brown */
+.lede h1 {
+  color: var(--color-heading);
+  font-weight: 400;
+  font-size: clamp(30px, 4.8vw, 48px);
+  line-height: 1.12;
+  margin: 14px auto 16px;
+  max-width: 700px;
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+
+/* Body: gray */
+.lede p {
+  max-width: 580px;
+  margin: 0 auto;
+  color: var(--color-body);
+}
+
+.pills {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.pills span,
+.pills button {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--color-outline);
+  background: var(--color-card-bg);
+  color: var(--color-body);
+  border-radius: 99px;
+  padding: 7px 16px;
+}
+
+.pills button {
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pills button:hover {
+  background: var(--color-outline);
+  color: var(--color-card-bg);
+}
+
+.pills b {
+  color: var(--color-section-name);
+  font-weight: 600;
+}
+
+/* Separador de secciones */
+section {
+  padding: 60px 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* ==========================================================================
+   4. OUR STORY (#story idéntico a Davelle NY)
+   ========================================================================== */
+.story {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  gap: 44px;
+  align-items: center;
+  background: var(--color-card-bg);
+  border: 1.5px solid var(--color-outline);
+  border-radius: 18px;
+  padding: 32px;
+}
+
+.story .ph {
+  border-radius: 14px;
+  border: 1.5px solid var(--color-outline);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+}
+
+.story .ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story h3 {
+  color: var(--color-heading);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.18;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+
+.story p {
+  margin: 0 0 16px;
+  max-width: 60ch;
+  color: var(--color-body);
+}
+
+.story .coffee {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-hairline);
+  color: var(--color-body);
+  font-size: 16.5px;
+}
+
+.story .coffee b {
+  font-weight: 600;
+  color: var(--color-section-name);
+}
+
+.story .sig {
+  color: var(--color-section-name);
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 22px;
+}
+
+/* ==========================================================================
+   5. MENU TOGGLE (#menu .menuwrap con doble borde rosa idéntico a Davelle NY)
+   ========================================================================== */
+.menuwrap {
+  background: var(--color-card-bg);
+  border: 1.5px solid var(--color-outline);
+  border-radius: 18px;
+  padding: 44px 48px;
+  position: relative;
+}
+
+.menuwrap::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 0.75px solid var(--color-outline);
+  border-radius: 14px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.mtabs {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 0 auto 34px;
+  border: 1.5px solid var(--color-outline);
+  border-radius: 99px;
+  width: max-content;
+  max-width: 100%;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+
+.mtabs button {
+  font: inherit;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: none;
+  border: 0;
+  padding: 9px 22px;
+  color: var(--color-body);
+  cursor: pointer;
+}
+
+.mtabs button[aria-selected="true"] {
+  background: var(--color-outline);
+  color: var(--color-card-bg);
+}
+
+.blurb {
+  text-align: center;
+  color: var(--color-body);
+  max-width: 560px;
+  margin: -14px auto 26px;
+  font-style: italic;
+}
+
+/* Categoría con líneas laterales (h3.cat de Davelle NY) */
+.cat {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 32px 0 14px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-section-name);
+}
+
+.cat i {
+  flex: 1 1;
+  height: 1px;
+  background: var(--color-hairline);
+}
+
+.sub {
+  text-align: center;
+  color: var(--color-body);
+  font-size: 15.5px;
+  margin: -2px auto 20px;
+  max-width: 60ch;
+  font-style: italic;
+}
+
+.item {
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--color-hairline);
+}
+
+.item:last-of-type {
+  border-bottom: none;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nm {
+  flex: 1 1;
+  font-size: 22px;
+  line-height: 1.15;
+  color: var(--color-heading);
+  font-weight: 500;
+}
+
+.nm small {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-section-name);
+  margin-left: 8px;
+  vertical-align: 2px;
+}
+
+.pr {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--color-section-name);
+}
+
+.pr-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--color-body);
+  margin-left: 6px;
+}
+
+.dsc {
+  margin: 6px 0 12px;
+  color: var(--color-body);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.item-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.65rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--color-outline);
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .pack-pills-inline {
   display: flex;
-  gap: 0.35rem;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .pack-pill-btn {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   border: 1px solid var(--color-outline);
-  background-color: var(--color-bg);
+  background: var(--color-bg);
   color: var(--color-body);
-  padding: 0.28rem 0.6rem;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
+  border-radius: 99px;
+  padding: 5px 12px;
   cursor: pointer;
-  transition: var(--transition);
 }
 
 .pack-pill-btn.active {
-  background-color: var(--color-outline);
+  background: var(--color-outline);
   color: var(--color-card-bg);
-  font-weight: 700;
+  font-weight: 600;
 }
 
-.menu-card-actions {
+.item-actions {
   display: flex;
-  gap: 0.45rem;
+  gap: 8px;
 }
 
-.btn-card-takeout {
-  background-color: var(--color-section-name);
-  color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-pill);
-  padding: 0.42rem 0.9rem;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 700;
+.btn-menu-order {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  border: 1.5px solid var(--color-outline);
+  background: var(--color-section-name);
+  color: var(--color-card-bg);
+  border-radius: 99px;
+  padding: 6px 14px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  transition: var(--transition);
+  gap: 5px;
 }
 
-.btn-card-takeout:hover {
-  background-color: var(--color-card-bg);
-  color: var(--color-section-name);
+.btn-menu-order:hover {
+  background: var(--black);
+  border-color: var(--black);
 }
 
-.btn-card-wa {
-  background-color: var(--color-card-bg);
-  color: var(--color-section-name);
+.btn-menu-wa {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-pill);
-  padding: 0.42rem 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 700;
+  background: var(--color-card-bg);
+  color: var(--color-section-name);
+  border-radius: 99px;
+  padding: 6px 13px;
   cursor: pointer;
-  transition: var(--transition);
 }
 
-.btn-card-wa:hover {
-  background-color: var(--color-outline);
+.btn-menu-wa:hover {
+  background: var(--color-outline);
   color: var(--color-card-bg);
 }
 
-/* ==========================================================================
-   6. VISIT SECTION (LOCATION, HOURS & TAKEOUT PICKUP)
-   ========================================================================== */
-.visit-section {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 1rem 1.5rem 5rem;
+.legend {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 26px;
+  text-align: center;
+  color: var(--color-body);
 }
 
-.visit-card {
-  background-color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-lg);
-  padding: 3rem 2.5rem;
+/* ==========================================================================
+   6. VISIT (#visit idéntico a Davelle NY)
+   ========================================================================== */
+.visit {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
+  gap: 44px;
   align-items: center;
-}
-
-.visit-heading {
-  font-size: clamp(2.1rem, 3.6vw, 3rem);
-  color: var(--color-heading);
-  margin-bottom: 1rem;
-}
-
-.visit-details-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  margin-top: 1.25rem;
-}
-
-.visit-detail-block h4 {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--color-section-name);
-  margin-bottom: 0.25rem;
-}
-
-.visit-detail-block p {
-  font-size: 0.95rem;
-  color: var(--color-body);
-}
-
-.visit-map-box {
-  background-color: var(--color-bg);
+  background: var(--color-card-bg);
   border: 1.5px solid var(--color-outline);
-  border-radius: var(--radius-md);
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
+  border-radius: 18px;
+  padding: 32px;
 }
 
-.hours-table {
+.visit .ph {
+  border-radius: 14px;
+  border: 1.5px solid var(--color-outline);
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.visit .ph img {
   width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  height: 100%;
+  object-fit: cover;
 }
 
-.hours-table tr {
-  border-bottom: 1px dashed var(--color-outline);
+.visit .big {
+  font-size: 30px;
+  color: var(--color-heading);
+  margin: 0 0 4px;
+  line-height: 1.2;
 }
 
-.hours-table td {
-  padding: 0.55rem 0;
+.visit p {
+  margin: 0 0 6px;
   color: var(--color-body);
 }
 
-.hours-table td:last-child {
-  text-align: right;
-  font-weight: 700;
+.hours {
+  margin: 22px 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.hours div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-hairline);
+  font-size: 17px;
+}
+
+.hours span:last-child {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
   color: var(--color-section-name);
+  font-weight: 600;
+}
+
+.hours small {
+  display: block;
+  color: var(--color-body);
+  font-size: 13px;
+}
+
+.acts {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.acts a,
+.acts button {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--color-outline);
+  background: var(--color-card-bg);
+  border-radius: 99px;
+  padding: 8px 18px;
+  color: var(--color-section-name);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.acts a:hover,
+.acts button:hover {
+  background: var(--color-outline);
+  color: var(--color-card-bg);
+  text-decoration: none;
 }
 
 /* ==========================================================================
-   7. FOOTER
+   7. FOOTER (idéntico a Davelle NY)
    ========================================================================== */
-.davelle-footer {
-  background-color: var(--color-card-bg);
-  border-top: 2px solid var(--color-outline);
-  padding: 3.5rem 1.5rem 2.5rem;
-}
-
-.davelle-footer-inner {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.davelle-footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
+footer {
+  border-top: 1.5px solid var(--color-outline);
+  padding: 36px 0 52px;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  color: var(--color-body);
 }
 
-.davelle-footer-nav a:hover {
+footer .footer-logo {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-style: italic;
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
   color: var(--color-section-name);
+  display: block;
+  margin-bottom: 10px;
+}
+
+footer p {
+  margin: 0 0 8px;
+  line-height: 1.6;
 }
 
 /* ==========================================================================
@@ -875,6 +872,7 @@ img, video {
 .drawer-header h3 {
   font-size: 1.55rem;
   color: var(--color-heading);
+  margin: 0;
 }
 
 .drawer-body {
@@ -897,7 +895,7 @@ img, video {
 .cart-item-row img {
   width: 62px;
   height: 62px;
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   border: 1.5px solid var(--color-outline);
   object-fit: cover;
 }
@@ -909,11 +907,13 @@ img, video {
 .cart-item-info h4 {
   font-size: 1.15rem;
   color: var(--color-heading);
+  margin: 0;
 }
 
 .cart-item-info p {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   color: var(--color-body);
+  margin: 2px 0 0;
 }
 
 .qty-controls {
@@ -922,7 +922,7 @@ img, video {
   gap: 0.5rem;
   background-color: var(--color-bg);
   border: 1px solid var(--color-outline);
-  border-radius: var(--radius-pill);
+  border-radius: 99px;
   padding: 0.12rem 0.5rem;
   margin-top: 0.35rem;
 }
@@ -948,10 +948,11 @@ img, video {
 .drawer-input {
   width: 100%;
   padding: 0.7rem 0.9rem;
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   border: 1.5px solid var(--color-outline);
   background-color: var(--color-bg);
   color: var(--color-body);
+  font-family: var(--sans);
   font-size: 0.85rem;
 }
 
@@ -969,7 +970,7 @@ img, video {
 }
 
 .drawer-total-row strong {
-  font-family: var(--font-mono);
+  font-family: var(--sans);
   font-size: 1.35rem;
   color: var(--color-section-name);
 }
@@ -980,53 +981,89 @@ img, video {
   color: var(--color-card-bg);
   border: 1.5px solid var(--color-outline);
   padding: 0.95rem;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
+  border-radius: 99px;
+  font-family: var(--sans);
   font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-  transition: var(--transition);
+  transition: all 0.25s ease;
 }
 
 .btn-checkout-whatsapp:hover {
-  background-color: var(--color-card-bg);
-  color: var(--color-section-name);
+  background-color: var(--black);
+  border-color: var(--black);
 }
 
 /* ==========================================================================
-   RESPONSIVE
+   RESPONSIVE (Idéntico a Davelle NY)
    ========================================================================== */
-@media (max-width: 900px) {
-  .our-story-grid,
-  .menu-cards-grid,
-  .visit-card {
-    grid-template-columns: 1fr;
+@media (max-width: 960px) {
+  .davelle-nav {
+    grid-template-columns: auto 1fr auto;
+    row-gap: 10px;
   }
 
-  .our-story-image-wrap {
-    border-right: none;
-    border-bottom: 1.5px solid var(--color-outline);
-    max-height: 320px;
+  .status {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: center;
   }
 }
 
-@media (max-width: 600px) {
-  .davelle-navbar-inner {
-    justify-content: center;
+@media (max-width: 720px) {
+  .davelle-nav {
+    grid-template-columns: 1fr auto;
+    row-gap: 10px;
+    padding: 16px 0 14px;
   }
 
-  .menu-card-top {
+  .davelle-nav .links {
+    display: none;
+  }
+
+  .hero {
+    aspect-ratio: 4 / 5;
+    max-height: none;
+  }
+
+  .hero .cap {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+
+  .hvbtn {
+    right: 14px;
+    bottom: 50px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .lede {
+    padding: 40px 0 34px;
+  }
+
+  .story,
+  .visit {
     grid-template-columns: 1fr;
+    padding: 22px;
   }
 
-  .menu-card-thumb {
-    width: 100%;
-    height: 180px;
+  .story .ph {
+    aspect-ratio: 4 / 5;
+    order: -1;
+  }
+
+  .visit .ph {
+    order: 2;
+  }
+
+  .menuwrap {
+    padding: 28px 20px;
   }
 }
