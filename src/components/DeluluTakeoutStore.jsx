@@ -17,8 +17,6 @@ export default function DeluluTakeoutStore({
   onToggleCurrency,
   bcvRate,
 }) {
-  // 'cookies' vs 'boxes' (toggle de secciones de la tienda delulucookies)
-  const [storeTab, setStoreTab] = useState('cookies');
   // Item abierto en el bottom-sheet (.to-shade / .to-sheet)
   const [activeSheetItem, setActiveSheetItem] = useState(null);
   const [sheetPack, setSheetPack] = useState(null);
@@ -26,16 +24,12 @@ export default function DeluluTakeoutStore({
 
   // Vista de revisión de bolsa/checkout dentro de la tienda ('browse' | 'checkout')
   const [storeStep, setStoreStep] = useState('browse');
-  const [whenMode, setWhenMode] = useState('ASAP (aprox. 25 min)');
-  const [deliveryType, setDeliveryType] = useState('Delivery en Caracas');
+  const [whenMode, setWhenMode] = useState('ASAP (aprox. 20 min)');
+  const [deliveryType, setDeliveryType] = useState('Delivery');
   const [paymentMethod, setPaymentMethod] = useState('Pago Móvil (Tasa BCV)');
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
-
-  const visibleSections = TAKEOUT_STORE_SECTIONS.filter(
-    (sec) => sec.kind === storeTab
-  );
 
   const totalItemsCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
   const totalUsdAmount = cartItems.reduce(
@@ -54,8 +48,8 @@ export default function DeluluTakeoutStore({
     const baseUsd = Number(activeSheetItem.priceUsd) || 0;
     const extraUsd = sheetPack ? Number(sheetPack.extraUsd) || 0 : 0;
     const finalUnitUsd = Number((baseUsd + extraUsd).toFixed(2));
-    const packLabel = sheetPack ? sheetPack.name : 'Takeout';
-    const cartKey = `${activeSheetItem.id}-${sheetPack ? sheetPack.id : 'std'}`;
+    const packLabel = sheetPack ? sheetPack.name : 'Individual (1 Galleta)';
+    const cartKey = `${activeSheetItem.id}-${sheetPack ? sheetPack.id : 'single'}`;
 
     onAddToCart(
       {
@@ -79,26 +73,12 @@ export default function DeluluTakeoutStore({
     }
     onAddToCart(
       {
-        cartKey: `${item.id}-std`,
+        cartKey: `${item.id}-single`,
         id: item.id,
         name: item.name,
-        packLabel: item.tag || 'Takeout',
+        packLabel: 'Individual (1 Galleta)',
         unitPrice: item.priceUsd,
-        image: item.image || '/images/cookie-box.jpg',
-      },
-      1
-    );
-  };
-
-  const handleQuickAddRow = (rowItem) => {
-    onAddToCart(
-      {
-        cartKey: `${rowItem.id}-addon`,
-        id: rowItem.id,
-        name: rowItem.name,
-        packLabel: rowItem.tag || 'Extra',
-        unitPrice: rowItem.priceUsd,
-        image: '/images/hero-cookies.jpg',
+        image: item.image || '/images/cookie-classic.jpg',
       },
       1
     );
@@ -123,7 +103,7 @@ export default function DeluluTakeoutStore({
 
     const msgParts = [
       `¡Hola *${ENV_CONFIG.brandName}*!`,
-      `Nuevo pedido desde la tienda *Order Takeout*:`,
+      `Nuevo pedido desde *Ordenar ahora*:`,
       ``,
       lines,
       ``,
@@ -194,63 +174,37 @@ export default function DeluluTakeoutStore({
             {ENV_CONFIG.brandName}
           </span>
           <div className="to-eyebrow">
-            Takeout &amp; WhatsApp Store · {ENV_CONFIG.brandLocation}
+            obrador artesanal · cookies estilo nyc · delivery y pick-up
           </div>
         </header>
 
         {/* Tarjeta de estado Pickup / Delivery (.to-pickup) */}
         <section className="to-pickup">
-          <div className="to-k">Pickup &amp; Delivery · Directo por WhatsApp</div>
-          <div className="to-big">Hoy · Horneadas al momento, aprox. 25 min</div>
-          <div className="to-small">
-            Martes a Domingo, 8:00 am – 9:00 pm · Tasa BCV hoy:{' '}
-            <strong>Bs. {bcvRate.toFixed(2)} / $1 USD</strong>
+          <div className="to-k">Ordena ahora · Directo por WhatsApp</div>
+          <div className="to-big">
+            Tu pedido recién horneado estará listo en aprox. 20 minutos
           </div>
-          <div className="to-hold">
-            Precios expresados en{' '}
-            {currencyMode === 'USD'
-              ? 'Dólares ($ USD)'
-              : `Bolívares (Bs. BCV ${bcvRate.toFixed(2)})`}
-            .
+          <div className="to-small">
+            Horario: 11:00 am – 6:00 pm · Tasa BCV:{' '}
+            <strong>Bs. {bcvRate.toFixed(2)}</strong>
           </div>
         </section>
 
         {storeStep === 'browse' ? (
           <>
-            {/* Toggle principal .to-tabs (Cookies vs Boxes & Drinks) */}
-            <div className="to-tabs" role="tablist" aria-label="Store Menu">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={storeTab === 'cookies'}
-                onClick={() => setStoreTab('cookies')}
-              >
-                Cookies &amp; Dips
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={storeTab === 'boxes'}
-                onClick={() => setStoreTab('boxes')}
-              >
-                Boxes &amp; Drinks
-              </button>
-            </div>
-
             {/* Chips de navegación rápida .to-chips */}
             <nav className="to-chips" aria-label="Sections">
-              {visibleSections.map((sec) => (
+              {TAKEOUT_STORE_SECTIONS.map((sec) => (
                 <a key={sec.id} href={`#store-${sec.id}`}>
                   {sec.title}
                 </a>
               ))}
             </nav>
 
-            {/* Secciones con cuadrícula .to-tiles y filas .to-rows */}
-            {visibleSections.map((sec) => (
+            {/* Secciones con cuadrícula .to-tiles */}
+            {TAKEOUT_STORE_SECTIONS.map((sec) => (
               <section key={sec.id} id={`store-${sec.id}`} className="to-sec">
                 <h2>{sec.title}</h2>
-                {sec.sub && <p className="to-sub">{sec.sub}</p>}
 
                 {sec.tiles && sec.tiles.length > 0 && (
                   <ul className="to-tiles">
@@ -280,45 +234,17 @@ export default function DeluluTakeoutStore({
                             <span>{item.name}</span>
                             <span>{mainPrice}</span>
                           </div>
-                          {item.tag && <div className="to-tag">{item.tag}</div>}
+                          {item.desc && <div className="to-tag">{item.desc}</div>}
                           <button
                             type="button"
                             className="to-add"
                             onClick={() => handleQuickAddTile(item)}
                           >
-                            Add
+                            Agregar
                           </button>
                         </li>
                       );
                     })}
-                  </ul>
-                )}
-
-                {sec.rows && sec.rows.length > 0 && (
-                  <ul className="to-rows">
-                    {sec.rows.map((row) => (
-                      <li key={row.id}>
-                        <button
-                          type="button"
-                          className="to-rowtx"
-                          onClick={() => handleQuickAddRow(row)}
-                        >
-                          <span className="to-n">{row.name}</span>
-                          {row.tag && <span className="to-d">{row.tag}</span>}
-                        </button>
-                        <span className="to-p">
-                          {formatCookiePrice(row.priceUsd, currencyMode, bcvRate)}
-                        </span>
-                        <button
-                          type="button"
-                          className="to-plus"
-                          onClick={() => handleQuickAddRow(row)}
-                          aria-label={`Agregar ${row.name}`}
-                        >
-                          +
-                        </button>
-                      </li>
-                    ))}
                   </ul>
                 )}
               </section>
@@ -329,16 +255,16 @@ export default function DeluluTakeoutStore({
              PASO DE REVISIÓN Y ENVÍO A WHATSAPP (.to-cart / .to-form / .to-sum)
              ================================================================== */
           <section className="to-sec to-cart">
-            <h2>Your Takeout Order</h2>
+            <h2>Tu Pedido</h2>
             <p className="to-sub">
-              Revisa tus galletas y completa tus datos para enviar el pedido a
-              WhatsApp.
+              Selecciona las galletas que quieras ordenar, llena la información
+              y envía directo a WhatsApp.
             </p>
 
             <div className="to-box" style={{ marginTop: '14px' }}>
               {cartItems.length === 0 ? (
                 <p style={{ margin: 0 }}>
-                  No tienes productos en tu orden todavía.{' '}
+                  No tienes galletas en tu orden todavía.{' '}
                   <button
                     type="button"
                     className="to-more"
@@ -392,7 +318,7 @@ export default function DeluluTakeoutStore({
                 className="to-more"
                 onClick={() => setStoreStep('browse')}
               >
-                + Agregar más galletas o bebidas
+                + Agregar más galletas
               </button>
             </div>
 
@@ -401,19 +327,19 @@ export default function DeluluTakeoutStore({
               <div className="to-when">
                 <button
                   type="button"
-                  aria-pressed={whenMode === 'ASAP (aprox. 25 min)'}
-                  onClick={() => setWhenMode('ASAP (aprox. 25 min)')}
+                  aria-pressed={whenMode === 'ASAP (aprox. 20 min)'}
+                  onClick={() => setWhenMode('ASAP (aprox. 20 min)')}
                 >
                   <b>Lo antes posible</b>
-                  <span>Hoy · ~25 min</span>
+                  <span>Hoy · ~20 min</span>
                 </button>
                 <button
                   type="button"
-                  aria-pressed={whenMode === 'Programar hora hoy'}
-                  onClick={() => setWhenMode('Programar hora hoy')}
+                  aria-pressed={whenMode === 'Programar hora (11 am - 6 pm)'}
+                  onClick={() => setWhenMode('Programar hora (11 am - 6 pm)')}
                 >
                   <b>Programar hora</b>
-                  <span>Elegir horario en WhatsApp</span>
+                  <span>11 am - 6 pm</span>
                 </button>
               </div>
             </div>
@@ -426,15 +352,8 @@ export default function DeluluTakeoutStore({
                   value={deliveryType}
                   onChange={(e) => setDeliveryType(e.target.value)}
                 >
-                  <option value="Delivery en Caracas">
-                    Delivery en Caracas
-                  </option>
-                  <option value="Pickup / Retiro en Tienda">
-                    Pickup / Retiro en Tienda
-                  </option>
-                  <option value="Enviar como Regalo Sorpresa">
-                    Enviar como Regalo Sorpresa
-                  </option>
+                  <option value="Delivery">Delivery</option>
+                  <option value="Pick-up">Pick-up</option>
                 </select>
               </label>
 
@@ -446,13 +365,10 @@ export default function DeluluTakeoutStore({
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 >
                   <option value="Pago Móvil (Tasa BCV)">
-                    Pago Móvil en Bs. (Tasa BCV del día)
+                    Pago Móvil en Bs. (Tasa BCV)
                   </option>
                   <option value="Zelle (USD)">Zelle ($ USD)</option>
                   <option value="Efectivo (USD)">Efectivo ($ USD)</option>
-                  <option value="Binance Pay / Zinli">
-                    Binance Pay / Zinli
-                  </option>
                 </select>
               </label>
 
@@ -477,10 +393,10 @@ export default function DeluluTakeoutStore({
               </label>
 
               <label>
-                Dirección de entrega o dedicatoria de regalo
+                Dirección de entrega o notas
                 <input
                   type="text"
-                  placeholder="Zona de Caracas o mensaje para la tarjeta..."
+                  placeholder="Dirección de entrega o nota para tu pedido..."
                   value={customerAddress}
                   onChange={(e) => setCustomerAddress(e.target.value)}
                 />
@@ -545,8 +461,8 @@ export default function DeluluTakeoutStore({
           >
             <span>
               {storeStep === 'browse'
-                ? `View order (${totalItemsCount})`
-                : `Send order on WhatsApp (${totalItemsCount})`}
+                ? `Ver pedido (${totalItemsCount})`
+                : `Enviar por WhatsApp (${totalItemsCount})`}
             </span>
             <span>
               {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)} →
@@ -593,7 +509,7 @@ export default function DeluluTakeoutStore({
 
             <p className="to-desc">{activeSheetItem.desc}</p>
             <p className="to-fresh">
-              Horneada hoy en pequeños lotes · Disponible en USD ($) y Bs. (BCV)
+              Galletas estilo NYC · Listas en aprox. 20 min
             </p>
 
             {activeSheetItem.packs && activeSheetItem.packs.length > 0 && (
@@ -648,7 +564,7 @@ export default function DeluluTakeoutStore({
                 className="to-go"
                 onClick={handleConfirmSheetAdd}
               >
-                <span>Add to order</span>
+                <span>Agregar al pedido</span>
                 <span>
                   {formatCookiePrice(
                     ((Number(activeSheetItem.priceUsd) || 0) +
@@ -666,4 +582,3 @@ export default function DeluluTakeoutStore({
     </div>
   );
 }
-
