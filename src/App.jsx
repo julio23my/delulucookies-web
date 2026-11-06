@@ -82,14 +82,17 @@ export default function App() {
 
   const handleToggleVideoPlay = () => {
     const vid = videoRef.current;
-    if (!vid) return;
-    if (vid.paused) {
-      vid.play();
-      setIsVideoPaused(false);
-    } else {
-      vid.pause();
-      setIsVideoPaused(true);
+    if (vid) {
+      if (vid.paused) {
+        vid.play();
+        setIsVideoPaused(false);
+      } else {
+        vid.pause();
+        setIsVideoPaused(true);
+      }
+      return;
     }
+    setIsVideoPaused((prev) => !prev);
   };
 
   const computeUsdPrice = (cookie, pack) => {
@@ -234,38 +237,55 @@ export default function App() {
 
       <main id="main">
         {/* ====================================================================
-            2. FULL-BLEED LOOP VIDEO (Exactamente como Davelle New York .hero)
+            2. FULL-BLEED LOOP VIDEO / COLLAGE (100vw como Davelle New York .hero)
             ==================================================================== */}
         <div className="hero" id="top">
-          <video
-            ref={videoRef}
-            className="hv"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="/images/hero-cookies.jpg"
-            aria-label="Delulu Cookies storefront and artisanal cookie café loop video"
-          >
-            {ENV_CONFIG.loopVideoUrl ? (
-              <source src={ENV_CONFIG.loopVideoUrl} type="video/mp4" />
-            ) : (
-              <>
-                <source
-                  src="/images/hero-storefront-m.mp4"
-                  media="(max-width:720px)"
-                  type="video/mp4"
-                />
-                <source src="/images/hero-storefront.mp4" type="video/mp4" />
-              </>
-            )}
-          </video>
+          {ENV_CONFIG.loopVideoUrl ? (
+            <video
+              ref={videoRef}
+              className="hv"
+              src={ENV_CONFIG.loopVideoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/images/hero-cookies.jpg"
+              aria-label="Delulu Cookies loop video"
+            />
+          ) : (
+            <div
+              className={`loop-cinematic-reel ${isVideoPaused ? 'paused' : ''}`}
+              role="img"
+              aria-label="Collage en loop de galletas recién horneadas de Delulu Cookies"
+            >
+              <img
+                src="/images/hero-cookies.jpg"
+                alt="Galletas partidas con chocolate fundido y pistacho"
+                className="reel-slide slide-1"
+              />
+              <img
+                src="/images/cookie-pistachio.jpg"
+                alt="Galleta de Matcha y Pistacho Siciliano"
+                className="reel-slide slide-2"
+              />
+              <img
+                src="/images/cookie-classic.jpg"
+                alt="Galleta clásica con trozos de chocolate Chuao 70%"
+                className="reel-slide slide-3"
+              />
+              <img
+                src="/images/cookie-box.jpg"
+                alt="Caja de regalo artesanal de Delulu Cookies"
+                className="reel-slide slide-4"
+              />
+            </div>
+          )}
 
           <button
             className="hvbtn"
             type="button"
-            aria-label={isVideoPaused ? 'Play video' : 'Pause video'}
+            aria-label={isVideoPaused ? 'Play loop' : 'Pause loop'}
             aria-pressed={isVideoPaused}
             onClick={handleToggleVideoPlay}
           >
