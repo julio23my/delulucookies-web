@@ -1,4 +1,4 @@
-// Configuración centralizada leída desde el archivo .env (Venezuela · Estilo Davelle New York)
+// Configuración centralizada leída desde el archivo .env (Venezuela · Réplica Davelle New York)
 export const ENV_CONFIG = {
   whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '584121234567',
   whatsappDefaultMessage:
@@ -64,7 +64,6 @@ export function buildWhatsAppUrl(customMessage) {
 
 /**
  * Evalúa si la tienda está Abierta (Open) o Cerrada (Closed) según el horario de Venezuela (UTC-4)
- * Horario: Martes a Domingo, 9:00 AM a 8:00 PM
  */
 export function getStoreOpenStatus() {
   try {
@@ -73,130 +72,353 @@ export function getStoreOpenStatus() {
       timeZone: 'America/Caracas',
     });
     const caracasDate = new Date(caracasTimeStr);
-    const day = caracasDate.getDay(); // 0 = Domingo, 1 = Lunes, ...
+    const day = caracasDate.getDay();
     const hour = caracasDate.getHours();
 
-    // Abierto todos los días de 8:00 AM a 9:00 PM (excepto lunes después de las 6pm si se desea)
     const isOpen = hour >= 8 && hour < 21 && day !== 1;
     return {
       isOpen,
-      label: isOpen ? 'Open Now · 8am–9pm' : 'Closed · Opens 8am',
+      label: isOpen ? 'Open daily 8 AM–9 PM' : 'Closed · Opens 8 AM',
     };
   } catch {
     return {
       isOpen: true,
-      label: 'Open Today · 8am–9pm',
+      label: 'Open daily 8 AM–9 PM',
     };
   }
 }
 
-// Presentaciones disponibles dentro del menú para cada galleta
-export const PACK_OPTIONS = [
-  { id: 'single', label: '1 Pieza', multiplier: 1, discount: 1 },
-  { id: 'box4', label: 'Caja x4 (-8%)', multiplier: 4, discount: 0.92 },
-  { id: 'box6', label: 'Caja x6 (-12%)', multiplier: 6, discount: 0.88 },
-];
+// ============================================================================
+// DATOS DEL MENÚ PRINCIPAL (#menu en la Home, idéntico a Davelle New York)
+// ============================================================================
+export const HOME_MENU_COOKIES = {
+  blurb:
+    'Galletas artesanales con masa reposada 48 horas, mantequilla avellana, cacao venezolano Chuao 70% y centros cremosos.',
+  sections: [
+    {
+      title: 'Signature Cookies',
+      sub: 'Masa dorada con mantequilla avellana francesa y escamas de sal marina de Araya',
+      items: [
+        {
+          id: 'chuao-sea-salt',
+          name: 'Chuao 70% & Araya Sea Salt',
+          tag: 'Bestseller',
+          priceUsd: 3.5,
+          desc: 'Trozos fundentes de chocolate oscuro venezolano Chuao 70%, mantequilla avellana tostada y flor de sal marina.',
+        },
+        {
+          id: 'sunday-espresso-pecan',
+          name: 'Roasted Espresso & Gianduja',
+          tag: 'Fresh',
+          priceUsd: 3.8,
+          desc: 'Infusionada con café de especialidad venezolano recién molido, chocolate con leche avellanado y nueces pecanas tostadas.',
+        },
+        {
+          id: 'glazed-vanilla-milk',
+          name: 'Toasted Milk & Vanilla Glaze',
+          tag: 'Limited',
+          priceUsd: 4.0,
+          desc: 'Corteza crujiente con leche tostada en polvo, glaseado translúcido de vainilla en rama y corazón de caramelo salado.',
+        },
+      ],
+    },
+    {
+      title: 'Stuffed & Creamy Center',
+      sub: 'Rellenas a mano antes de hornear para lograr un centro líquido y tibio',
+      items: [
+        {
+          id: 'matcha-pistachio-cream',
+          name: 'Uji Matcha & Sicilian Pistachio',
+          tag: 'Chef Favorite',
+          priceUsd: 4.5,
+          desc: 'Masa de té verde ceremonial de Uji rellena con crema tibia de pistacho tostado y trozos de chocolate blanco caramelizado.',
+        },
+        {
+          id: 'berry-mascarpone-toast',
+          name: 'Berry Compote & Mascarpone',
+          tag: 'New',
+          priceUsd: 4.2,
+          desc: 'Galleta dorada rellena de crema batida de mascarpone y reducción artesanal de frambuesas y frutos rojos.',
+        },
+        {
+          id: 'hazelnut-praline-core',
+          name: 'Dark Cocoa & Hazelnut Praline',
+          tag: 'Rich',
+          priceUsd: 4.4,
+          desc: 'Galleta doble cacao oscuro 70% con corazón fundente de praliné artesanal de avellanas tostadas.',
+        },
+      ],
+    },
+    {
+      title: 'Cookie Add-ons & Extras',
+      items: [
+        {
+          id: 'addon-pistachio-dip',
+          name: 'Extra Vasito de Crema de Pistacho',
+          tag: 'GF',
+          priceUsd: 1.5,
+        },
+        {
+          id: 'addon-chuao-fudge',
+          name: 'Extra Fudge Caliente de Cacao Chuao 70%',
+          tag: 'GF',
+          priceUsd: 1.2,
+        },
+        {
+          id: 'addon-ice-cream',
+          name: 'Scoop de Helado de Vainilla para acompañar',
+          priceUsd: 2.0,
+        },
+        {
+          id: 'addon-gift-card',
+          name: 'Tarjeta Caligrafiada para Regalo',
+          priceUsd: 0.5,
+        },
+      ],
+    },
+  ],
+};
 
-// Categorías para el Menu Toggle (inspirado en Davelle New York)
-export const MENU_CATEGORIES = [
-  { id: 'signature', label: 'Signature Cookies' },
-  { id: 'stuffed', label: 'Cream & Stuffed' },
-  { id: 'boxes', label: 'Takeout Boxes & Pairing' },
-];
+export const HOME_MENU_BOXES_DRINKS = {
+  blurb:
+    'Cofres de regalo envueltos en papel crema con cinta y bebidas artesanales para acompañar tus galletas.',
+  sections: [
+    {
+      title: 'Takeout & Gift Boxes',
+      sub: 'Delulu Cookies · Empaque de colección con guía de calentamiento',
+      items: [
+        {
+          id: 'takeout-box-4',
+          name: 'The Petit Takeout Box (4 Galletas)',
+          priceUsd: 13.5,
+          desc: 'Caja degustación con 4 galletas de autor a tu elección, lista para llevar o enviar de regalo.',
+        },
+        {
+          id: 'takeout-box-6',
+          name: 'The Classic Assortment Box (6 Galletas)',
+          priceUsd: 19.5,
+          desc: 'Nuestras 6 recetas insignia recién salidas del horno en cofre rígido con listón y tarjeta.',
+        },
+        {
+          id: 'takeout-box-12',
+          name: 'Gran Cofre Editorial (12 Galletas)',
+          priceUsd: 36.0,
+          desc: '12 galletas de autor surtidas horneadas el mismo día. Ideal para compartir, eventos o regalos especiales.',
+        },
+        {
+          id: 'cold-brew-pairing',
+          name: 'Cookie & Cold Brew Takeout Duo',
+          priceUsd: 7.5,
+          desc: '2 galletas recién horneadas a elección + 1 Cold Brew de café venezolano o Matcha Latte.',
+        },
+      ],
+    },
+  ],
+  gridSections: [
+    {
+      title: 'Coffee & Matcha',
+      sub: 'Preparados al momento para acompañar tu galleta tibia',
+      lines: [
+        { name: 'Espresso Venezolano', small: 'doble shot', priceUsd: 2.0 },
+        { name: 'Cortado / Macchiato', small: 'leche entera o avena', priceUsd: 2.8 },
+        { name: 'Cold Brew Slow-Dripped', small: 'botella 10 oz', priceUsd: 3.5 },
+        { name: 'Ceremonial Matcha Latte', small: 'hot / iced', priceUsd: 4.2 },
+        { name: 'Hojicha Roasted Latte', small: 'hot / iced', priceUsd: 4.0 },
+        { name: 'Vaso de Leche Fría de Almendras', small: '8 oz', priceUsd: 2.5 },
+      ],
+    },
+  ],
+};
 
-// Menú de galletas para el Menu Toggle
-export const COOKIES_CATALOG = [
+// ============================================================================
+// DATOS DE LA TIENDA / ORDER TAKEOUT (Vista exacta a davellenewyork.com/order)
+// ============================================================================
+export const TAKEOUT_STORE_SECTIONS = [
   {
-    id: 'chuao-sea-salt',
-    category: 'signature',
-    name: 'Chuao 70% & Araya Sea Salt',
-    basePrice: 3.5,
-    image: '/images/cookie-classic.jpg',
-    description:
-      'Masa reposada 48 horas con mantequilla avellana dorada, trozos fundentes de chocolate oscuro venezolano Chuao 70% y escamas de sal de Araya.',
-    notes: ['Cacao Chuao 70%', 'Brown Butter', 'Sal Marina'],
+    id: 'signature',
+    title: 'Signature Cookies',
+    kind: 'cookies',
+    sub: 'Masa reposada 48 horas con mantequilla avellana y cacao venezolano Chuao 70%',
+    tiles: [
+      {
+        id: 'chuao-sea-salt',
+        name: 'Chuao 70% & Araya Sea Salt',
+        priceUsd: 3.5,
+        tag: 'Bestseller',
+        image: '/images/cookie-classic.jpg',
+        desc: 'Trozos fundentes de chocolate oscuro venezolano Chuao 70%, mantequilla avellana tostada y flor de sal marina de Araya.',
+        packs: [
+          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 Galletas (-8%)', extraUsd: 9.38 },
+          { id: 'box6', name: 'Caja de 6 Galletas (-12%)', extraUsd: 14.98 },
+        ],
+      },
+      {
+        id: 'sunday-espresso-pecan',
+        name: 'Roasted Espresso & Gianduja',
+        priceUsd: 3.8,
+        tag: 'Fresh',
+        image: '/images/hero-cookies.jpg',
+        desc: 'Infusionada con café de especialidad venezolano recién molido, chocolate con leche avellanado y nueces pecanas tostadas.',
+        packs: [
+          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 Galletas (-8%)', extraUsd: 10.18 },
+          { id: 'box6', name: 'Caja de 6 Galletas (-12%)', extraUsd: 16.26 },
+        ],
+      },
+      {
+        id: 'glazed-vanilla-milk',
+        name: 'Toasted Milk & Vanilla Glaze',
+        priceUsd: 4.0,
+        tag: 'Limited',
+        image: '/images/cookie-classic.jpg',
+        desc: 'Corteza crujiente con leche tostada en polvo, glaseado translúcido de vainilla en rama y corazón de caramelo salado.',
+        packs: [
+          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 Galletas (-8%)', extraUsd: 10.72 },
+          { id: 'box6', name: 'Caja de 6 Galletas (-12%)', extraUsd: 17.12 },
+        ],
+      },
+    ],
+    rows: [],
   },
   {
-    id: 'sunday-espresso-pecan',
-    category: 'signature',
-    name: 'Roasted Espresso & Gianduja',
-    basePrice: 3.8,
-    image: '/images/hero-cookies.jpg',
-    description:
-      'Infusionada con café de especialidad venezolano recién molido, chocolate con leche avellanado y nueces pecanas tostadas al horno.',
-    notes: ['Espresso Venezolano', 'Gianduja', 'Nuez Pecana'],
+    id: 'stuffed',
+    title: 'Cream & Stuffed',
+    kind: 'cookies',
+    sub: 'Galletas rellenas con corazón cremoso y fundente',
+    tiles: [
+      {
+        id: 'matcha-pistachio-cream',
+        name: 'Uji Matcha & Sicilian Pistachio',
+        priceUsd: 4.5,
+        tag: 'Chef Favorite',
+        image: '/images/cookie-pistachio.jpg',
+        desc: 'Masa de té verde ceremonial de Uji rellena con crema tibia de pistacho tostado y chocolate blanco caramelizado.',
+        packs: [
+          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 Galletas (-8%)', extraUsd: 12.06 },
+          { id: 'box6', name: 'Caja de 6 Galletas (-12%)', extraUsd: 19.26 },
+        ],
+      },
+      {
+        id: 'berry-mascarpone-toast',
+        name: 'Berry Compote & Mascarpone',
+        priceUsd: 4.2,
+        tag: 'New',
+        image: '/images/cookie-pistachio.jpg',
+        desc: 'Galleta dorada rellena de crema batida de mascarpone y reducción artesanal de frambuesas silvestres.',
+        packs: [
+          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 Galletas (-8%)', extraUsd: 11.26 },
+          { id: 'box6', name: 'Caja de 6 Galletas (-12%)', extraUsd: 17.98 },
+        ],
+      },
+      {
+        id: 'hazelnut-praline-core',
+        name: 'Dark Cocoa & Hazelnut Praline',
+        priceUsd: 4.4,
+        tag: 'Rich',
+        image: '/images/hero-cookies.jpg',
+        desc: 'Galleta doble cacao oscuro 70% con corazón fundente de praliné artesanal de avellanas tostadas.',
+        packs: [
+          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 Galletas (-8%)', extraUsd: 11.79 },
+          { id: 'box6', name: 'Caja de 6 Galletas (-12%)', extraUsd: 18.83 },
+        ],
+      },
+    ],
+    rows: [],
   },
   {
-    id: 'glazed-vanilla-milk',
-    category: 'signature',
-    name: 'Toasted Milk & Vanilla Glaze',
-    basePrice: 4.0,
-    image: '/images/cookie-classic.jpg',
-    description:
-      'Corteza crujiente con leche tostada en polvo, glaseado translúcido de vainilla en rama y centro suave de caramelo salado.',
-    notes: ['Leche Tostada', 'Vainilla Natural', 'Caramelo'],
+    id: 'addons',
+    title: 'Dips & Add-ons',
+    kind: 'cookies',
+    tiles: [],
+    rows: [
+      {
+        id: 'addon-pistachio-dip',
+        name: 'Extra Vasito de Crema de Pistacho',
+        tag: 'GF',
+        priceUsd: 1.5,
+      },
+      {
+        id: 'addon-chuao-fudge',
+        name: 'Extra Fudge Caliente de Cacao Chuao 70%',
+        tag: 'GF',
+        priceUsd: 1.2,
+      },
+      {
+        id: 'addon-ice-cream',
+        name: 'Scoop de Helado de Vainilla Artesanal',
+        priceUsd: 2.0,
+      },
+      {
+        id: 'addon-gift-card',
+        name: 'Tarjeta Caligrafiada con Dedicatoria',
+        tag: 'Envolver para regalo',
+        priceUsd: 0.5,
+      },
+    ],
   },
   {
-    id: 'matcha-pistachio-cream',
-    category: 'stuffed',
-    name: 'Uji Matcha & Sicilian Pistachio',
-    basePrice: 4.5,
-    image: '/images/cookie-pistachio.jpg',
-    description:
-      'Nuestra galleta insignia inspirada en Davelle: masa de té verde ceremonial de Uji rellena con crema tibia de pistacho tostado y chocolate blanco.',
-    notes: ['Matcha Ceremonial', 'Crema de Pistacho', 'Bestseller'],
-  },
-  {
-    id: 'berry-mascarpone-toast',
-    category: 'stuffed',
-    name: 'Berry Compote & Mascarpone',
-    basePrice: 4.2,
-    image: '/images/cookie-pistachio.jpg',
-    description:
-      'Inspirada en los famosos toasts de Nueva York: galleta tibia rellena de crema de mascarpone batida y reducción artesanal de frutos rojos.',
-    notes: ['Crema Mascarpone', 'Frambuesa Silvestre', 'Mantequilla'],
-  },
-  {
-    id: 'hazelnut-praline-core',
-    category: 'stuffed',
-    name: 'Dark Cocoa & Hazelnut Praline',
-    basePrice: 4.4,
-    image: '/images/hero-cookies.jpg',
-    description:
-      'Galleta doble cacao oscuro con corazón líquido de praliné artesanal de avellanas piamontesas tostadas.',
-    notes: ['Doble Cacao', 'Praliné Avellana', 'Centro Fundente'],
-  },
-  {
-    id: 'takeout-box-4',
-    category: 'boxes',
-    name: 'The Petit Takeout Box (4 Cookies)',
-    basePrice: 13.5,
-    image: '/images/cookie-box.jpg',
-    description:
-      'Caja de degustación con 4 galletas de autor a tu elección, envuelta en papel crema con cinta rosa/roja lista para llevar o regalar.',
-    notes: ['4 Galletas a Elección', 'Empaque Regalo', 'Takeout'],
-    isFixedBox: true,
-  },
-  {
-    id: 'takeout-box-6',
-    category: 'boxes',
-    name: 'Davelle Assortment Box (6 Cookies)',
-    basePrice: 19.5,
-    image: '/images/cookie-box.jpg',
-    description:
-      'Nuestra colección completa de 6 galletas recién salidas del horno con tarjeta de notas de cata y guía de calentamiento.',
-    notes: ['6 Galletas de Autor', 'Delivery Gratis CCS', 'Tarjeta Incluida'],
-    isFixedBox: true,
-  },
-  {
-    id: 'cold-brew-pairing',
-    category: 'boxes',
-    name: 'Cookie & Cold Brew Takeout Duo',
-    basePrice: 7.5,
-    image: '/images/hero-cookies.jpg',
-    description:
-      'Dos galletas recién horneadas a elección acompañadas de nuestro Cold Brew de café venezolano embotellado o leche de avena.',
-    notes: ['2 Galletas', '1 Bebida Artesanal', 'Combo Takeout'],
-    isFixedBox: true,
+    id: 'boxes',
+    title: 'Takeout Gift Boxes',
+    kind: 'boxes',
+    sub: 'Cajas listas para llevar, compartir o enviar como regalo en Caracas',
+    tiles: [
+      {
+        id: 'takeout-box-4',
+        name: 'The Petit Takeout Box (4 Cookies)',
+        priceUsd: 13.5,
+        tag: '4 Piezas Surtidas',
+        image: '/images/cookie-box.jpg',
+        desc: 'Caja degustación con 4 galletas de autor a tu elección envuelta en papel crema con cinta.',
+      },
+      {
+        id: 'takeout-box-6',
+        name: 'The Classic Assortment Box (6 Cookies)',
+        priceUsd: 19.5,
+        tag: 'Delivery Gratis CCS',
+        image: '/images/cookie-box.jpg',
+        desc: 'Nuestra colección completa de 6 galletas recién salidas del horno con tarjeta de notas de cata.',
+      },
+      {
+        id: 'takeout-box-12',
+        name: 'Gran Cofre Editorial (12 Cookies)',
+        priceUsd: 36.0,
+        tag: '12 Piezas · Eventos',
+        image: '/images/cookie-box.jpg',
+        desc: '12 galletas de autor horneadas el mismo día en cofre de lujo con listón.',
+      },
+      {
+        id: 'cold-brew-pairing',
+        name: 'Cookie & Cold Brew Takeout Duo',
+        priceUsd: 7.5,
+        tag: '2 Galletas + Bebida',
+        image: '/images/hero-cookies.jpg',
+        desc: 'Dos galletas recién horneadas acompañadas de nuestro Cold Brew de café venezolano o Matcha Latte.',
+      },
+    ],
+    rows: [
+      {
+        id: 'drink-cold-brew',
+        name: 'Cold Brew Slow-Dripped (10 oz)',
+        tag: 'Café de especialidad venezolano',
+        priceUsd: 3.5,
+      },
+      {
+        id: 'drink-matcha-latte',
+        name: 'Ceremonial Matcha Latte (12 oz)',
+        tag: 'Hot or Iced · Leche de avena disponible',
+        priceUsd: 4.2,
+      },
+      {
+        id: 'drink-espresso',
+        name: 'Cortado / Macchiato',
+        tag: 'Caliente',
+        priceUsd: 2.8,
+      },
+    ],
   },
 ];

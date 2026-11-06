@@ -1,6 +1,7 @@
 /* ==========================================================================
-   DELULU COOKIES — CSS MAESTRO (DAVELLE NEW YORK FULL REPLICA)
-   Inspirado fielmente en https://davellenewyork.com/
+   DELULU COOKIES — CSS MAESTRO (EXACT DAVELLE NEW YORK REPLICA)
+   Basado en la estructura y clases exactas de https://davellenewyork.com/
+   y https://davellenewyork.com/order
    ========================================================================== */
 
 :root {
@@ -31,28 +32,26 @@
      - section name: red
      - card bg: light
      ======================================================================== */
+  --paper: var(--cream);
+  --card: var(--light);
+  --ink: var(--brown);
+  --ink2: var(--gray);
+  --taupe: var(--gray);
+  --hair: rgba(243, 62, 78, 0.28);
+  --pinkt: var(--red);
+
+  /* Aliases semánticos del CSS Maestro */
   --color-bg: var(--cream);
   --color-outline: var(--pink);
   --color-heading: var(--brown);
   --color-body: var(--gray);
   --color-section-name: var(--red);
   --color-card-bg: var(--light);
-  --color-hairline: rgba(243, 62, 78, 0.25);
 
-  /* Aliases semánticos del CSS Maestro */
-  --color-primary: var(--cream);
-  --color-secondary: var(--gray);
-  --color-tertiary: var(--red);
-
-  /* Tipografía Davelle New York */
-  --serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
-  --sans: 'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Jost', sans-serif;
-  --radius-pill: 99px;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
+  --serif: "EB Garamond", Georgia, "Times New Roman", serif;
+  --sans: "Jost", "Century Gothic", "Avenir Next", system-ui, sans-serif;
+  --cm-serif: var(--serif);
+  --cm-sans: var(--sans);
 }
 
 html {
@@ -60,10 +59,14 @@ html {
   scroll-behavior: smooth;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  background-color: var(--color-bg);
-  color: var(--color-body);
+  background: var(--paper);
+  color: var(--ink2);
   font-family: var(--serif);
   font-size: 18px;
   line-height: 1.55;
@@ -76,18 +79,8 @@ img, video {
   display: block;
 }
 
-h1, h2, h3, h4 {
-  color: var(--color-heading);
-  font-family: var(--serif);
-  font-weight: 400;
-}
-
-p {
-  color: var(--color-body);
-}
-
 a {
-  color: var(--color-section-name);
+  color: var(--pinkt);
   text-decoration: none;
 }
 
@@ -96,23 +89,33 @@ a:hover {
   text-underline-offset: 3px;
 }
 
-/* Contenedor principal Davelle (.wrap) */
+.site {
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink2);
+  background: var(--paper);
+  min-height: 100dvh;
+}
+
+.site [hidden] {
+  display: none !important;
+}
+
 .wrap {
   max-width: 960px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-.wrap-nav {
+.wrap:has(> nav) {
   max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 24px;
 }
 
 /* ==========================================================================
-   1. NAVBAR (logo, our story, menu, open/closed, order takeout)
+   1. NAVBAR (nav: logo, our story, menu, open/closed, order takeout)
    ========================================================================== */
-.davelle-nav {
+nav.davelle-top-nav {
   display: grid;
   grid-template-columns: auto 1fr auto auto auto;
   align-items: center;
@@ -125,7 +128,7 @@ a:hover {
   font-size: 32px;
   font-weight: 500;
   font-style: italic;
-  color: var(--color-section-name);
+  color: var(--pinkt);
   letter-spacing: -0.02em;
   line-height: 1;
   text-decoration: none;
@@ -133,10 +136,9 @@ a:hover {
 
 .davelle-brand:hover {
   text-decoration: none;
-  opacity: 0.9;
 }
 
-.davelle-nav .links {
+nav.davelle-top-nav .links {
   display: flex;
   justify-content: center;
   gap: 26px;
@@ -148,24 +150,31 @@ a:hover {
   padding-top: 2px;
 }
 
-.davelle-nav .links a {
-  color: var(--color-body);
+nav.davelle-top-nav .links a,
+nav.davelle-top-nav .links button {
+  color: var(--ink2);
   white-space: nowrap;
+  background: none;
+  border: none;
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  padding: 0;
+}
+
+nav.davelle-top-nav .links a:hover,
+nav.davelle-top-nav .links button:hover {
+  color: var(--pinkt);
   text-decoration: none;
 }
 
-.davelle-nav .links a:hover {
-  color: var(--color-section-name);
-  text-decoration: none;
-}
-
-/* Open / Closed status */
 .status {
   font-family: var(--sans);
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-body);
+  color: var(--ink2);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -180,19 +189,19 @@ a:hover {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--color-section-name);
+  background: var(--pinkt);
 }
 
 .status.on b {
   background: #3E8E5B;
 }
 
-/* Conmutador rápido USD ($) / Bs. BCV en el Navbar */
+/* Selector de Moneda USD ($) / Bs. (BCV) */
 .currency-pill {
   display: inline-flex;
-  border: 1.5px solid var(--color-outline);
+  border: 1.5px solid var(--pink);
   border-radius: 99px;
-  background: var(--color-card-bg);
+  background: var(--card);
   overflow: hidden;
   font-family: var(--sans);
 }
@@ -206,24 +215,24 @@ a:hover {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-body);
+  color: var(--ink2);
   cursor: pointer;
 }
 
 .currency-pill button.active {
-  background: var(--color-outline);
-  color: var(--color-card-bg);
+  background: var(--pink);
+  color: var(--card);
 }
 
-/* Order Takeout button (idéntico al botón .order de Davelle NY) */
-.order-btn {
+/* Botón Order Takeout idéntico a nav a.order de Davelle NY */
+.order {
   font-family: var(--sans);
   text-transform: uppercase;
   line-height: 1;
   white-space: nowrap;
-  background: var(--color-section-name);
-  color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
+  background: var(--pinkt);
+  color: var(--card);
+  border: 1.5px solid var(--pink);
   border-radius: 99px;
   padding: 9px 20px;
   min-height: 44px;
@@ -231,32 +240,31 @@ a:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
 
-.order-btn .ot {
+.order .ot {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.16em;
 }
 
-.order-btn .os {
+.order .os {
   font-size: 9.5px;
   font-weight: 500;
   letter-spacing: 0.12em;
-  opacity: 0.92;
 }
 
-.order-btn:hover {
+.order:hover {
   background: var(--black);
-  border-color: var(--black);
-  color: var(--color-card-bg);
+  color: #fff;
+  text-decoration: none;
 }
 
 /* ==========================================================================
-   2. FULL-BLEED LOOP VIDEO / COLLAGE (.hero idéntico a Davelle NY 100vw)
+   2. FULL-BLEED LOOP VIDEO / COLLAGE (.hero idéntico a Davelle NY)
    ========================================================================== */
 .hero {
   position: relative;
@@ -266,10 +274,10 @@ a:hover {
   max-height: 70vh;
   overflow: hidden;
   background: var(--black);
-  border-top: 1.5px solid var(--color-outline);
-  border-bottom: 1.5px solid var(--color-outline);
 }
 
+.hero img,
+.hero picture,
 .hero video {
   width: 100%;
   height: 100%;
@@ -277,7 +285,7 @@ a:hover {
   display: block;
 }
 
-/* Collage cinemático en loop a pantalla completa (100vw) */
+/* Collage cinemático en loop con tus imágenes de galletas a 100vw */
 .loop-cinematic-reel {
   position: relative;
   width: 100%;
@@ -322,18 +330,17 @@ a:hover {
   }
   25% {
     opacity: 1;
-    transform: scale(1.1);
+    transform: scale(1.09);
   }
   32% {
     opacity: 0;
-    transform: scale(1.12);
+    transform: scale(1.11);
   }
   100% {
     opacity: 0;
   }
 }
 
-/* Botón Pause/Play en la esquina inferior derecha como en Davelle NY */
 .hvbtn {
   position: absolute;
   right: 20px;
@@ -341,15 +348,15 @@ a:hover {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid var(--color-outline);
-  background: rgba(0, 0, 0, 0.55);
-  color: var(--color-card-bg);
+  border: 1px solid rgba(246, 241, 232, 0.55);
+  background: rgba(34, 26, 18, 0.45);
+  color: var(--card);
   font-size: 11px;
   line-height: 1;
   display: grid;
   place-items: center;
   cursor: pointer;
-  opacity: 0.78;
+  opacity: 0.7;
   transition: opacity 0.2s;
 }
 
@@ -357,19 +364,18 @@ a:hover {
   opacity: 1;
 }
 
-/* Barra inferior sobre el video (.cap) */
 .hero .cap {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   padding: 18px 24px;
-  color: var(--color-card-bg);
+  color: var(--card);
   font-family: var(--sans);
   font-size: 11.5px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
+  background: linear-gradient(transparent, rgba(34, 26, 18, 0.55));
   display: flex;
   justify-content: space-between;
   gap: 16px;
@@ -386,29 +392,21 @@ a:hover {
 .zig {
   display: block;
   margin: 0 auto 20px;
-  color: var(--color-outline);
+  color: var(--pink);
 }
 
-/* Section Name: red */
-.eyebrow,
-.section-heading {
+.eyebrow {
   font-family: var(--sans);
   font-size: 12px;
   letter-spacing: 0.34em;
   text-transform: uppercase;
-  color: var(--color-section-name);
+  color: var(--pinkt);
   font-weight: 600;
-  text-align: center;
-  margin: 0 0 28px;
 }
 
-.lede .eyebrow {
-  margin-bottom: 0;
-}
-
-/* Heading: brown */
 .lede h1 {
-  color: var(--color-heading);
+  color: var(--ink);
+  font-family: var(--serif);
   font-weight: 400;
   font-size: clamp(30px, 4.8vw, 48px);
   line-height: 1.12;
@@ -418,11 +416,10 @@ a:hover {
   letter-spacing: -0.01em;
 }
 
-/* Body: gray */
 .lede p {
-  max-width: 580px;
+  max-width: 560px;
   margin: 0 auto;
-  color: var(--color-body);
+  color: var(--ink2);
 }
 
 .pills {
@@ -439,32 +436,157 @@ a:hover {
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  border: 1.5px solid var(--color-outline);
-  background: var(--color-card-bg);
-  color: var(--color-body);
+  border: 1px solid var(--pink);
   border-radius: 99px;
-  padding: 7px 16px;
+  padding: 7px 14px;
+  background: var(--card);
+  color: var(--ink2);
 }
 
 .pills button {
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
 }
 
 .pills button:hover {
-  background: var(--color-outline);
-  color: var(--color-card-bg);
+  background: var(--pink);
+  color: var(--card);
 }
 
 .pills b {
-  color: var(--color-section-name);
+  color: var(--pinkt);
   font-weight: 600;
 }
 
-/* Separador de secciones */
+/* ==========================================================================
+   SECCIONES GENERALES & HEADINGS (section name: red)
+   ========================================================================== */
 section {
   padding: 60px 0;
-  border-top: 1px solid var(--color-hairline);
+  border-top: 1px solid var(--hair);
+}
+
+h2 {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--pinkt);
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 28px;
+}
+
+/* ==========================================================================
+   SECCIÓN DE TIENDA EN LA HOME (#doors — One house · two doors de Davelle NY)
+   ========================================================================== */
+.doors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.door {
+  background: var(--card);
+  border: 1.5px solid var(--pink);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.door:hover {
+  box-shadow: 0 14px 34px rgba(243, 62, 78, 0.15);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.door .ph {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-bottom: 1px solid var(--hair);
+}
+
+.door .ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.door:hover .ph img {
+  transform: scale(1.025);
+}
+
+.door .tx {
+  padding: 26px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1;
+}
+
+.door .mark {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 30px;
+  font-style: italic;
+  color: var(--ink);
+}
+
+.door .jp {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--taupe);
+}
+
+.door p {
+  margin: 0;
+  color: var(--ink2);
+  font-size: 16.5px;
+}
+
+.door .when {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pinkt);
+  font-weight: 600;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.door .more {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pinkt);
+  font-weight: 600;
+  padding: 14px 26px 18px;
+  border-top: 1px solid var(--hair);
+  text-align: center;
+}
+
+.door .more span {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-left: 6px;
+}
+
+.door:hover .more span {
+  transform: translateX(4px);
 }
 
 /* ==========================================================================
@@ -475,15 +597,11 @@ section {
   grid-template-columns: 5fr 6fr;
   gap: 44px;
   align-items: center;
-  background: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: 18px;
-  padding: 32px;
 }
 
 .story .ph {
-  border-radius: 14px;
-  border: 1.5px solid var(--color-outline);
+  border-radius: 18px;
+  border: 1.5px solid var(--pink);
   overflow: hidden;
   aspect-ratio: 4 / 5;
 }
@@ -495,7 +613,7 @@ section {
 }
 
 .story h3 {
-  color: var(--color-heading);
+  color: var(--ink);
   font-weight: 400;
   font-size: 32px;
   line-height: 1.18;
@@ -506,24 +624,28 @@ section {
 .story p {
   margin: 0 0 16px;
   max-width: 60ch;
-  color: var(--color-body);
+  color: var(--ink2);
+}
+
+.story em {
+  font-style: italic;
 }
 
 .story .coffee {
   margin-top: 22px;
   padding-top: 18px;
-  border-top: 1px solid var(--color-hairline);
-  color: var(--color-body);
+  border-top: 1px solid var(--hair);
+  color: var(--ink2);
   font-size: 16.5px;
 }
 
 .story .coffee b {
-  font-weight: 600;
-  color: var(--color-section-name);
+  font-weight: 500;
+  color: var(--pinkt);
 }
 
 .story .sig {
-  color: var(--color-section-name);
+  color: var(--taupe);
   font-family: var(--sans);
   font-size: 12px;
   letter-spacing: 0.2em;
@@ -532,11 +654,11 @@ section {
 }
 
 /* ==========================================================================
-   5. MENU TOGGLE (#menu .menuwrap con doble borde rosa idéntico a Davelle NY)
+   5. MENU TOGGLE (#menu .menuwrap exactamente igual a Davelle NY)
    ========================================================================== */
 .menuwrap {
-  background: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
+  background: var(--card);
+  border: 1.5px solid var(--pink);
   border-radius: 18px;
   padding: 44px 48px;
   position: relative;
@@ -546,7 +668,7 @@ section {
   content: "";
   position: absolute;
   inset: 6px;
-  border: 0.75px solid var(--color-outline);
+  border: 0.75px solid var(--pink);
   border-radius: 14px;
   opacity: 0.55;
   pointer-events: none;
@@ -557,12 +679,10 @@ section {
   justify-content: center;
   gap: 0;
   margin: 0 auto 34px;
-  border: 1.5px solid var(--color-outline);
+  border: 1px solid var(--pink);
   border-radius: 99px;
   width: max-content;
-  max-width: 100%;
   overflow: hidden;
-  flex-wrap: wrap;
 }
 
 .mtabs button {
@@ -574,187 +694,134 @@ section {
   background: none;
   border: 0;
   padding: 9px 22px;
-  color: var(--color-body);
+  color: var(--ink2);
   cursor: pointer;
 }
 
 .mtabs button[aria-selected="true"] {
-  background: var(--color-outline);
-  color: var(--color-card-bg);
+  background: var(--pink);
+  color: #fff;
 }
 
 .blurb {
   text-align: center;
-  color: var(--color-body);
+  color: var(--ink2);
   max-width: 560px;
-  margin: -14px auto 26px;
+  margin: -18px auto 26px;
   font-style: italic;
 }
 
-/* Categoría con líneas laterales (h3.cat de Davelle NY) */
 .cat {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin: 32px 0 14px;
+  margin: 32px 0 12px;
   font-family: var(--sans);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--color-section-name);
+  color: var(--pinkt);
+}
+
+.cat:first-child {
+  margin-top: 0;
 }
 
 .cat i {
   flex: 1 1;
   height: 1px;
-  background: var(--color-hairline);
+  background: var(--hair);
 }
 
 .sub {
   text-align: center;
-  color: var(--color-body);
+  color: var(--ink2);
   font-size: 15.5px;
-  margin: -2px auto 20px;
+  margin: -2px auto 16px;
   max-width: 60ch;
   font-style: italic;
 }
 
 .item {
-  margin-bottom: 22px;
-  padding-bottom: 16px;
-  border-bottom: 1px dashed var(--color-hairline);
+  margin-bottom: 16px;
+  cursor: pointer;
+  padding: 6px 8px;
+  margin-left: -8px;
+  margin-right: -8px;
+  border-radius: 10px;
+  transition: background 0.18s ease;
 }
 
-.item:last-of-type {
-  border-bottom: none;
+.item:hover {
+  background: rgba(243, 62, 78, 0.06);
 }
 
 .row {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
   gap: 16px;
-  flex-wrap: wrap;
 }
 
 .nm {
   flex: 1 1;
-  font-size: 22px;
+  font-size: 21px;
   line-height: 1.15;
-  color: var(--color-heading);
-  font-weight: 500;
-}
-
-.nm small {
-  font-family: var(--sans);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-section-name);
-  margin-left: 8px;
-  vertical-align: 2px;
+  color: var(--ink);
 }
 
 .pr {
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;
   font-size: 19px;
-  font-weight: 600;
-  color: var(--color-section-name);
+  color: var(--pinkt);
+  white-space: nowrap;
 }
 
-.pr-sub {
+.line small,
+.nm small {
   font-family: var(--sans);
-  font-size: 11px;
-  color: var(--color-body);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taupe);
   margin-left: 6px;
+  vertical-align: 2px;
 }
 
 .dsc {
-  margin: 6px 0 12px;
-  color: var(--color-body);
-  font-size: 16px;
-  line-height: 1.45;
+  margin: 4px 56px 0 0;
+  color: var(--ink2);
+  font-size: 15.5px;
+  line-height: 1.4;
+  text-wrap: pretty;
 }
 
-.item-controls {
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 44px;
+}
+
+.line {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
   gap: 10px;
-  flex-wrap: wrap;
-}
-
-.pack-pills-inline {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.pack-pill-btn {
-  font-family: var(--sans);
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  border: 1px solid var(--color-outline);
-  background: var(--color-bg);
-  color: var(--color-body);
-  border-radius: 99px;
-  padding: 5px 12px;
+  font-size: 18px;
+  color: var(--ink);
   cursor: pointer;
 }
 
-.pack-pill-btn.active {
-  background: var(--color-outline);
-  color: var(--color-card-bg);
-  font-weight: 600;
+.line i {
+  flex: 1 1;
+  border-bottom: 1px dotted var(--hair);
+  transform: translateY(-5px);
 }
 
-.item-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.btn-menu-order {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  border: 1.5px solid var(--color-outline);
-  background: var(--color-section-name);
-  color: var(--color-card-bg);
-  border-radius: 99px;
-  padding: 6px 14px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.btn-menu-order:hover {
-  background: var(--black);
-  border-color: var(--black);
-}
-
-.btn-menu-wa {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  border: 1.5px solid var(--color-outline);
-  background: var(--color-card-bg);
-  color: var(--color-section-name);
-  border-radius: 99px;
-  padding: 6px 13px;
-  cursor: pointer;
-}
-
-.btn-menu-wa:hover {
-  background: var(--color-outline);
-  color: var(--color-card-bg);
+.legend,
+.note {
+  color: var(--taupe);
+  text-align: center;
 }
 
 .legend {
@@ -762,28 +829,41 @@ section {
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin-top: 26px;
+  margin-top: 30px;
+}
+
+.allergy,
+.mver {
   text-align: center;
-  color: var(--color-body);
+  color: var(--taupe);
+}
+
+.allergy {
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.mver {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-top: 22px;
 }
 
 /* ==========================================================================
-   6. VISIT (#visit idéntico a Davelle NY)
+   6. VISIT (#visit exactamente igual a Davelle NY)
    ========================================================================== */
 .visit {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 44px;
   align-items: center;
-  background: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  border-radius: 18px;
-  padding: 32px;
 }
 
 .visit .ph {
-  border-radius: 14px;
-  border: 1.5px solid var(--color-outline);
+  border-radius: 18px;
+  border: 1.5px solid var(--pink);
   overflow: hidden;
   aspect-ratio: 1;
 }
@@ -795,28 +875,28 @@ section {
 }
 
 .visit .big {
-  font-size: 30px;
-  color: var(--color-heading);
+  font-size: 28px;
+  color: var(--ink);
   margin: 0 0 4px;
   line-height: 1.2;
 }
 
 .visit p {
   margin: 0 0 6px;
-  color: var(--color-body);
+  color: var(--ink2);
 }
 
 .hours {
   margin: 22px 0;
-  border-top: 1px solid var(--color-hairline);
+  border-top: 1px solid var(--hair);
 }
 
 .hours div {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--color-hairline);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hair);
   font-size: 17px;
 }
 
@@ -824,13 +904,12 @@ section {
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  color: var(--color-section-name);
-  font-weight: 600;
+  color: var(--pinkt);
 }
 
 .hours small {
   display: block;
-  color: var(--color-body);
+  color: var(--taupe);
   font-size: 13px;
 }
 
@@ -838,7 +917,7 @@ section {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 12px;
+  margin-top: 6px;
 }
 
 .acts a,
@@ -847,45 +926,44 @@ section {
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  border: 1.5px solid var(--color-outline);
-  background: var(--color-card-bg);
+  border: 1px solid var(--pink);
   border-radius: 99px;
-  padding: 8px 18px;
-  color: var(--color-section-name);
+  padding: 8px 16px;
+  color: var(--ink2);
+  background: var(--card);
   cursor: pointer;
-  text-decoration: none;
 }
 
 .acts a:hover,
 .acts button:hover {
-  background: var(--color-outline);
-  color: var(--color-card-bg);
+  background: var(--pink);
+  color: #fff;
   text-decoration: none;
 }
 
 /* ==========================================================================
-   7. FOOTER (idéntico a Davelle NY)
+   7. FOOTER (exactamente igual a Davelle NY)
    ========================================================================== */
 footer {
-  border-top: 1.5px solid var(--color-outline);
-  padding: 36px 0 52px;
+  border-top: 1px solid var(--hair);
+  padding: 30px 0 52px;
   text-align: center;
   font-family: var(--sans);
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-body);
+  color: var(--taupe);
 }
 
-footer .footer-logo {
+footer .footer-wordmark {
   font-family: var(--serif);
   font-size: 28px;
   font-style: italic;
   text-transform: lowercase;
   letter-spacing: -0.01em;
-  color: var(--color-section-name);
+  color: var(--pinkt);
   display: block;
-  margin-bottom: 10px;
+  margin: 0 auto 12px;
 }
 
 footer p {
@@ -894,176 +972,703 @@ footer p {
 }
 
 /* ==========================================================================
-   DRAWER DE ORDER TAKEOUT (WHATSAPP CHECKOUT)
+   SECCIÓN DE TIENDA / ORDER TAKEOUT (Exacta a davellenewyork.com/order)
    ========================================================================== */
-.drawer-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(3px);
-  z-index: 90;
-  display: flex;
-  justify-content: flex-end;
+.cm {
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink2);
+  font-family: var(--cm-sans), sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
 }
 
-.drawer-panel {
+.to-wrap {
   width: 100%;
-  max-width: 440px;
-  background-color: var(--color-card-bg);
-  height: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 20px calc(110px + env(safe-area-inset-bottom, 0px));
+  font-family: var(--cm-serif), Georgia, serif;
+  font-size: 17px;
+}
+
+.to-wrap button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.to-back-pill {
+  font-family: var(--cm-sans) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--pink) !important;
+  background: var(--card) !important;
+  color: var(--pinkt) !important;
+  padding: 7px 14px !important;
+  border-radius: 99px;
+}
+
+.to-eyebrow,
+.to-k {
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: var(--cm-sans), sans-serif;
+  color: var(--pinkt);
+}
+
+.to-small {
+  font-family: var(--cm-sans), sans-serif;
+  color: var(--taupe);
+  font-size: 12.5px;
+  margin: 4px 0 0;
+  line-height: 1.45;
+}
+
+.to-big {
+  font-size: 21px;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+.to-hold {
+  font-family: var(--cm-sans), sans-serif;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--pinkt);
+  margin-top: 6px;
+}
+
+.to-mast {
   display: flex;
   flex-direction: column;
-  border-left: 2px solid var(--color-outline);
+  align-items: center;
+  gap: 8px;
+  padding: 24px 0 18px;
 }
 
-.drawer-header {
-  padding: 1.35rem 1.5rem;
-  border-bottom: 1.5px solid var(--color-outline);
+.to-box,
+.to-pickup {
+  background: var(--card);
+  border: 1.5px solid var(--pink);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.to-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1.5px solid var(--pink);
+  background: var(--card);
+  margin-top: 18px;
+}
+
+.to-tabs button {
+  height: 42px;
+  border-radius: 999px;
+  font-family: var(--cm-sans), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.to-tabs button[aria-selected="true"] {
+  background: var(--pinkt);
+  color: var(--card);
+}
+
+.to-chips {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 14px 20px 12px;
+  margin: 0 -20px;
+  background: rgba(243, 239, 228, 0.95);
+  border-bottom: 1px solid var(--hair);
+  scrollbar-width: none;
+}
+
+.to-chips a {
+  flex: none;
+  font-family: var(--cm-sans), sans-serif;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0 14px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--pink);
+  background: var(--card);
+  color: var(--ink2);
+  text-decoration: none;
+}
+
+.to-chips a:hover {
+  background: var(--pink);
+  color: var(--card);
+}
+
+.to-sec {
+  padding-top: 26px;
+  scroll-margin-top: 64px;
+  border-top: none;
+}
+
+.to-sec h2 {
+  margin: 0;
+  font-family: var(--cm-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: 28px;
+  color: var(--ink);
+  text-align: left;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.to-sub {
+  margin: 4px 0 0;
+  font-style: italic;
+  color: var(--ink2);
+  font-size: 16px;
+}
+
+.to-tiles {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 14px;
+}
+
+.to-tiles li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--card);
+  border: 1.5px solid var(--pink);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.to-art img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--hair);
+  display: block;
+}
+
+.to-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid var(--hair);
+  padding-top: 8px;
+  line-height: 1.2;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.to-line span:last-child {
+  color: var(--pinkt);
+  white-space: nowrap;
+}
+
+.to-tag {
+  font-family: var(--cm-sans), sans-serif;
+  font-size: 11px;
+  color: var(--taupe);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.to-add {
+  margin-top: auto;
+  height: 40px;
+  border-radius: 999px !important;
+  border: 1.5px solid var(--pink) !important;
+  background: var(--paper) !important;
+  color: var(--pinkt) !important;
+  font-family: var(--cm-sans), sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.to-add:hover {
+  background: var(--pinkt) !important;
+  color: var(--card) !important;
+}
+
+.to-rows {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  background: var(--card);
+  border: 1.5px solid var(--pink);
+  border-radius: 14px;
+  padding: 6px 14px;
+}
+
+.to-rows li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hair);
+  min-height: 56px;
+}
+
+.to-rows li:last-child {
+  border-bottom: none;
+}
+
+.to-rowtx {
+  flex: 1 1;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.to-n {
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.to-d {
+  font-family: var(--cm-sans), sans-serif;
+  font-size: 11.5px;
+  color: var(--taupe);
+}
+
+.to-p {
+  font-size: 17px;
+  color: var(--pinkt);
+  font-weight: 600;
+}
+
+.to-plus {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 999px !important;
+  border: 1.5px solid var(--pink) !important;
+  color: var(--pinkt) !important;
+  font-family: var(--cm-sans), sans-serif !important;
+  font-size: 20px !important;
+}
+
+.to-plus:hover {
+  background: var(--pinkt) !important;
+  color: var(--card) !important;
+}
+
+.to-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  padding: 14px 20px calc(18px + env(safe-area-inset-bottom, 0px));
+  background: var(--paper);
+  border-top: 1.5px solid var(--pink);
+}
+
+.to-bar button {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  height: 54px;
+  border-radius: 999px !important;
+  background: var(--pinkt) !important;
+  color: var(--card) !important;
+  border: 1.5px solid var(--pink) !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 22px !important;
+  font-family: var(--cm-sans), sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.drawer-header h3 {
-  font-size: 1.55rem;
-  color: var(--color-heading);
-  margin: 0;
-}
-
-.drawer-body {
-  padding: 1.5rem;
-  overflow-y: auto;
-  flex: 1;
+.to-shade {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(34, 26, 18, 0.45);
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  align-items: flex-end;
+  justify-content: center;
 }
 
-.cart-item-row {
-  display: flex;
-  gap: 0.9rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px dashed var(--color-outline);
-  align-items: center;
-}
-
-.cart-item-row img {
-  width: 62px;
-  height: 62px;
-  border-radius: 10px;
-  border: 1.5px solid var(--color-outline);
-  object-fit: cover;
-}
-
-.cart-item-info {
-  flex: 1;
-}
-
-.cart-item-info h4 {
-  font-size: 1.15rem;
-  color: var(--color-heading);
-  margin: 0;
-}
-
-.cart-item-info p {
-  font-size: 0.78rem;
-  color: var(--color-body);
-  margin: 2px 0 0;
-}
-
-.qty-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-outline);
-  border-radius: 99px;
-  padding: 0.12rem 0.5rem;
-  margin-top: 0.35rem;
-}
-
-.qty-controls button {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-weight: 700;
-  color: var(--color-section-name);
-  padding: 0 0.25rem;
-}
-
-.drawer-form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  margin-top: 0.5rem;
-  padding-top: 1rem;
-  border-top: 1.5px solid var(--color-outline);
-}
-
-.drawer-input {
+.to-sheet {
+  position: relative;
   width: 100%;
-  padding: 0.7rem 0.9rem;
-  border-radius: 10px;
-  border: 1.5px solid var(--color-outline);
-  background-color: var(--color-bg);
-  color: var(--color-body);
-  font-family: var(--sans);
-  font-size: 0.85rem;
+  max-width: 560px;
+  max-height: 92dvh;
+  overflow-y: auto;
+  background: var(--card);
+  border: 2px solid var(--pink);
+  border-radius: 18px 18px 0 0;
+  padding: 18px 20px 0;
+  font-family: var(--cm-serif), Georgia, serif;
 }
 
-.drawer-footer {
-  padding: 1.35rem 1.5rem;
-  border-top: 1.5px solid var(--color-outline);
-  background-color: var(--color-bg);
+.to-x {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  line-height: 1;
+  border-radius: 999px;
+  background: var(--paper) !important;
+  border: 1.5px solid var(--pink) !important;
+  color: var(--pinkt) !important;
 }
 
-.drawer-total-row {
+.to-sheetart {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1.5px solid var(--pink);
+  display: block;
+  margin: 8px auto 0;
+}
+
+.to-sheethead {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 0.3rem;
+  gap: 12px;
+  margin-top: 16px;
 }
 
-.drawer-total-row strong {
-  font-family: var(--sans);
-  font-size: 1.35rem;
-  color: var(--color-section-name);
+.to-sheethead h3 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.1;
+  color: var(--ink);
 }
 
-.btn-checkout-whatsapp {
-  width: 100%;
-  background-color: var(--color-section-name);
-  color: var(--color-card-bg);
-  border: 1.5px solid var(--color-outline);
-  padding: 0.95rem;
-  border-radius: 99px;
-  font-family: var(--sans);
-  font-size: 0.8rem;
+.to-sheethead span {
+  font-size: 21px;
+  color: var(--pinkt);
   font-weight: 600;
-  letter-spacing: 0.14em;
+}
+
+.to-desc {
+  margin: 8px 0 0;
+  color: var(--ink2);
+  line-height: 1.45;
+}
+
+.to-fresh {
+  font-family: var(--cm-sans), sans-serif;
+  font-size: 12px;
+  color: var(--pinkt);
+  margin: 6px 0 0;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.to-group {
+  border: 0;
+  margin: 20px 0 0;
+  padding: 0;
+}
+
+.to-group legend {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+.to-group legend span {
+  font-size: 21px;
+  color: var(--ink);
+}
+
+.to-group legend i.req {
+  font-style: normal;
+  font-family: var(--cm-sans), sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--pinkt);
+}
+
+.to-opt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid var(--hair);
   cursor: pointer;
+}
+
+.to-opt span:first-child {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  transition: all 0.25s ease;
+  gap: 12px;
+  font-size: 18px;
+  color: var(--ink2);
 }
 
-.btn-checkout-whatsapp:hover {
-  background-color: var(--black);
-  border-color: var(--black);
+.to-opt input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--pinkt);
+  margin: 0;
+}
+
+.to-opt span:last-child {
+  color: var(--pinkt);
+  font-weight: 600;
+}
+
+.to-sheetbar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0 calc(20px + env(safe-area-inset-bottom, 0px));
+  margin-top: 18px;
+  background: var(--card);
+  border-top: 1px solid var(--hair);
+}
+
+.to-qty {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--pink);
+  border-radius: 999px;
+  height: 50px;
+  background: var(--paper);
+}
+
+.to-qty button {
+  width: 42px;
+  height: 48px;
+  font-size: 20px !important;
+  font-family: var(--cm-sans), sans-serif !important;
+  color: var(--pinkt) !important;
+}
+
+.to-qty span {
+  min-width: 20px;
+  text-align: center;
+  font-family: var(--cm-sans), sans-serif;
+  font-weight: 600;
+}
+
+.to-qty.sm {
+  height: 38px;
+}
+
+.to-qty.sm button {
+  height: 36px;
+  width: 34px;
+}
+
+.to-go {
+  flex: 1 1;
+  height: 52px;
+  border-radius: 999px !important;
+  background: var(--pinkt) !important;
+  color: var(--card) !important;
+  border: 1.5px solid var(--pink) !important;
+  padding: 0 20px !important;
+  font-family: var(--cm-sans), sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.to-lines {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.to-lines li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.to-lines b {
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink);
+  display: block;
+}
+
+.to-lines li > div:first-child span {
+  font-size: 14px;
+  color: var(--ink2);
+}
+
+.to-more {
+  font-family: var(--cm-sans), sans-serif !important;
+  font-size: 12.5px !important;
+  color: var(--pinkt) !important;
+  padding: 12px 0 4px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600 !important;
+}
+
+.to-when {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.to-when button {
+  height: 56px;
+  border-radius: 12px !important;
+  border: 1.5px solid var(--hair) !important;
+  background: var(--paper) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-family: var(--cm-sans), sans-serif !important;
+}
+
+.to-when button[aria-pressed="true"] {
+  border: 1.5px solid var(--pink) !important;
+  background: var(--card) !important;
+}
+
+.to-when b {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.to-when span {
+  font-size: 11px;
+  color: var(--ink2);
+}
+
+.to-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.to-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--cm-sans), sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink2);
+}
+
+.to-form input,
+.to-select-input {
+  height: 46px;
+  border-radius: 10px;
+  border: 1.5px solid var(--pink);
+  background: var(--card);
+  padding: 0 14px;
+  font-family: var(--cm-serif), Georgia, serif;
+  font-size: 17px;
+  color: var(--ink2);
+}
+
+.to-sum {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--card);
+  border: 1.5px solid var(--pink);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.to-sum div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.to-sum .m {
+  color: var(--ink2);
+  font-size: 15px;
+}
+
+.to-sum .t {
+  font-size: 20px;
+  border-top: 1px solid var(--hair);
+  padding-top: 10px;
+  color: var(--pinkt);
+}
+
+.to-notip {
+  align-self: center;
+  font-family: var(--cm-sans), sans-serif !important;
+  font-size: 12px !important;
+  color: var(--ink2) !important;
+  text-decoration: underline;
+  height: 36px;
 }
 
 /* ==========================================================================
    RESPONSIVE (Idéntico a Davelle NY)
    ========================================================================== */
-@media (max-width: 960px) {
-  .davelle-nav {
-    grid-template-columns: auto 1fr auto;
+@media (max-width: 1120px) and (min-width: 721px) {
+  nav.davelle-top-nav {
+    grid-template-columns: auto 1fr auto auto;
     row-gap: 10px;
   }
-
   .status {
     grid-column: 1 / -1;
     grid-row: 2;
@@ -1072,53 +1677,58 @@ footer p {
 }
 
 @media (max-width: 720px) {
-  .davelle-nav {
+  nav.davelle-top-nav {
     grid-template-columns: 1fr auto;
     row-gap: 10px;
     padding: 16px 0 14px;
   }
-
-  .davelle-nav .links {
+  nav.davelle-top-nav .links {
     display: none;
   }
-
-  .hero {
-    aspect-ratio: 4 / 5;
-    max-height: none;
+  .status {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    justify-self: start;
   }
-
-  .hero .cap {
-    font-size: 10px;
-    letter-spacing: 0.18em;
-  }
-
   .hvbtn {
     right: 14px;
     bottom: 50px;
     width: 32px;
     height: 32px;
   }
-
-  .lede {
-    padding: 40px 0 34px;
-  }
-
+  .doors,
+  .grid2,
   .story,
-  .visit {
+  .visit,
+  .to-tiles {
     grid-template-columns: 1fr;
-    padding: 22px;
   }
-
+  .menuwrap {
+    padding: 28px 20px;
+  }
+  .dsc {
+    margin-right: 0;
+  }
+  body,
+  .site {
+    font-size: 17px;
+  }
+  .hero {
+    aspect-ratio: 4 / 5;
+    max-height: none;
+  }
   .story .ph {
     aspect-ratio: 4 / 5;
     order: -1;
   }
-
   .visit .ph {
     order: 2;
   }
-
-  .menuwrap {
-    padding: 28px 20px;
+  .hero .cap {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+  .lede {
+    padding: 40px 0 34px;
   }
 }

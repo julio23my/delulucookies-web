@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShoppingBag, Check } from 'lucide-react';
-import WhatsAppCartDrawer from './components/WhatsAppCartDrawer';
+import DavelleTakeoutStore from './components/DavelleTakeoutStore';
 import {
   ENV_CONFIG,
-  COOKIES_CATALOG,
-  MENU_CATEGORIES,
-  PACK_OPTIONS,
+  HOME_MENU_COOKIES,
+  HOME_MENU_BOXES_DRINKS,
   buildWhatsAppUrl,
   formatCookiePrice,
-  formatDualPrice,
   getStoreOpenStatus,
 } from './data/cookiesData';
 
@@ -16,29 +13,29 @@ export default function App() {
   // Visualización de precios en Dólares ('USD') o Bolívares ('VES' a tasa BCV)
   const [currencyMode, setCurrencyMode] = useState('USD');
   const [bcvRate, setBcvRate] = useState(ENV_CONFIG.bcvFallbackRate);
-  const [activeMenuTab, setActiveMenuTab] = useState('signature');
-  const [selectedPacks, setSelectedPacks] = useState(() =>
-    COOKIES_CATALOG.reduce((acc, item) => {
-      acc[item.id] = PACK_OPTIONS[0];
-      return acc;
-    }, {})
-  );
-  const [addedCookieId, setAddedCookieId] = useState(null);
+
+  // Vista activa: 'home' (davellenewyork.com) | 'store' (davellenewyork.com/order)
+  const [viewMode, setViewMode] = useState('home');
+
+  // Pestaña activa en #menu ('cookies' | 'boxes')
+  const [menuTab, setMenuTab] = useState('cookies');
+
+  // Pausa/reproducción del loop full-width (.hero)
   const [isVideoPaused, setIsVideoPaused] = useState(false);
   const videoRef = useRef(null);
 
+  // Carrito de Order Takeout conectado a WhatsApp
   const [cartItems, setCartItems] = useState([
     {
       cartKey: 'matcha-pistachio-cream-single',
       id: 'matcha-pistachio-cream',
       name: 'Uji Matcha & Sicilian Pistachio',
-      packLabel: '1 Pieza',
+      packLabel: 'Individual (1 Galleta)',
       unitPrice: 4.5,
       quantity: 1,
       image: '/images/cookie-pistachio.jpg',
     },
   ]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const openStatus = getStoreOpenStatus();
   const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -95,63 +92,22 @@ export default function App() {
     setIsVideoPaused((prev) => !prev);
   };
 
-  const computeUsdPrice = (cookie, pack) => {
-    if (cookie.isFixedBox) return Number(cookie.basePrice.toFixed(2));
-    return Number((cookie.basePrice * pack.multiplier * pack.discount).toFixed(2));
-  };
-
-  const handlePackChange = (cookieId, packObj) => {
-    setSelectedPacks((prev) => ({ ...prev, [cookieId]: packObj }));
-  };
-
-  const handleAddToCart = (cookie) => {
-    const chosenPack = cookie.isFixedBox
-      ? { id: 'box', label: 'Takeout Box' }
-      : selectedPacks[cookie.id] || PACK_OPTIONS[0];
-    const finalUsdPrice = computeUsdPrice(cookie, chosenPack);
-    const cartKey = `${cookie.id}-${chosenPack.id}`;
-
+  const handleAddToCart = (newItem, qtyToAdd = 1) => {
     setCartItems((prev) => {
-      const idx = prev.findIndex((item) => item.cartKey === cartKey);
+      const idx = prev.findIndex((item) => item.cartKey === newItem.cartKey);
       if (idx > -1) {
         const next = [...prev];
-        next[idx] = { ...next[idx], quantity: next[idx].quantity + 1 };
+        next[idx] = { ...next[idx], quantity: next[idx].quantity + qtyToAdd };
         return next;
       }
       return [
         ...prev,
         {
-          cartKey,
-          id: cookie.id,
-          name: cookie.name,
-          packLabel: chosenPack.label,
-          unitPrice: finalUsdPrice,
-          quantity: 1,
-          image: cookie.image,
+          ...newItem,
+          quantity: qtyToAdd,
         },
       ];
     });
-
-    setAddedCookieId(cookie.id);
-    setTimeout(() => setAddedCookieId(null), 1100);
-  };
-
-  const handleDirectWhatsAppOrder = (cookie) => {
-    const chosenPack = cookie.isFixedBox
-      ? { label: 'Takeout Box' }
-      : selectedPacks[cookie.id] || PACK_OPTIONS[0];
-    const finalUsdPrice = computeUsdPrice(cookie, chosenPack);
-
-    const text =
-      `¡Hola *${ENV_CONFIG.brandName}*!\n\n` +
-      `Quiero hacer un pedido de *Order Takeout*:\n` +
-      `- *${cookie.name}* (${chosenPack.label}) — ${formatDualPrice(
-        finalUsdPrice,
-        bcvRate
-      )}\n\n` +
-      `¿Tienen disponibilidad para hoy?`;
-
-    window.open(buildWhatsAppUrl(text), '_blank', 'noopener,noreferrer');
   };
 
   const handleUpdateQty = (cartKey, newQty) => {
@@ -166,26 +122,61 @@ export default function App() {
     );
   };
 
-  const handleRemoveItem = (cartKey) => {
-    setCartItems((prev) => prev.filter((item) => item.cartKey !== cartKey));
+  const handleOpenStoreWithItem = (item, packLabel = 'Takeout') => {
+    handleAddToCart(
+      {
+        cartKey: `${item.id || item.name}-menu`,
+        id: item.id || item.name,
+        name: item.name,
+        packLabel: item.tag || item.small || packLabel,
+        unitPrice: Number(item.priceUsd) || 0,
+        image: '/images/cookie-classic.jpg',
+      },
+      1
+    );
+    setViewMode('store');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const visibleMenuCookies = COOKIES_CATALOG.filter(
-    (c) => c.category === activeMenuTab
-  );
+  const handleOpenStore = () => {
+    setViewMode('store');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackToHome = () => {
+    setViewMode('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Si el usuario entra a la tienda (Order Takeout), mostramos la réplica exacta de davellenewyork.com/order
+  if (viewMode === 'store') {
+    return (
+      <DavelleTakeoutStore
+        onBackToHome={handleBackToHome}
+        cartItems={cartItems}
+        onAddToCart={handleAddToCart}
+        onUpdateQty={handleUpdateQty}
+        onClearCart={() => setCartItems([])}
+        currencyMode={currencyMode}
+        onToggleCurrency={setCurrencyMode}
+        bcvRate={bcvRate}
+      />
+    );
+  }
 
   return (
     <div className="site">
       {/* ====================================================================
-          1. NAVBAR: logo, our story, menu, open/closed, order takeout
+          1. NAVBAR (Exacto a davellenewyork.com: logo, links, status, order)
           ==================================================================== */}
-      <div className="wrap-nav">
-        <nav className="davelle-nav" aria-label="Primary">
+      <div className="wrap">
+        <nav className="davelle-top-nav" aria-label="Primary">
           <a href="#top" className="davelle-brand">
             {ENV_CONFIG.brandName}
           </a>
 
           <div className="links">
+            <a href="#doors">Two doors</a>
             <a href="#story">Our story</a>
             <a href="#menu">Menu</a>
             <a href="#visit">Visit</a>
@@ -200,7 +191,7 @@ export default function App() {
             <span>{openStatus.label}</span>
           </div>
 
-          {/* Selector claro de visualización de precios USD ($) vs Bs. BCV */}
+          {/* Selector de visualización de precios USD ($) vs Bs. BCV */}
           <div
             className="currency-pill"
             role="group"
@@ -226,11 +217,13 @@ export default function App() {
 
           <button
             type="button"
-            className="order-btn"
-            onClick={() => setIsCartOpen(true)}
+            className="order"
+            onClick={handleOpenStore}
           >
-            <span className="ot">Order takeout ({totalCartCount})</span>
-            <span className="os">WhatsApp · Delivery &amp; Pickup</span>
+            <span className="ot">
+              Order takeout{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
+            </span>
+            <span className="os">WhatsApp · Pickup &amp; Delivery</span>
           </button>
         </nav>
       </div>
@@ -243,7 +236,7 @@ export default function App() {
           {ENV_CONFIG.loopVideoUrl ? (
             <video
               ref={videoRef}
-              className="hv"
+              id="hv"
               src={ENV_CONFIG.loopVideoUrl}
               autoPlay
               muted
@@ -284,8 +277,9 @@ export default function App() {
 
           <button
             className="hvbtn"
+            id="hvbtn"
             type="button"
-            aria-label={isVideoPaused ? 'Play loop' : 'Pause loop'}
+            aria-label={isVideoPaused ? 'Play video' : 'Pause video'}
             aria-pressed={isVideoPaused}
             onClick={handleToggleVideoPlay}
           >
@@ -300,7 +294,7 @@ export default function App() {
 
         <div className="wrap">
           {/* ==================================================================
-              3. SHORT DESCRIPTION (.lede con el zig-zag y pills de Davelle NY)
+              3. SHORT DESCRIPTION (.lede idéntico a Davelle NY)
               ================================================================== */}
           <div className="lede">
             <svg
@@ -347,32 +341,100 @@ export default function App() {
                   setCurrencyMode(currencyMode === 'USD' ? 'VES' : 'USD')
                 }
               >
-                Cambiar precios a{' '}
-                <b>{currencyMode === 'USD' ? 'Bolívares (Bs. BCV)' : 'Dólares ($ USD)'}</b>
+                Ver precios en{' '}
+                <b>
+                  {currencyMode === 'USD'
+                    ? 'Bolívares (Bs. BCV)'
+                    : 'Dólares ($ USD)'}
+                </b>
               </button>
             </div>
           </div>
 
           {/* ==================================================================
-              4. OUR STORY (#story idéntico a Davelle NY)
+              4. SECCIÓN TIENDA EN LA HOME (#doors — One house · two doors)
+              ================================================================== */}
+          <section id="doors">
+            <h2>One house · two doors</h2>
+            <div className="doors">
+              <a className="door" href="#menu">
+                <div className="ph">
+                  <img
+                    src="/images/cookie-pistachio.jpg"
+                    alt="Galletas recién horneadas rellenas de crema de pistacho y matcha"
+                    loading="lazy"
+                    width="900"
+                    height="1125"
+                  />
+                </div>
+                <div className="tx">
+                  <div className="mark">{ENV_CONFIG.brandName}</div>
+                  <div className="jp">COOKIE CAFÉ · RECIÉN HORNEADAS</div>
+                  <p>
+                    Galletas tibias de masa reposada 48 horas con mantequilla
+                    avellana, chocolate venezolano Chuao 70%, centros cremosos de
+                    pistacho y café de especialidad.
+                  </p>
+                  <div className="when">Tue–Sun · 8 AM – 9 PM</div>
+                </div>
+                <div className="more">
+                  See the menu <span>↓</span>
+                </div>
+              </a>
+
+              <button
+                type="button"
+                className="door"
+                onClick={handleOpenStore}
+              >
+                <div className="ph">
+                  <img
+                    src="/images/cookie-box.jpg"
+                    alt="Caja de regalo artesanal de Delulu Cookies lista para takeout"
+                    loading="lazy"
+                    width="900"
+                    height="1125"
+                  />
+                </div>
+                <div className="tx">
+                  <div className="mark">delulu takeout</div>
+                  <div className="jp">TIENDA ONLINE · PEDIDOS POR WHATSAPP</div>
+                  <p>
+                    Arma tu pedido de galletas individuales, cajas de regalo de
+                    4, 6 o 12 piezas y bebidas. Calcula en USD ($) o Bolívares
+                    (BCV) y envía directo a WhatsApp.
+                  </p>
+                  <div className="when">Pickup &amp; Delivery · Caracas</div>
+                </div>
+                <div className="more">
+                  Open takeout store <span>→</span>
+                </div>
+              </button>
+            </div>
+          </section>
+
+          {/* ==================================================================
+              5. OUR STORY (#story idéntico a Davelle NY)
               ================================================================== */}
           <section id="story">
-            <h2 className="section-heading">Our story</h2>
+            <h2>Our story</h2>
             <div className="story">
               <div className="ph">
                 <img
                   src="/images/hero-cookies.jpg"
                   alt="Galletas recién horneadas partidas por la mitad mostrando el corazón fundente"
                   loading="lazy"
+                  width="900"
+                  height="1125"
                 />
               </div>
               <div>
                 <h3>What Delulu means to us</h3>
                 <p>
-                  Delulu Cookies nació de la obsesión por hornear la galleta
-                  perfecta: corteza dorada con mantequilla avellana tostada,
-                  interior suave y un corazón fundente hecho con ingredientes
-                  reales.
+                  <em>Delulu Cookies</em> nació de la obsesión por hornear la
+                  galleta perfecta: corteza dorada con mantequilla avellana
+                  tostada, interior suave y un corazón fundente hecho con
+                  ingredientes reales.
                 </p>
                 <p>
                   Cada lote reposa en frío durante 48 horas antes de entrar al
@@ -395,178 +457,230 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              5. MENU TOGGLE (#menu .menuwrap con pestañas como Davelle NY)
+              6. THE MENU (#menu exactamente igual a davellenewyork.com)
               ================================================================== */}
           <section id="menu">
-            <h2 className="section-heading">The menu</h2>
+            <h2>The menu</h2>
             <div className="menuwrap">
               <div className="mtabs" role="tablist">
-                {MENU_CATEGORIES.map((cat) => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={activeMenuTab === cat.id}
-                    onClick={() => setActiveMenuTab(cat.id)}
-                  >
-                    {cat.label}
-                  </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="t-food"
+                  aria-selected={menuTab === 'cookies'}
+                  aria-controls="p-food"
+                  onClick={() => setMenuTab('cookies')}
+                >
+                  Cookies
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="t-drink"
+                  aria-selected={menuTab === 'boxes'}
+                  aria-controls="p-drink"
+                  onClick={() => setMenuTab('boxes')}
+                >
+                  Boxes &amp; Drinks
+                </button>
+              </div>
+
+              {/* PANEL 1: COOKIES (Estructura idéntica a #p-food de Davelle NY) */}
+              <div
+                id="p-food"
+                role="tabpanel"
+                aria-labelledby="t-food"
+                hidden={menuTab !== 'cookies'}
+              >
+                <p className="blurb">{HOME_MENU_COOKIES.blurb}</p>
+
+                {HOME_MENU_COOKIES.sections.map((sec) => (
+                  <React.Fragment key={sec.title}>
+                    <h3 className="cat">
+                      <i />
+                      <span>{sec.title}</span>
+                      <i />
+                    </h3>
+                    {sec.sub && <p className="sub">{sec.sub}</p>}
+
+                    {sec.items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="item"
+                        onClick={() => handleOpenStoreWithItem(item, '1 Galleta')}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleOpenStoreWithItem(item, '1 Galleta');
+                          }
+                        }}
+                        title="Haz clic para agregar a tu pedido en la tienda Takeout"
+                      >
+                        <div className="row">
+                          <span className="nm">
+                            {item.name}
+                            {item.tag && <small>{item.tag}</small>}
+                          </span>
+                          <span className="pr">
+                            {formatCookiePrice(
+                              item.priceUsd,
+                              currencyMode,
+                              bcvRate
+                            )}
+                          </span>
+                        </div>
+                        {item.desc && <p className="dsc">{item.desc}</p>}
+                      </div>
+                    ))}
+                  </React.Fragment>
                 ))}
               </div>
 
-              <div role="tabpanel">
-                <p className="blurb">
-                  Precios expresados en{' '}
-                  <strong>
-                    {currencyMode === 'USD'
-                      ? 'Dólares ($ USD)'
-                      : `Bolívares a tasa BCV del día (Bs. ${bcvRate.toFixed(2)})`}
-                  </strong>
-                  . Puedes cambiar la moneda arriba en cualquier momento.
-                </p>
+              {/* PANEL 2: BOXES & DRINKS (Estructura idéntica a #p-drink de Davelle NY) */}
+              <div
+                id="p-drink"
+                role="tabpanel"
+                aria-labelledby="t-drink"
+                hidden={menuTab !== 'boxes'}
+              >
+                <p className="blurb">{HOME_MENU_BOXES_DRINKS.blurb}</p>
 
-                <h3 className="cat">
-                  <i />
-                  <span>
-                    {MENU_CATEGORIES.find((c) => c.id === activeMenuTab)?.label}
-                  </span>
-                  <i />
-                </h3>
-                <p className="sub">
-                  Horneadas al momento · Elige presentación individual o en caja
-                  para compartir
-                </p>
+                {HOME_MENU_BOXES_DRINKS.sections.map((sec) => (
+                  <React.Fragment key={sec.title}>
+                    <h3 className="cat">
+                      <i />
+                      <span>{sec.title}</span>
+                      <i />
+                    </h3>
+                    {sec.sub && <p className="sub">{sec.sub}</p>}
 
-                {visibleMenuCookies.map((cookie) => {
-                  const currentPack = selectedPacks[cookie.id] || PACK_OPTIONS[0];
-                  const finalUsd = computeUsdPrice(cookie, currentPack);
-                  const mainPrice = formatCookiePrice(
-                    finalUsd,
-                    currencyMode,
-                    bcvRate
-                  );
-                  const altPrice = formatCookiePrice(
-                    finalUsd,
-                    currencyMode === 'USD' ? 'VES' : 'USD',
-                    bcvRate
-                  );
-                  const isJustAdded = addedCookieId === cookie.id;
-
-                  return (
-                    <div key={cookie.id} className="item">
-                      <div className="row">
-                        <span className="nm">
-                          {cookie.name}
-                          <small>{cookie.notes.join(' · ')}</small>
-                        </span>
-                        <span className="pr">
-                          {mainPrice}
-                          <span className="pr-sub">(≈ {altPrice})</span>
-                        </span>
-                      </div>
-
-                      <p className="dsc">{cookie.description}</p>
-
-                      <div className="item-controls">
-                        {!cookie.isFixedBox ? (
-                          <div className="pack-pills-inline">
-                            {PACK_OPTIONS.map((pack) => (
-                              <button
-                                key={pack.id}
-                                type="button"
-                                className={`pack-pill-btn ${
-                                  currentPack.id === pack.id ? 'active' : ''
-                                }`}
-                                onClick={() => handlePackChange(cookie.id, pack)}
-                              >
-                                {pack.label}
-                              </button>
-                            ))}
-                          </div>
-                        ) : (
-                          <span
-                            style={{
-                              fontFamily: 'var(--sans)',
-                              fontSize: '11px',
-                              letterSpacing: '0.16em',
-                              textTransform: 'uppercase',
-                              color: 'var(--color-section-name)',
-                              fontWeight: 600,
-                            }}
-                          >
-                            ✦ Takeout Box lista para regalar o compartir
-                          </span>
-                        )}
-
-                        <div className="item-actions">
-                          <button
-                            type="button"
-                            className="btn-menu-order"
-                            onClick={() => handleAddToCart(cookie)}
-                          >
-                            {isJustAdded ? (
-                              <>
-                                <Check size={13} /> Added
-                              </>
-                            ) : (
-                              <>
-                                <ShoppingBag size={13} /> Add Takeout
-                              </>
+                    {sec.items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="item"
+                        onClick={() =>
+                          handleOpenStoreWithItem(item, 'Takeout Box')
+                        }
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleOpenStoreWithItem(item, 'Takeout Box');
+                          }
+                        }}
+                        title="Haz clic para pedir esta caja en la tienda Takeout"
+                      >
+                        <div className="row">
+                          <span className="nm">{item.name}</span>
+                          <span className="pr">
+                            {formatCookiePrice(
+                              item.priceUsd,
+                              currencyMode,
+                              bcvRate
                             )}
-                          </button>
-
-                          <button
-                            type="button"
-                            className="btn-menu-wa"
-                            onClick={() => handleDirectWhatsAppOrder(cookie)}
-                          >
-                            WhatsApp →
-                          </button>
+                          </span>
                         </div>
+                        {item.desc && <p className="dsc">{item.desc}</p>}
                       </div>
-                    </div>
-                  );
-                })}
+                    ))}
+                  </React.Fragment>
+                ))}
 
-                <p className="legend">
-                  Pago Móvil (Tasa BCV) · Zelle · Efectivo USD · Delivery &amp;
-                  Takeout
-                </p>
+                {HOME_MENU_BOXES_DRINKS.gridSections.map((gSec) => (
+                  <React.Fragment key={gSec.title}>
+                    <h3 className="cat">
+                      <i />
+                      <span>{gSec.title}</span>
+                      <i />
+                    </h3>
+                    {gSec.sub && <p className="sub">{gSec.sub}</p>}
+
+                    <div className="grid2">
+                      {gSec.lines.map((line) => (
+                        <div
+                          key={line.name}
+                          className="line"
+                          onClick={() => handleOpenStoreWithItem(line, 'Bebida')}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              handleOpenStoreWithItem(line, 'Bebida');
+                            }
+                          }}
+                          title="Haz clic para agregar bebida a tu pedido Takeout"
+                        >
+                          <span>
+                            {line.name}
+                            {line.small && <small>{line.small}</small>}
+                          </span>
+                          <i />
+                          <span className="pr">
+                            {formatCookiePrice(
+                              line.priceUsd,
+                              currencyMode,
+                              bcvRate
+                            )}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </React.Fragment>
+                ))}
               </div>
+
+              <p className="legend">
+                GF gluten-free · Tasa BCV Bs. {bcvRate.toFixed(2)} · Haz clic en
+                cualquier producto para pedir en la tienda Takeout
+              </p>
+              <p className="allergy">
+                Por favor infórmanos sobre cualquier alergia a frutos secos,
+                lácteos o gluten al enviar tu pedido por WhatsApp.
+              </p>
+              <p className="mver">
+                Menu &amp; Prices in USD ($) and Bolívares (BCV) · Updated Daily
+              </p>
             </div>
           </section>
 
           {/* ==================================================================
-              6. VISIT (#visit idéntico a Davelle NY)
+              7. VISIT (#visit exactamente igual a Davelle NY)
               ================================================================== */}
           <section id="visit">
-            <h2 className="section-heading">Visit</h2>
+            <h2>Visit</h2>
             <div className="visit">
               <div>
                 <p className="big">{ENV_CONFIG.brandLocation}</p>
                 <p>
                   Retira tus galletas recién salidas del horno o pide Delivery a
-                  toda Caracas directo por WhatsApp.
+                  toda Caracas directo desde nuestra tienda de WhatsApp.
                 </p>
 
                 <div className="hours">
                   <div>
                     <span>
-                      Delulu Cookie Counter · Takeout &amp; Pickup
+                      {ENV_CONFIG.brandName}
                       <small>galletas tibias, cajas de regalo y café</small>
                     </span>
                     <span>8 AM – 9 PM · Mar–Dom</span>
                   </div>
                   <div>
                     <span>
-                      WhatsApp Delivery · Caracas
-                      <small>Pago Móvil BCV, Zelle o Efectivo</small>
+                      Delulu Takeout Store
+                      <small>pedidos online por WhatsApp · USD y Bs. BCV</small>
                     </span>
                     <span>9 AM – 8:30 PM · Mar–Dom</span>
                   </div>
                 </div>
 
                 <div className="acts">
+                  <button type="button" onClick={handleOpenStore}>
+                    Order takeout
+                  </button>
                   <a
                     href={ENV_CONFIG.mapsUrl}
                     target="_blank"
@@ -579,7 +693,7 @@ export default function App() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Order on WhatsApp
+                    WhatsApp Directo
                   </a>
                   <a
                     href={ENV_CONFIG.instagramUrl}
@@ -593,9 +707,11 @@ export default function App() {
 
               <div className="ph">
                 <img
-                  src="/images/cookie-box.jpg"
-                  alt="Caja de regalo Delulu Cookies"
+                  src="/images/cookie-classic.jpg"
+                  alt="Galleta recién horneada de Delulu Cookies"
                   loading="lazy"
+                  width="900"
+                  height="900"
                 />
               </div>
             </div>
@@ -604,11 +720,11 @@ export default function App() {
       </main>
 
       {/* ====================================================================
-          7. FOOTER (idéntico a Davelle NY)
+          8. FOOTER (idéntico a Davelle NY)
           ==================================================================== */}
       <div className="wrap">
         <footer>
-          <span className="footer-logo">{ENV_CONFIG.brandName}</span>
+          <span className="footer-wordmark">{ENV_CONFIG.brandName}</span>
           <p>{ENV_CONFIG.brandLocation} · Baked Fresh Daily</p>
           <p>
             <a
@@ -627,25 +743,12 @@ export default function App() {
               {ENV_CONFIG.brandHandle}
             </a>
           </p>
-          <p style={{ marginTop: '12px', opacity: 0.75 }}>
+          <p style={{ marginTop: '14px', opacity: 0.7 }}>
             © {new Date().getFullYear()} {ENV_CONFIG.brandName} · Precios en USD
-            ($) y Bolívares (Bs. BCV Bs. {bcvRate.toFixed(2)})
+            ($) y Bolívares (BCV Bs. {bcvRate.toFixed(2)})
           </p>
         </footer>
       </div>
-
-      {/* Drawer de Order Takeout conectado a WhatsApp */}
-      <WhatsAppCartDrawer
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        cartItems={cartItems}
-        onUpdateQty={handleUpdateQty}
-        onRemoveItem={handleRemoveItem}
-        onClearCart={() => setCartItems([])}
-        currencyMode={currencyMode}
-        onToggleCurrency={setCurrencyMode}
-        bcvRate={bcvRate}
-      />
     </div>
   );
 }
