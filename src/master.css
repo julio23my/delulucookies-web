@@ -5,35 +5,35 @@
 :root {
   /* ========================================================================
      PALETTE
-     - cream / bg: #ffffff
+     - cream / bg: #fdfbf9
      - brown (bordes, outline y títulos de secciones): #da8a41
      - red (#d32240): acentos, precios, botones y títulos principales
      - black (textos): #000000
-     - light (card bg): #ffffff
+     - light (card bg): #fdfbf9
      ======================================================================== */
-  --cream: #ffffff;
+  --cream: #fdfbf9;
   --brown: #da8a41;
   --pink: #da8a41;
   --black: #000000;
   --gray: #000000;
   --red: #d32240;
-  --light: #ffffff;
+  --light: #fdfbf9;
 
   /* ========================================================================
      STYLES MAPPING
-     - bg: #ffffff
+     - bg: #fdfbf9
      - outline / bordes: #da8a41
      - section titles: #da8a41
      - accent & headings: #d32240
      - textos: #000000
-     - card bg: #ffffff
+     - card bg: #fdfbf9
      ======================================================================== */
   --paper: var(--cream);
   --card: var(--light);
   --ink: #d32240;
   --ink2: var(--black);
   --taupe: var(--black);
-  --hair: rgba(218, 138, 65, 0.28);
+  --hair: transparent;
   --pinkt: var(--pink);
   --accent: #d32240;
 
@@ -114,7 +114,7 @@ a:hover {
 }
 
 /* ==========================================================================
-   1. NAVBAR (4 columnas: logo, links, abierto/cerrado, Ordenar ahora)
+   1. NAVBAR (4 columnas: logo, links, abierto/cerrado, Crea tu pedido)
    ========================================================================== */
 nav.delulu-top-nav {
   display: grid;
@@ -129,6 +129,10 @@ nav.delulu-top-nav {
   align-items: center;
   line-height: 1;
   text-decoration: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
 .delulu-brand:hover {
@@ -212,7 +216,7 @@ nav.delulu-top-nav .links button:hover {
   background: #3E8E5B;
 }
 
-/* Botón Ordenar ahora / Crea tu pedido */
+/* Botón Crea tu pedido */
 .order {
   font-family: var(--sans);
   text-transform: uppercase;
@@ -290,7 +294,7 @@ nav.delulu-top-nav .links button:hover {
 }
 
 /* ==========================================================================
-   2. FULL-BLEED LOOP VIDEO / COLLAGE (.hero 100vw)
+   2. FULL-BLEED LOOP VIDEO (.hero 100vw)
    ========================================================================== */
 .hero {
   position: relative;
@@ -309,69 +313,6 @@ nav.delulu-top-nav .links button:hover {
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-/* Collage cinemático en loop con las imágenes de galletas a 100vw */
-.loop-cinematic-reel {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.reel-slide {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  animation: deluluLoopReel 20s infinite ease-in-out;
-}
-
-.loop-cinematic-reel.paused .reel-slide {
-  animation-play-state: paused;
-}
-
-.reel-slide.slide-1 {
-  animation-delay: 0s;
-}
-
-.reel-slide.slide-2 {
-  animation-delay: 5s;
-}
-
-.reel-slide.slide-3 {
-  animation-delay: 10s;
-}
-
-.reel-slide.slide-4 {
-  animation-delay: 15s;
-}
-
-@keyframes deluluLoopReel {
-  0% {
-    opacity: 0;
-    transform: scale(1.02);
-  }
-
-  7% {
-    opacity: 1;
-  }
-
-  25% {
-    opacity: 1;
-    transform: scale(1.09);
-  }
-
-  32% {
-    opacity: 0;
-    transform: scale(1.11);
-  }
-
-  100% {
-    opacity: 0;
-  }
 }
 
 .hvbtn {
@@ -398,7 +339,7 @@ nav.delulu-top-nav .links button:hover {
 }
 
 /* ==========================================================================
-   3. SHORT DESCRIPTION (.lede — espacio ajustado sin svg ni pills)
+   3. SHORT DESCRIPTION (.lede)
    ========================================================================== */
 .lede {
   text-align: center;
@@ -433,7 +374,7 @@ nav.delulu-top-nav .links button:hover {
 }
 
 /* ==========================================================================
-   SECCIONES GENERALES & HEADINGS (títulos de secciones: #da8a41)
+   SECCIONES GENERALES & HEADINGS (sin líneas divisoras)
    ========================================================================== */
 section {
   padding: 54px 0;
@@ -452,7 +393,7 @@ h2 {
 }
 
 /* ==========================================================================
-   4. OUR STORY (#story)
+   4. NOSOTROS (#story)
    ========================================================================== */
 .story {
   display: grid;
@@ -494,7 +435,7 @@ h2 {
 }
 
 /* ==========================================================================
-   5. MENU TOGGLE (#menu .menuwrap — un solo borde)
+   5. MENÚ (#menu .menuwrap — un solo borde, ítems no seleccionables)
    ========================================================================== */
 .menuwrap {
   background: var(--card);
@@ -511,36 +452,6 @@ h2 {
   gap: 12px;
   flex-wrap: wrap;
   margin: 0 auto 30px;
-}
-
-.mtabs {
-  display: flex;
-  justify-content: center;
-  gap: 0;
-  margin: 0;
-  border: 1px solid var(--pink);
-  border-radius: 99px;
-  width: max-content;
-  overflow: hidden;
-}
-
-.mtabs button {
-  font: inherit;
-  font-family: var(--sans);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  background: none;
-  border: 0;
-  padding: 9px 22px;
-  line-height: 1;
-  color: var(--black);
-  cursor: pointer;
-}
-
-.mtabs button[aria-selected="true"] {
-  background: var(--accent);
-  color: #fff;
 }
 
 .menuwrap .currency-switch button {
@@ -579,17 +490,9 @@ h2 {
 }
 
 .item {
-  margin-bottom: 16px;
-  cursor: pointer;
-  padding: 6px 8px;
-  margin-left: -8px;
-  margin-right: -8px;
-  border-radius: 10px;
-  transition: background 0.18s ease;
-}
-
-.item:hover {
-  background: rgba(211, 34, 64, 0.08);
+  margin-bottom: 18px;
+  cursor: default;
+  padding: 4px 0;
 }
 
 .row {
@@ -666,7 +569,7 @@ h2 {
 }
 
 /* ==========================================================================
-   6. VISIT (#visit — espacio ajustado sin .hours ni Open in Maps)
+   6. TE ESPERAMOS (#visit)
    ========================================================================== */
 .visit {
   display: grid;
@@ -758,7 +661,7 @@ footer p {
 }
 
 /* ==========================================================================
-   SECCIÓN DE TIENDA / ORDENAR AHORA (.cm > .to-wrap)
+   SECCIÓN DE TIENDA / CREA TU PEDIDO (.cm > .to-wrap — sin líneas divisoras)
    ========================================================================== */
 .cm {
   min-height: 100dvh;
@@ -899,10 +802,10 @@ footer p {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding: 14px 20px 10px;
+  padding: 16px 20px 12px;
   margin: 6px -20px 0;
   background: var(--paper);
-  border-bottom: 1px solid var(--hair);
+  border-bottom: none;
   scrollbar-width: none;
 }
 
@@ -934,7 +837,7 @@ footer p {
 }
 
 .to-sec {
-  padding-top: 26px;
+  padding-top: 24px;
   scroll-margin-top: 64px;
   border-top: none;
 }
@@ -959,16 +862,16 @@ footer p {
 .to-tiles {
   list-style: none;
   padding: 0;
-  margin: 12px 0 0;
+  margin: 14px 0 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px 14px;
+  gap: 22px 14px;
 }
 
 .to-tiles li {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .to-art img {
@@ -985,8 +888,8 @@ footer p {
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  border-top: 1px solid var(--hair);
-  padding-top: 6px;
+  border-top: none;
+  padding-top: 4px;
   line-height: 1.2;
   color: var(--black);
 }
@@ -1028,9 +931,9 @@ footer p {
   right: 0;
   bottom: 0;
   z-index: 30;
-  padding: 12px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+  padding: 14px 20px calc(18px + env(safe-area-inset-bottom, 0px));
   background: var(--paper);
-  border-top: 1px solid var(--hair);
+  border-top: none;
 }
 
 .to-bar button {
@@ -1168,7 +1071,7 @@ footer p {
   gap: 10px;
   align-items: baseline;
   padding: 0;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .to-group legend span {
@@ -1189,8 +1092,9 @@ footer p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 46px;
-  border-bottom: 1px solid var(--hair);
+  min-height: 44px;
+  padding: 4px 0;
+  border-bottom: none;
   cursor: pointer;
 }
 
@@ -1220,10 +1124,10 @@ footer p {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 0 calc(18px + env(safe-area-inset-bottom, 0px));
-  margin-top: 18px;
+  padding: 16px 0 calc(20px + env(safe-area-inset-bottom, 0px));
+  margin-top: 16px;
   background: var(--paper);
-  border-top: 1px solid var(--hair);
+  border-top: none;
 }
 
 .to-qty {
@@ -1301,8 +1205,8 @@ footer p {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--hair);
+  padding: 8px 0;
+  border-bottom: none;
 }
 
 .to-lines b {
@@ -1312,7 +1216,7 @@ footer p {
   display: block;
 }
 
-.to-lines li>div:first-child span {
+.to-lines li > div:first-child span {
   font-size: 14px;
   color: var(--black);
 }
@@ -1429,8 +1333,8 @@ footer p {
 
 .to-sum .t {
   font-size: 20px;
-  border-top: 1px solid var(--hair);
-  padding-top: 8px;
+  border-top: none;
+  padding-top: 6px;
   color: var(--accent);
 }
 
@@ -1521,5 +1425,332 @@ footer p {
 
   .lede {
     padding: 36px 0 32px;
+  }
+}
+
+/* ==========================================================================
+   VISTA INICIAL: LINKTREE / INSTAGRAM BIO HUB (LinkHubView)
+   ========================================================================== */
+.linkhub-wrapper {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem 3.5rem;
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+
+.linkhub-card {
+  width: 100%;
+  max-width: 520px;
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 24px;
+  padding: 2rem 1.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.linkhub-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.linkhub-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background-color: var(--cream);
+  border: 1px solid var(--pink);
+  color: var(--ink);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+}
+
+.status-dot-live {
+  width: 7px;
+  height: 7px;
+  background-color: var(--pink);
+  border-radius: 50%;
+}
+
+.linkhub-currency-btn {
+  border: 1px solid var(--pink);
+  background-color: var(--cream);
+  color: var(--ink);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.linkhub-currency-btn:hover {
+  background-color: var(--pink);
+  color: #ffffff;
+}
+
+.linkhub-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.linkhub-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.linkhub-logo-img {
+  height: 54px;
+  width: auto;
+  object-fit: contain;
+}
+
+.linkhub-handle {
+  font-size: 0.82rem;
+  color: var(--pink);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.4rem;
+}
+
+.linkhub-bio {
+  font-size: 0.92rem;
+  color: var(--ink);
+  max-width: 390px;
+  margin: 0 auto;
+}
+
+.linkhub-featured-banner {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 175px;
+  margin-bottom: 1.15rem;
+  cursor: pointer;
+  border: 1px solid var(--pink);
+}
+
+.linkhub-featured-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.linkhub-featured-banner:hover img {
+  transform: scale(1.04);
+}
+
+.linkhub-featured-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.15) 70%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.1rem;
+  color: #ffffff;
+}
+
+.linkhub-featured-tag {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fdfbf9;
+  opacity: 0.9;
+  margin-bottom: 0.2rem;
+}
+
+.linkhub-featured-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.linkhub-links-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.linkhub-action-btn {
+  width: 100%;
+  padding: 0.95rem 1.15rem;
+  border-radius: 16px;
+  border: 1px solid var(--pink);
+  background-color: var(--cream);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  text-align: left;
+  font-family: var(--sans);
+}
+
+.linkhub-action-btn:hover {
+  transform: translateY(-2px);
+  background-color: var(--pink);
+  color: #ffffff;
+}
+
+.linkhub-action-btn.primary-site {
+  background-color: var(--pink);
+  color: #ffffff;
+  border-color: var(--pink);
+}
+
+.linkhub-action-btn.primary-site:hover {
+  background-color: #c27630;
+  border-color: #c27630;
+}
+
+.linkhub-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.linkhub-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(218, 138, 65, 0.14);
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+.primary-site .linkhub-icon-box,
+.linkhub-action-btn:hover .linkhub-icon-box {
+  background-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.linkhub-btn-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: block;
+}
+
+.linkhub-btn-subtitle {
+  font-size: 0.76rem;
+  opacity: 0.82;
+  display: block;
+}
+
+.linkhub-quick-flavors {
+  margin-top: 1.5rem;
+}
+
+.linkhub-quick-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+
+.linkhub-flavor-pills {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.flavor-mini-card {
+  background-color: var(--cream);
+  border: 1px solid var(--pink);
+  border-radius: 12px;
+  padding: 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  text-align: left;
+  font-family: var(--sans);
+}
+
+.flavor-mini-card:hover {
+  background-color: var(--pink);
+  color: #ffffff;
+}
+
+.flavor-mini-card img {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.flavor-mini-info h5 {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.flavor-mini-info span {
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+.linkhub-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.linkhub-socials {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.social-circle-link {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--pink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.social-circle-link:hover {
+  background-color: var(--pink);
+  color: #ffffff;
+}
+
+@media (max-width: 520px) {
+  .linkhub-flavor-pills {
+    grid-template-columns: 1fr;
   }
 }

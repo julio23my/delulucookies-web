@@ -22,7 +22,7 @@ export const ENV_CONFIG = {
   bcvApiUrl:
     import.meta.env.VITE_BCV_API_URL || 'https://ve.dolarapi.com/v1/dolares/oficial',
   bcvFallbackRate: Number(import.meta.env.VITE_BCV_FALLBACK_RATE) || 896.12,
-  loopVideoUrl: import.meta.env.VITE_LOOP_VIDEO_URL || '',
+  loopVideoUrl: import.meta.env.VITE_LOOP_VIDEO_URL || '/images/delulu-video.mp4',
 };
 
 /**
@@ -121,6 +121,13 @@ export const HOME_MENU_COOKIES = {
           image: '/images/cookie-classic.jpg',
           desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
         },
+        {
+          id: 'caramelo-salado',
+          name: 'Caramelo Salado',
+          priceUsd: 3.5,
+          image: '/images/delulu-visit.jpeg',
+          desc: 'Galleta de chips de chocolate, trozos de caramelo salado, y sal marina.',
+        },
       ],
     },
     {
@@ -160,7 +167,7 @@ export const HOME_MENU_COOKIES = {
 };
 
 // ============================================================================
-// DATOS DE LA TIENDA / ORDENAR AHORA (delulucookies store)
+// DATOS DE LA TIENDA / CREA TU PEDIDO (delulucookies store)
 // ============================================================================
 export const TAKEOUT_STORE_SECTIONS = [
   {
@@ -175,9 +182,8 @@ export const TAKEOUT_STORE_SECTIONS = [
         image: '/images/cookie-classic.jpg',
         desc: 'Galleta de beurre noisette, chips de chocolate, chips de chocolate blanco y sal marina.',
         packs: [
-          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 10.5 },
-          { id: 'box6', name: 'Caja de 6 Galletas', extraUsd: 17.5 },
+          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 9.5 },
         ],
       },
       {
@@ -187,9 +193,8 @@ export const TAKEOUT_STORE_SECTIONS = [
         image: '/images/hero-cookies.jpg',
         desc: 'Galleta de canela, jengibre, nuez moscada, chips de chocolate blanco, y sal marina.',
         packs: [
-          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 10.5 },
-          { id: 'box6', name: 'Caja de 6 Galletas', extraUsd: 17.5 },
+          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 9.5 },
         ],
       },
       {
@@ -199,9 +204,19 @@ export const TAKEOUT_STORE_SECTIONS = [
         image: '/images/cookie-classic.jpg',
         desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
         packs: [
-          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 10.5 },
-          { id: 'box6', name: 'Caja de 6 Galletas', extraUsd: 17.5 },
+          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 9.5 },
+        ],
+      },
+      {
+        id: 'caramelo-salado',
+        name: 'Caramelo Salado',
+        priceUsd: 3.5,
+        image: '/images/delulu-visit.jpeg',
+        desc: 'Galleta de chips de chocolate, trozos de caramelo salado, y sal marina.',
+        packs: [
+          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 9.5 },
         ],
       },
     ],
@@ -219,9 +234,8 @@ export const TAKEOUT_STORE_SECTIONS = [
         image: '/images/cookie-box.jpg',
         desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
         packs: [
-          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 12.0 },
-          { id: 'box6', name: 'Caja de 6 Galletas', extraUsd: 20.0 },
+          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 11.0 },
         ],
       },
       {
@@ -231,9 +245,8 @@ export const TAKEOUT_STORE_SECTIONS = [
         image: '/images/hero-cookies.jpg',
         desc: 'Galleta de chocolate, chips de chocolate, rellena de mantequilla de maní, y sal marina.',
         packs: [
-          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 12.0 },
-          { id: 'box6', name: 'Caja de 6 Galletas', extraUsd: 20.0 },
+          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 11.0 },
         ],
       },
       {
@@ -243,9 +256,8 @@ export const TAKEOUT_STORE_SECTIONS = [
         image: '/images/cookie-pistachio.jpg',
         desc: 'Galleta de pistacho, chips de chocolate blanco, rellena de crema de pistacho, y sal marina.',
         packs: [
-          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 12.0 },
-          { id: 'box6', name: 'Caja de 6 Galletas', extraUsd: 20.0 },
+          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 11.0 },
         ],
       },
       {
@@ -255,9 +267,8 @@ export const TAKEOUT_STORE_SECTIONS = [
         image: '/images/cookie-classic.jpg',
         desc: 'Galleta de chips de chocolate, rellena de crema de avellanas, y sal marina.',
         packs: [
-          { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 12.0 },
-          { id: 'box6', name: 'Caja de 6 Galletas', extraUsd: 20.0 },
+          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
+          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 11.0 },
         ],
       },
     ],

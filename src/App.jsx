@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DeluluTakeoutStore from './components/DeluluTakeoutStore';
+import LinkHubView from './components/LinkHubView';
 import {
   ENV_CONFIG,
   HOME_MENU_COOKIES,
@@ -13,28 +14,29 @@ export default function App() {
   const [currencyMode, setCurrencyMode] = useState('USD');
   const [bcvRate, setBcvRate] = useState(ENV_CONFIG.bcvFallbackRate);
 
-  // Vista activa: 'home' | 'store' (tienda de pedidos de delulucookies)
-  const [viewMode, setViewMode] = useState('home');
+  // Vista activa: 'linkhub' (vista inicial desde Instagram) | 'home' | 'store'
+  const [viewMode, setViewMode] = useState('linkhub');
 
-  // Pausa/reproducción del loop full-width (.hero)
+  // Pausa/reproducción del video en loop (.hero)
   const [isVideoPaused, setIsVideoPaused] = useState(false);
   const videoRef = useRef(null);
 
-  // Carrito de pedidos conectado a WhatsApp
-  const [cartItems, setCartItems] = useState([
-    {
-      cartKey: 'pistacho-single',
-      id: 'pistacho',
-      name: 'Pistacho',
-      packLabel: 'Individual (1 Galleta)',
-      unitPrice: 4.0,
-      quantity: 1,
-      image: '/images/cookie-pistachio.jpg',
-    },
-  ]);
+  // El carrito inicia vacío
+  const [cartItems, setCartItems] = useState([]);
 
   const openStatus = getStoreOpenStatus();
   const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Asegurar que el video esté siempre en loop y silenciado (mute)
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (vid) {
+      vid.defaultMuted = true;
+      vid.muted = true;
+      vid.loop = true;
+      vid.play().catch(() => {});
+    }
+  }, [viewMode]);
 
   // Consulta automática de la tasa oficial del BCV (desde /bcv-rate.json y API en vivo)
   useEffect(() => {
@@ -76,6 +78,7 @@ export default function App() {
   const handleToggleVideoPlay = () => {
     const vid = videoRef.current;
     if (vid) {
+      vid.muted = true;
       if (vid.paused) {
         vid.play();
         setIsVideoPaused(false);
@@ -118,20 +121,18 @@ export default function App() {
     );
   };
 
-  const handleOpenStoreWithItem = (item, packLabel = 'Individual (1 Galleta)') => {
-    handleAddToCart(
-      {
-        cartKey: `${item.id || item.name}-single`,
-        id: item.id || item.name,
-        name: item.name,
-        packLabel,
-        unitPrice: Number(item.priceUsd) || 0,
-        image: item.image || '/images/cookie-classic.jpg',
-      },
-      1
-    );
-    setViewMode('store');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleEnterMainSite = (sectionId = 'top') => {
+    setViewMode('home');
+    setTimeout(() => {
+      if (sectionId && sectionId !== 'top') {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          return;
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 60);
   };
 
   const handleOpenStore = () => {
@@ -144,7 +145,20 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Si el usuario entra a la tienda ("Ordenar ahora" / "Ir a ordenar"), mostramos la tienda de delulucookies
+  // Vista inicial tipo Linktree para quienes entran desde Instagram
+  if (viewMode === 'linkhub') {
+    return (
+      <LinkHubView
+        onEnterMainSite={handleEnterMainSite}
+        onOpenStore={handleOpenStore}
+        currencyMode={currencyMode}
+        onToggleCurrency={setCurrencyMode}
+        bcvRate={bcvRate}
+      />
+    );
+  }
+
+  // Si el usuario entra a la tienda ("Crea tu pedido"), mostramos la tienda de delulucookies
   if (viewMode === 'store') {
     return (
       <DeluluTakeoutStore
@@ -161,9 +175,9 @@ export default function App() {
   }
 
   return (
-    <div className="site">
+    <div className="site" id="top">
       {/* ====================================================================
-          1. NAVBAR (4 columnas: logo, links, status, Ordenar ahora)
+          1. NAVBAR (4 columnas: logo, links, status, Crea tu pedido)
           ==================================================================== */}
       <div className="wrap">
         <nav className="delulu-top-nav" aria-label="Primary">
@@ -204,50 +218,23 @@ export default function App() {
 
       <main id="main">
         {/* ====================================================================
-            2. FULL-BLEED LOOP VIDEO / COLLAGE (100vw .hero sin texto sobrepuesto)
+            2. FULL-BLEED LOOP VIDEO (100vw .hero en loop y sin sonido)
             ==================================================================== */}
-        <div className="hero" id="top">
-          {ENV_CONFIG.loopVideoUrl ? (
-            <video
-              ref={videoRef}
-              id="hv"
-              src={ENV_CONFIG.loopVideoUrl}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster="/images/hero-cookies.jpg"
-              aria-label="delulucookies loop video"
-            />
-          ) : (
-            <div
-              className={`loop-cinematic-reel ${isVideoPaused ? 'paused' : ''}`}
-              role="img"
-              aria-label="Collage en loop de galletas recién horneadas de delulucookies"
-            >
-              <img
-                src="/images/hero-cookies.jpg"
-                alt="Galletas partidas con chocolate fundido y pistacho"
-                className="reel-slide slide-1"
-              />
-              <img
-                src="/images/cookie-pistachio.jpg"
-                alt="Galleta de chocolate blanco y crema de pistacho"
-                className="reel-slide slide-2"
-              />
-              <img
-                src="/images/cookie-classic.jpg"
-                alt="Galleta clásica con chispas de chocolate"
-                className="reel-slide slide-3"
-              />
-              <img
-                src="/images/cookie-box.jpg"
-                alt="Caja artesanal de delulucookies"
-                className="reel-slide slide-4"
-              />
-            </div>
-          )}
+        <div className="hero">
+          <video
+            ref={videoRef}
+            id="hv"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster="/images/delulu-nosotros.jpeg"
+            aria-label="delulu cookies loop video"
+          >
+            <source src="/images/delulu-video.mp4" type="video/mp4" />
+            <source src="/images/delulu-video.mov" type="video/quicktime" />
+          </video>
 
           <button
             className="hvbtn"
@@ -263,12 +250,10 @@ export default function App() {
 
         <div className="wrap">
           {/* ==================================================================
-              3. SHORT DESCRIPTION (.lede sin svg ni botones inferiores)
+              3. SHORT DESCRIPTION (.lede)
               ================================================================== */}
           <div className="lede">
-            <div className="eyebrow">
-              obrador artesanal
-            </div>
+            <div className="eyebrow">obrador artesanal</div>
 
             <h1>Cada bocado hecho a mano con amor</h1>
 
@@ -280,15 +265,15 @@ export default function App() {
           </div>
 
           {/* ==================================================================
-              4. OUR STORY (#story)
+              4. NOSOTROS (#story — imagen delulu-nosotros)
               ================================================================== */}
           <section id="story">
             <h2>Nosotros</h2>
             <div className="story">
               <div className="ph">
                 <img
-                  src="/images/hero-cookies.jpg"
-                  alt="Galletas recién horneadas partidas por la mitad mostrando el corazón fundente"
+                  src="/images/delulu-nosotros.jpeg"
+                  alt="Galletas recién horneadas de delulu cookies"
                   loading="lazy"
                   width="900"
                   height="1125"
@@ -313,7 +298,7 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              5. THE MENU (#menu — Solo Cookies, 1 solo borde)
+              5. MENÚ (#menu — Ítems no seleccionables)
               ================================================================== */}
           <section id="menu">
             <h2>Menú</h2>
@@ -353,25 +338,7 @@ export default function App() {
                     </h3>
 
                     {sec.items.map((item) => (
-                      <div
-                        key={item.id}
-                        className="item"
-                        onClick={() =>
-                          handleOpenStoreWithItem(item, 'Individual (1 Galleta)')
-                        }
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            handleOpenStoreWithItem(
-                              item,
-                              'Individual (1 Galleta)'
-                            );
-                          }
-                        }}
-                        title="Haz clic para agregar a tu pedido"
-                      >
+                      <div key={item.id} className="item">
                         <div className="row">
                           <span className="nm">{item.name}</span>
                           <span className="pr">
@@ -402,7 +369,7 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              6. VISIT (#visit)
+              6. TE ESPERAMOS (#visit — imagen delulu-visita)
               ================================================================== */}
           <section id="visit">
             <h2>Te esperamos</h2>
@@ -410,9 +377,9 @@ export default function App() {
               <div>
                 <p className="big">Mándanos un mensaje</p>
                 <p>
-                  Queremos que hacer tu pedido sea súper fácil. Por eso, creamos
-                  un formulario que arma tu mensaje de forma automática: solo
-                  seleccion y nos llegará directo a WhatsApp. Como horneamos al
+                  Queremos que hacer tu pedido sea súper fácil. Por eso creamos
+                  un formulario que arma tu mensaje de forma automática: llena
+                  la información y envía directo a WhatsApp. Como horneamos al
                   momento, tu pedido estará listo en solo 25 minutos.
                 </p>
 
@@ -439,7 +406,7 @@ export default function App() {
 
               <div className="ph">
                 <img
-                  src="/images/cookie-classic.jpg"
+                  src="/images/delulu-visita.jpeg"
                   alt="Galleta recién horneada de delulucookies"
                   loading="lazy"
                   width="900"
@@ -452,7 +419,7 @@ export default function App() {
       </main>
 
       {/* ====================================================================
-          7. FOOTER
+          7. FOOTER (sin "obrador artesanal")
           ==================================================================== */}
       <div className="wrap">
         <footer>
@@ -463,7 +430,6 @@ export default function App() {
               className="delulu-logo-img footer-logo-img"
             />
           </a>
-          <p>obrador artesanal</p>
           <p>
             <a
               href={buildWhatsAppUrl()}

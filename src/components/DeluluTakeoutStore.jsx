@@ -24,7 +24,7 @@ export default function DeluluTakeoutStore({
 
   // Vista de revisión de bolsa/checkout dentro de la tienda ('browse' | 'checkout')
   const [storeStep, setStoreStep] = useState('browse');
-  const [whenMode, setWhenMode] = useState('ASAP (aprox. 20 min)');
+  const [whenMode, setWhenMode] = useState('ASAP (aprox. 25 min)');
   const [deliveryType, setDeliveryType] = useState('Delivery');
   const [paymentMethod, setPaymentMethod] = useState('Pago Móvil (Tasa BCV)');
   const [customerName, setCustomerName] = useState('');
@@ -48,7 +48,7 @@ export default function DeluluTakeoutStore({
     const baseUsd = Number(activeSheetItem.priceUsd) || 0;
     const extraUsd = sheetPack ? Number(sheetPack.extraUsd) || 0 : 0;
     const finalUnitUsd = Number((baseUsd + extraUsd).toFixed(2));
-    const packLabel = sheetPack ? sheetPack.name : 'Individual (1 Galleta)';
+    const packLabel = sheetPack ? sheetPack.name : 'Individual (1 galleta)';
     const cartKey = `${activeSheetItem.id}-${sheetPack ? sheetPack.id : 'single'}`;
 
     onAddToCart(
@@ -76,7 +76,7 @@ export default function DeluluTakeoutStore({
         cartKey: `${item.id}-single`,
         id: item.id,
         name: item.name,
-        packLabel: 'Individual (1 Galleta)',
+        packLabel: 'Individual (1 galleta)',
         unitPrice: item.priceUsd,
         image: item.image || '/images/cookie-classic.jpg',
       },
@@ -137,13 +137,9 @@ export default function DeluluTakeoutStore({
             <button
               type="button"
               className="to-back-pill"
-              onClick={
-                storeStep === 'checkout'
-                  ? () => setStoreStep('browse')
-                  : onBackToHome
-              }
+              onClick={() => onBackToHome()}
             >
-              ← {storeStep === 'checkout' ? 'Menú' : 'Inicio'}
+              ← Inicio
             </button>
 
             <div
@@ -170,24 +166,24 @@ export default function DeluluTakeoutStore({
             </div>
           </div>
 
-          <span className="delulu-brand">
+          <button
+            type="button"
+            className="delulu-brand"
+            onClick={() => onBackToHome()}
+            aria-label="Volver al inicio"
+          >
             <img
               src="/images/DELULU - logo.png"
               alt={ENV_CONFIG.brandName}
               className="delulu-logo-img store-logo-img"
             />
-          </span>
-          <div className="to-eyebrow">
-            obrador artesanal
-          </div>
+          </button>
         </header>
 
         {/* Tarjeta de estado Pickup / Delivery (.to-pickup) */}
         <section className="to-pickup">
           <div className="to-k">Ordena ahora · Directo por WhatsApp</div>
-          <div className="to-big">
-            Tu pedido recién horneado estará listo en aprox. 20 minutos
-          </div>
+          <div className="to-big">Listo en aprox. 25 minutos</div>
           <div className="to-small">
             Horario: 11:00 am – 6:00 pm · Tasa BCV:{' '}
             <strong>Bs. {bcvRate.toFixed(2)}</strong>
@@ -260,10 +256,7 @@ export default function DeluluTakeoutStore({
              ================================================================== */
           <section className="to-sec to-cart">
             <h2>Tu Pedido</h2>
-            <p className="to-sub">
-              Selecciona las galletas que quieras ordenar, llena la información
-              y envía directo a WhatsApp.
-            </p>
+            <p className="to-sub">Revisa tu pedido y envía directo a WhatsApp</p>
 
             <div className="to-box" style={{ marginTop: '14px' }}>
               {cartItems.length === 0 ? (
@@ -331,11 +324,11 @@ export default function DeluluTakeoutStore({
               <div className="to-when">
                 <button
                   type="button"
-                  aria-pressed={whenMode === 'ASAP (aprox. 20 min)'}
-                  onClick={() => setWhenMode('ASAP (aprox. 20 min)')}
+                  aria-pressed={whenMode === 'ASAP (aprox. 25 min)'}
+                  onClick={() => setWhenMode('ASAP (aprox. 25 min)')}
                 >
                   <b>Lo antes posible</b>
-                  <span>Hoy · ~20 min</span>
+                  <span>Hoy · ~25 min</span>
                 </button>
                 <button
                   type="button"
@@ -372,6 +365,7 @@ export default function DeluluTakeoutStore({
                     Pago Móvil en Bs. (Tasa BCV)
                   </option>
                   <option value="Zelle (USD)">Zelle ($ USD)</option>
+                  <option value="Binance ($ USDT)">Binance ($ USDT)</option>
                   <option value="Efectivo (USD)">Efectivo ($ USD)</option>
                 </select>
               </label>
@@ -513,7 +507,7 @@ export default function DeluluTakeoutStore({
 
             <p className="to-desc">{activeSheetItem.desc}</p>
             <p className="to-fresh">
-              Galletas estilo NYC · Listas en aprox. 20 min
+              Galletas estilo NYC · Listas en aprox. 25 min
             </p>
 
             {activeSheetItem.packs && activeSheetItem.packs.length > 0 && (
