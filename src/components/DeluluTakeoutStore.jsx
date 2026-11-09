@@ -103,7 +103,7 @@ export default function DeluluTakeoutStore({
 
     const msgParts = [
       `¡Hola *${ENV_CONFIG.brandName}*!`,
-      `Nuevo pedido desde *Ordenar ahora*:`,
+      `Nuevo pedido desde *Crea tu pedido*:`,
       ``,
       lines,
       ``,
@@ -178,7 +178,7 @@ export default function DeluluTakeoutStore({
             />
           </span>
           <div className="to-eyebrow">
-            obrador artesanal · cookies estilo nyc · delivery y pick-up
+            obrador artesanal
           </div>
         </header>
 

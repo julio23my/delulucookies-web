@@ -11,7 +11,7 @@ export const ENV_CONFIG = {
   brandHandle: import.meta.env.VITE_BRAND_HANDLE || '@delulucookies.ve',
   brandLocation:
     import.meta.env.VITE_BRAND_LOCATION ||
-    'obrador artesanal · cookies estilo nyc · delivery y pick-up',
+    'obrador artesanal',
   instagramUrl:
     import.meta.env.VITE_INSTAGRAM_URL ||
     'https://www.instagram.com/delulucookies.ve/',
@@ -101,22 +101,25 @@ export const HOME_MENU_COOKIES = {
       title: 'Galletas NYC Clásicas',
       items: [
         {
-          id: 'doble-chocolate-brown-butter',
-          name: 'De doble chocolate y brown butter',
+          id: 'choco-chip',
+          name: 'Choco Chip',
           priceUsd: 3.5,
-          desc: 'galleta de mantequilla avellanada, con chispas de chocolate blanco y chocolate de leche, con topping de sal marina.',
+          image: '/images/cookie-classic.jpg',
+          desc: 'Galleta de beurre noisette, chips de chocolate, chips de chocolate blanco y sal marina.',
         },
         {
-          id: 'gingerbread-chocolate-blanco',
-          name: 'De gingerbread y chocolate blanco',
+          id: 'navidena',
+          name: 'Navideña',
           priceUsd: 3.5,
-          desc: 'galleta especiada con canela, jengibre y nuez moscada, con chispas de chocolate blanco, con topping de sal marina.',
+          image: '/images/hero-cookies.jpg',
+          desc: 'Galleta de canela, jengibre, nuez moscada, chips de chocolate blanco, y sal marina.',
         },
         {
-          id: 'cookies-and-cream-doble-chocolate',
-          name: 'De cookies & cream y doble chocolate',
+          id: 'cookies-and-cream',
+          name: 'Cookies & Cream',
           priceUsd: 3.5,
-          desc: 'galleta de oreo, con chispas de chocolate blanco y chocolate de leche, con topping de oreo.',
+          image: '/images/cookie-classic.jpg',
+          desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
         },
       ],
     },
@@ -124,28 +127,32 @@ export const HOME_MENU_COOKIES = {
       title: 'Galletas NYC Rellenas',
       items: [
         {
-          id: 'almendras-frangipane',
-          name: 'De almendras y frangipane',
+          id: 'almendras',
+          name: 'Almendras',
           priceUsd: 4.0,
-          desc: 'galleta de almendras, rellena de frangipane, con topping de almendras fileteadas.',
+          image: '/images/cookie-box.jpg',
+          desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
         },
         {
-          id: 'brownie-crema-de-mani',
-          name: 'De brownie y crema de maní',
+          id: 'choco-mani',
+          name: 'Choco Maní',
           priceUsd: 4.0,
-          desc: 'galleta de chocolate, con chispas de chocolate de leche, rellena de crema de maní, con topping de sal marina.',
+          image: '/images/hero-cookies.jpg',
+          desc: 'Galleta de chocolate, chips de chocolate, rellena de mantequilla de maní, y sal marina.',
         },
         {
-          id: 'chocolate-blanco-crema-pistacho',
-          name: 'De chocolate blanco y crema de pistacho',
+          id: 'pistacho',
+          name: 'Pistacho',
           priceUsd: 4.0,
-          desc: 'galleta de pistacho, con chispas de chocolate blanco, rellena de crema de pistacho, con topping de sal marina.',
+          image: '/images/cookie-pistachio.jpg',
+          desc: 'Galleta de pistacho, chips de chocolate blanco, rellena de crema de pistacho, y sal marina.',
         },
         {
-          id: 'chips-chocolate-crema-avellana',
-          name: 'De chips de chocolate y crema de avellana',
+          id: 'choco-avellana',
+          name: 'Choco Avellana',
           priceUsd: 4.0,
-          desc: 'galleta clásica, con chips de chocolate de leche, rellena de crema de avellanas, con topping de sal marina.',
+          image: '/images/cookie-classic.jpg',
+          desc: 'Galleta de chips de chocolate, rellena de crema de avellanas, y sal marina.',
         },
       ],
     },
@@ -162,11 +169,11 @@ export const TAKEOUT_STORE_SECTIONS = [
     kind: 'cookies',
     tiles: [
       {
-        id: 'doble-chocolate-brown-butter',
-        name: 'De doble chocolate y brown butter',
+        id: 'choco-chip',
+        name: 'Choco Chip',
         priceUsd: 3.5,
         image: '/images/cookie-classic.jpg',
-        desc: 'galleta de mantequilla avellanada, con chispas de chocolate blanco y chocolate de leche, con topping de sal marina.',
+        desc: 'Galleta de beurre noisette, chips de chocolate, chips de chocolate blanco y sal marina.',
         packs: [
           { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
           { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 10.5 },
@@ -174,11 +181,11 @@ export const TAKEOUT_STORE_SECTIONS = [
         ],
       },
       {
-        id: 'gingerbread-chocolate-blanco',
-        name: 'De gingerbread y chocolate blanco',
+        id: 'navidena',
+        name: 'Navideña',
         priceUsd: 3.5,
         image: '/images/hero-cookies.jpg',
-        desc: 'galleta especiada con canela, jengibre y nuez moscada, con chispas de chocolate blanco, con topping de sal marina.',
+        desc: 'Galleta de canela, jengibre, nuez moscada, chips de chocolate blanco, y sal marina.',
         packs: [
           { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
           { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 10.5 },
@@ -186,11 +193,11 @@ export const TAKEOUT_STORE_SECTIONS = [
         ],
       },
       {
-        id: 'cookies-and-cream-doble-chocolate',
-        name: 'De cookies & cream y doble chocolate',
+        id: 'cookies-and-cream',
+        name: 'Cookies & Cream',
         priceUsd: 3.5,
         image: '/images/cookie-classic.jpg',
-        desc: 'galleta de oreo, con chispas de chocolate blanco y chocolate de leche, con topping de oreo.',
+        desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
         packs: [
           { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
           { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 10.5 },
@@ -206,11 +213,11 @@ export const TAKEOUT_STORE_SECTIONS = [
     kind: 'cookies',
     tiles: [
       {
-        id: 'almendras-frangipane',
-        name: 'De almendras y frangipane',
+        id: 'almendras',
+        name: 'Almendras',
         priceUsd: 4.0,
         image: '/images/cookie-box.jpg',
-        desc: 'galleta de almendras, rellena de frangipane, con topping de almendras fileteadas.',
+        desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
         packs: [
           { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
           { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 12.0 },
@@ -218,11 +225,11 @@ export const TAKEOUT_STORE_SECTIONS = [
         ],
       },
       {
-        id: 'brownie-crema-de-mani',
-        name: 'De brownie y crema de maní',
+        id: 'choco-mani',
+        name: 'Choco Maní',
         priceUsd: 4.0,
         image: '/images/hero-cookies.jpg',
-        desc: 'galleta de chocolate, con chispas de chocolate de leche, rellena de crema de maní, con topping de sal marina.',
+        desc: 'Galleta de chocolate, chips de chocolate, rellena de mantequilla de maní, y sal marina.',
         packs: [
           { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
           { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 12.0 },
@@ -230,11 +237,11 @@ export const TAKEOUT_STORE_SECTIONS = [
         ],
       },
       {
-        id: 'chocolate-blanco-crema-pistacho',
-        name: 'De chocolate blanco y crema de pistacho',
+        id: 'pistacho',
+        name: 'Pistacho',
         priceUsd: 4.0,
         image: '/images/cookie-pistachio.jpg',
-        desc: 'galleta de pistacho, con chispas de chocolate blanco, rellena de crema de pistacho, con topping de sal marina.',
+        desc: 'Galleta de pistacho, chips de chocolate blanco, rellena de crema de pistacho, y sal marina.',
         packs: [
           { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
           { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 12.0 },
@@ -242,11 +249,11 @@ export const TAKEOUT_STORE_SECTIONS = [
         ],
       },
       {
-        id: 'chips-chocolate-crema-avellana',
-        name: 'De chips de chocolate y crema de avellana',
+        id: 'choco-avellana',
+        name: 'Choco Avellana',
         priceUsd: 4.0,
         image: '/images/cookie-classic.jpg',
-        desc: 'galleta clásica, con chips de chocolate de leche, rellena de crema de avellanas, con topping de sal marina.',
+        desc: 'Galleta de chips de chocolate, rellena de crema de avellanas, y sal marina.',
         packs: [
           { id: 'single', name: 'Individual (1 Galleta)', extraUsd: 0 },
           { id: 'box4', name: 'Caja de 4 Galletas', extraUsd: 12.0 },

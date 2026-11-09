@@ -5,57 +5,60 @@
 :root {
   /* ========================================================================
      PALETTE
-     - cream: #f3efe4
-     - accent / brown: #da8a41 (todo excepto bordes y títulos de secciones)
-     - pink (bordes y títulos de secciones): #f33e4e
+     - cream / bg: #ffffff
+     - brown (bordes, outline y títulos de secciones): #da8a41
+     - red (#d32240): acentos, precios, botones y títulos principales
      - black (textos): #000000
-     - light (card bg): #fffdf7
+     - light (card bg): #ffffff
      ======================================================================== */
-  --cream: #f3efe4;
+  --cream: #ffffff;
   --brown: #da8a41;
-  --pink: #f33e4e;
+  --pink: #da8a41;
   --black: #000000;
   --gray: #000000;
-  --red: #f33e4e;
-  --light: #fffdf7;
+  --red: #d32240;
+  --light: #ffffff;
 
   /* ========================================================================
      STYLES MAPPING
-     - bg: cream (#f3efe4)
-     - outline / bordes: #f33e4e
-     - section titles: #f33e4e
-     - accent & headings: #da8a41
+     - bg: #ffffff
+     - outline / bordes: #da8a41
+     - section titles: #da8a41
+     - accent & headings: #d32240
      - textos: #000000
-     - card bg: #fffdf7
+     - card bg: #ffffff
      ======================================================================== */
   --paper: var(--cream);
   --card: var(--light);
-  --ink: var(--brown);
+  --ink: #d32240;
   --ink2: var(--black);
   --taupe: var(--black);
-  --hair: rgba(243, 62, 78, 0.28);
-  --pinkt: var(--red);
-  --accent: #da8a41;
+  --hair: rgba(218, 138, 65, 0.28);
+  --pinkt: var(--pink);
+  --accent: #d32240;
 
   --color-bg: var(--cream);
   --color-outline: var(--pink);
-  --color-heading: var(--brown);
+  --color-heading: #d32240;
   --color-body: var(--black);
-  --color-section-name: var(--red);
+  --color-section-name: var(--pink);
   --color-card-bg: var(--light);
 
-  --serif: "EB Garamond", Georgia, "Times New Roman", serif;
   --sans: "Jost", "Century Gothic", "Avenir Next", system-ui, sans-serif;
-  --cm-serif: var(--serif);
+  --serif: var(--sans);
+  --cm-serif: var(--sans);
   --cm-sans: var(--sans);
 }
 
 html {
   color-scheme: light;
   scroll-behavior: smooth;
+  background: var(--paper);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -63,14 +66,15 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--black);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 18px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-img, video {
+img,
+video {
   max-width: 100%;
   display: block;
 }
@@ -87,7 +91,7 @@ a:hover {
 }
 
 .site {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 18px;
   line-height: 1.55;
   color: var(--black);
@@ -208,14 +212,14 @@ nav.delulu-top-nav .links button:hover {
   background: #3E8E5B;
 }
 
-/* Botón Ordenar ahora (#da8a41 con borde #f33e4e) */
+/* Botón Ordenar ahora / Crea tu pedido */
 .order {
   font-family: var(--sans);
   text-transform: uppercase;
   line-height: 1;
   white-space: nowrap;
-  background: var(--accent);
-  color: var(--card);
+  background: transparent;
+  color: var(--black);
   border: 1.5px solid var(--pink);
   border-radius: 99px;
   padding: 12px 22px;
@@ -236,7 +240,7 @@ nav.delulu-top-nav .links button:hover {
 }
 
 .order:hover {
-  background: var(--black);
+  background: var(--pink);
   color: #fff;
   text-decoration: none;
 }
@@ -250,7 +254,7 @@ nav.delulu-top-nav .links button:hover {
   align-items: center;
   border: 1px solid var(--pink);
   border-radius: 99px;
-  background: var(--card);
+  background: transparent;
   overflow: hidden;
   width: max-content;
 }
@@ -275,12 +279,13 @@ nav.delulu-top-nav .links button:hover {
 
 .site .currency-switch button:hover,
 .cm .currency-switch button:hover {
-  color: var(--accent);
+  background: var(--pink);
+  color: #fff;
 }
 
 .site .currency-switch button[aria-selected="true"],
 .cm .currency-switch button[aria-selected="true"] {
-  background: var(--accent);
+  background: var(--pink);
   color: #fff;
 }
 
@@ -331,12 +336,15 @@ nav.delulu-top-nav .links button:hover {
 .reel-slide.slide-1 {
   animation-delay: 0s;
 }
+
 .reel-slide.slide-2 {
   animation-delay: 5s;
 }
+
 .reel-slide.slide-3 {
   animation-delay: 10s;
 }
+
 .reel-slide.slide-4 {
   animation-delay: 15s;
 }
@@ -346,17 +354,21 @@ nav.delulu-top-nav .links button:hover {
     opacity: 0;
     transform: scale(1.02);
   }
+
   7% {
     opacity: 1;
   }
+
   25% {
     opacity: 1;
     transform: scale(1.09);
   }
+
   32% {
     opacity: 0;
     transform: scale(1.11);
   }
+
   100% {
     opacity: 0;
   }
@@ -404,7 +416,7 @@ nav.delulu-top-nav .links button:hover {
 
 .lede h1 {
   color: var(--accent);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-weight: 400;
   font-size: clamp(30px, 4.8vw, 48px);
   line-height: 1.12;
@@ -421,11 +433,11 @@ nav.delulu-top-nav .links button:hover {
 }
 
 /* ==========================================================================
-   SECCIONES GENERALES & HEADINGS (títulos de secciones: #f33e4e)
+   SECCIONES GENERALES & HEADINGS (títulos de secciones: #da8a41)
    ========================================================================== */
 section {
   padding: 54px 0;
-  border-top: 1px solid var(--hair);
+  border-top: none;
 }
 
 h2 {
@@ -541,13 +553,13 @@ h2 {
   color: var(--black);
   max-width: 560px;
   margin: -10px auto 24px;
-  font-style: italic;
 }
 
 .cat {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 0;
   margin: 32px 0 14px;
   font-family: var(--sans);
   font-size: 12px;
@@ -555,6 +567,7 @@ h2 {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--pinkt);
+  text-align: center;
 }
 
 .cat:first-child {
@@ -562,9 +575,7 @@ h2 {
 }
 
 .cat i {
-  flex: 1 1;
-  height: 1px;
-  background: var(--hair);
+  display: none;
 }
 
 .item {
@@ -578,7 +589,7 @@ h2 {
 }
 
 .item:hover {
-  background: rgba(218, 138, 65, 0.08);
+  background: rgba(211, 34, 64, 0.08);
 }
 
 .row {
@@ -706,14 +717,14 @@ h2 {
   border-radius: 99px;
   padding: 9px 18px;
   color: var(--black);
-  background: var(--card);
+  background: transparent;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .acts a:hover,
 .acts button:hover {
-  background: var(--accent);
+  background: var(--pink);
   color: #fff;
   text-decoration: none;
 }
@@ -722,7 +733,7 @@ h2 {
    7. FOOTER
    ========================================================================== */
 footer {
-  border-top: 1px solid var(--hair);
+  border-top: none;
   padding: 30px 0 52px;
   text-align: center;
   font-family: var(--sans);
@@ -765,7 +776,7 @@ footer p {
   max-width: 560px;
   margin: 0 auto;
   padding: 0 20px calc(110px + env(safe-area-inset-bottom, 0px));
-  font-family: var(--cm-serif), Georgia, serif;
+  font-family: var(--sans);
   font-size: 17px;
 }
 
@@ -796,13 +807,13 @@ footer p {
 }
 
 .to-wrap .to-back-pill {
-  font-family: var(--cm-sans);
+  font-family: var(--sans);
   font-size: 11.5px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   border: 1px solid var(--pink);
-  background: var(--card);
+  background: transparent;
   color: var(--black);
   padding: 7px 14px;
   line-height: 1;
@@ -811,7 +822,7 @@ footer p {
 }
 
 .to-wrap .to-back-pill:hover {
-  background: var(--accent);
+  background: var(--pink);
   color: #fff;
 }
 
@@ -820,12 +831,12 @@ footer p {
   align-items: center;
   border: 1px solid var(--pink);
   border-radius: 99px;
-  background: var(--card);
+  background: transparent;
   overflow: hidden;
 }
 
 .to-wrap .currency-switch button {
-  font-family: var(--cm-sans);
+  font-family: var(--sans);
   font-size: 11.5px;
   font-weight: 500;
   letter-spacing: 0.16em;
@@ -836,10 +847,16 @@ footer p {
   color: var(--black);
   line-height: 1;
   white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.to-wrap .currency-switch button:hover {
+  background: var(--pink);
+  color: #fff;
 }
 
 .to-wrap .currency-switch button[aria-selected="true"] {
-  background: var(--accent);
+  background: var(--pink);
   color: #fff;
 }
 
@@ -895,7 +912,7 @@ footer p {
 
 .to-chips a {
   flex: none;
-  font-family: var(--cm-sans), sans-serif;
+  font-family: var(--sans);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -905,13 +922,14 @@ footer p {
   align-items: center;
   border-radius: 999px;
   border: 1px solid var(--pink);
-  background: var(--card);
+  background: transparent;
   color: var(--black);
   text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .to-chips a:hover {
-  background: var(--accent);
+  background: var(--pink);
   color: #fff;
 }
 
@@ -923,7 +941,7 @@ footer p {
 
 .to-sec h2 {
   margin: 0;
-  font-family: var(--cm-serif), Georgia, serif;
+  font-family: var(--sans);
   font-weight: 400;
   font-size: 26px;
   color: var(--pinkt);
@@ -934,7 +952,6 @@ footer p {
 
 .to-sub {
   margin: 4px 0 0;
-  font-style: italic;
   color: var(--black);
   font-size: 15px;
 }
@@ -991,9 +1008,9 @@ footer p {
   height: 40px;
   border-radius: 999px;
   border: 1px solid var(--pink);
-  background: var(--card);
+  background: transparent;
   color: var(--black);
-  font-family: var(--cm-sans), sans-serif;
+  font-family: var(--sans);
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1001,7 +1018,7 @@ footer p {
 }
 
 .to-wrap .to-add:hover {
-  background: var(--accent);
+  background: var(--pink);
   color: #fff;
 }
 
@@ -1022,18 +1039,24 @@ footer p {
   margin: 0 auto;
   height: 52px;
   border-radius: 999px;
-  background: var(--accent);
-  color: var(--card);
-  border: 1px solid var(--pink);
+  background: transparent;
+  color: var(--black);
+  border: 1.5px solid var(--pink);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  font-family: var(--cm-sans), sans-serif;
+  font-family: var(--sans);
   font-size: 14px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.to-bar button:hover {
+  background: var(--pink);
+  color: #fff;
 }
 
 .to-shade {
@@ -1056,7 +1079,7 @@ footer p {
   border: 1px solid var(--pink);
   border-radius: 18px 18px 0 0;
   padding: 18px 20px 0;
-  font-family: var(--cm-serif), Georgia, serif;
+  font-family: var(--sans);
 }
 
 .to-sheet button {
@@ -1077,8 +1100,16 @@ footer p {
   font-size: 24px;
   line-height: 1;
   border-radius: 999px;
-  background: var(--card);
+  background: transparent;
   border: 1px solid var(--pink);
+  color: var(--black);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.to-sheet .to-x:hover {
+  background: var(--pink);
+  color: #fff;
 }
 
 .to-sheetart {
@@ -1201,20 +1232,27 @@ footer p {
   border: 1px solid var(--pink);
   border-radius: 999px;
   height: 48px;
-  background: var(--card);
+  background: transparent;
 }
 
 .to-qty button {
   width: 40px;
   height: 48px;
   font-size: 18px;
-  font-family: var(--cm-sans), sans-serif;
+  font-family: var(--sans);
+  border-radius: 999px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.to-qty button:hover {
+  background: var(--pink);
+  color: #fff;
 }
 
 .to-qty span {
   min-width: 18px;
   text-align: center;
-  font-family: var(--cm-sans), sans-serif;
+  font-family: var(--sans);
 }
 
 .to-qty.sm {
@@ -1231,17 +1269,25 @@ footer p {
   flex: 1 1;
   height: 48px;
   border-radius: 999px;
-  background: var(--accent);
-  color: var(--card);
-  border: 1px solid var(--pink);
+  background: transparent;
+  color: var(--black);
+  border: 1.5px solid var(--pink);
   padding: 0 18px;
-  font-family: var(--cm-sans), sans-serif;
+  font-family: var(--sans);
   font-size: 13px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.to-wrap .to-go:hover,
+.to-sheet .to-go:hover {
+  background: var(--pink);
+  color: #fff;
 }
 
 .to-lines {
@@ -1266,7 +1312,7 @@ footer p {
   display: block;
 }
 
-.to-lines li > div:first-child span {
+.to-lines li>div:first-child span {
   font-size: 14px;
   color: var(--black);
 }
@@ -1290,18 +1336,37 @@ footer p {
 .to-wrap .to-when button {
   height: 54px;
   border-radius: 12px;
-  border: 1px solid var(--hair);
-  background: var(--card);
+  border: 1px solid var(--pink);
+  background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  font-family: var(--cm-sans), sans-serif;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .to-wrap .to-when button[aria-pressed="true"] {
   border-color: var(--pink);
+  background: var(--pink);
+  color: #fff;
+}
+
+.to-wrap .to-when button[aria-pressed="true"] b,
+.to-wrap .to-when button[aria-pressed="true"] span {
+  color: #fff;
+}
+
+.to-wrap .to-when button:hover {
+  background: var(--pink);
+  color: #fff;
+}
+
+.to-wrap .to-when button:hover b,
+.to-wrap .to-when button:hover span {
+  color: #fff;
 }
 
 .to-when b {
@@ -1340,7 +1405,7 @@ footer p {
   border: 1px solid var(--pink);
   background: var(--card);
   padding: 0 12px;
-  font-family: var(--cm-serif), Georgia, serif;
+  font-family: var(--sans);
   font-size: 17px;
   color: var(--black);
 }
@@ -1386,6 +1451,7 @@ footer p {
     grid-template-columns: auto 1fr auto;
     row-gap: 10px;
   }
+
   .status {
     grid-column: 1 / -1;
     grid-row: 2;
@@ -1399,48 +1465,60 @@ footer p {
     row-gap: 10px;
     padding: 16px 0 14px;
   }
+
   nav.delulu-top-nav .links {
     display: none;
   }
+
   .status {
     grid-column: 1 / -1;
     grid-row: 2;
     justify-self: start;
   }
+
   .hvbtn {
     right: 14px;
     bottom: 14px;
     width: 32px;
     height: 32px;
   }
+
   .story,
   .visit {
     grid-template-columns: 1fr;
   }
+
   .menuwrap {
     padding: 28px 20px;
   }
+
   .menu-controls-row {
     margin-bottom: 24px;
   }
+
   .dsc {
     margin-right: 0;
   }
+
   body,
   .site {
     font-size: 17px;
   }
+
   .hero {
     aspect-ratio: 4 / 5;
     max-height: none;
   }
+
   .story .ph {
     aspect-ratio: 4 / 5;
     order: -1;
   }
+
   .visit .ph {
     order: 2;
   }
+
   .lede {
     padding: 36px 0 32px;
   }

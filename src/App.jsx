@@ -23,9 +23,9 @@ export default function App() {
   // Carrito de pedidos conectado a WhatsApp
   const [cartItems, setCartItems] = useState([
     {
-      cartKey: 'chocolate-blanco-crema-pistacho-single',
-      id: 'chocolate-blanco-crema-pistacho',
-      name: 'De chocolate blanco y crema de pistacho',
+      cartKey: 'pistacho-single',
+      id: 'pistacho',
+      name: 'Pistacho',
       packLabel: 'Individual (1 Galleta)',
       unitPrice: 4.0,
       quantity: 1,
@@ -126,7 +126,7 @@ export default function App() {
         name: item.name,
         packLabel,
         unitPrice: Number(item.priceUsd) || 0,
-        image: '/images/cookie-classic.jpg',
+        image: item.image || '/images/cookie-classic.jpg',
       },
       1
     );
@@ -196,7 +196,7 @@ export default function App() {
             onClick={handleOpenStore}
           >
             <span className="ot">
-              Ordenar ahora{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
+              Crea tu pedido{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
             </span>
           </button>
         </nav>
@@ -267,10 +267,10 @@ export default function App() {
               ================================================================== */}
           <div className="lede">
             <div className="eyebrow">
-              obrador artesanal · cookies estilo nyc · delivery y pick-up
+              obrador artesanal
             </div>
 
-            <h1>Delulu es la solulu: Cada bocado hecho a mano con amor</h1>
+            <h1>Cada bocado hecho a mano con amor</h1>
 
             <p>
               Somos una línea de galletas artesanales gigantes y absolutamente
@@ -283,7 +283,7 @@ export default function App() {
               4. OUR STORY (#story)
               ================================================================== */}
           <section id="story">
-            <h2>Our story</h2>
+            <h2>Nosotros</h2>
             <div className="story">
               <div className="ph">
                 <img
@@ -297,9 +297,9 @@ export default function App() {
               <div>
                 <h3>Delulu es la Solulu</h3>
                 <p>
-                  Delulu, del inglés delusional, es una palabra lúdica de
-                  internet que describe el acto de abrazar fantasías o ideas que
-                  desafían la realidad.
+                  Delulu — del inglés <em>delusional</em>, es una palabra lúdica
+                  de internet que describe el acto de abrazar fantasías o ideas
+                  que desafían la realidad.
                 </p>
                 <p style={{ marginBottom: 0 }}>
                   Para nosotros, Delulu es un refugio frente al pesimismo al que
@@ -316,21 +316,9 @@ export default function App() {
               5. THE MENU (#menu — Solo Cookies, 1 solo borde)
               ================================================================== */}
           <section id="menu">
-            <h2>The menu</h2>
+            <h2>Menú</h2>
             <div className="menuwrap">
               <div className="menu-controls-row">
-                <div className="mtabs" role="tablist" aria-label="Categorías del menú">
-                  <button
-                    type="button"
-                    role="tab"
-                    id="t-food"
-                    aria-selected="true"
-                    aria-controls="p-food"
-                  >
-                    Cookies
-                  </button>
-                </div>
-
                 <div
                   className="currency-switch"
                   role="tablist"
@@ -355,15 +343,13 @@ export default function App() {
                 </div>
               </div>
 
-              <div id="p-food" role="tabpanel" aria-labelledby="t-food">
+              <div id="p-food" role="region" aria-label="Menú de galletas">
                 <p className="blurb">{HOME_MENU_COOKIES.blurb}</p>
 
                 {HOME_MENU_COOKIES.sections.map((sec) => (
                   <React.Fragment key={sec.title}>
                     <h3 className="cat">
-                      <i />
                       <span>{sec.title}</span>
-                      <i />
                     </h3>
 
                     {sec.items.map((item) => (
@@ -419,20 +405,20 @@ export default function App() {
               6. VISIT (#visit)
               ================================================================== */}
           <section id="visit">
-            <h2>Visit</h2>
+            <h2>Te esperamos</h2>
             <div className="visit">
               <div>
-                <p className="big">Ordena ahora</p>
+                <p className="big">Mándanos un mensaje</p>
                 <p>
-                  Arma tu pedido a través de nuestro formulario, selecciona las
-                  galletas que quieras ordenar, llena la información y envía
-                  directo a WhatsApp. Tu pedido recién horneado estará listo en
-                  aproximadamente 20 minutos.
+                  Queremos que hacer tu pedido sea súper fácil. Por eso, creamos
+                  un formulario que arma tu mensaje de forma automática: solo
+                  seleccion y nos llegará directo a WhatsApp. Como horneamos al
+                  momento, tu pedido estará listo en solo 25 minutos.
                 </p>
 
                 <div className="acts">
                   <button type="button" onClick={handleOpenStore}>
-                    Ir a ordenar
+                    Crea tu pedido
                   </button>
                   <a
                     href={buildWhatsAppUrl()}
@@ -477,7 +463,7 @@ export default function App() {
               className="delulu-logo-img footer-logo-img"
             />
           </a>
-          <p>obrador artesanal · cookies estilo nyc · delivery y pick-up</p>
+          <p>obrador artesanal</p>
           <p>
             <a
               href={buildWhatsAppUrl()}
