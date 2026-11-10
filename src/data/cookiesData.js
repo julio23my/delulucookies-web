@@ -11,7 +11,7 @@ export const ENV_CONFIG = {
   brandHandle: import.meta.env.VITE_BRAND_HANDLE || '@delulucookies.ve',
   brandLocation:
     import.meta.env.VITE_BRAND_LOCATION ||
-    'obrador artesanal',
+    'repostería de autor',
   instagramUrl:
     import.meta.env.VITE_INSTAGRAM_URL ||
     'https://www.instagram.com/delulucookies.ve/',
@@ -25,17 +25,32 @@ export const ENV_CONFIG = {
   loopVideoUrl: import.meta.env.VITE_LOOP_VIDEO_URL || '/images/delulu-video.mp4',
 };
 
+// Configuración única de Caja Delulu (4 galletas variadas a escoger por $15)
+export const BOX_DELULU_CONFIG = {
+  id: 'caja-delulu',
+  name: 'Caja Delulu',
+  desc: '4 galletas a escoger de nuestro menú',
+  size: 4,
+  priceUsd: 15,
+};
+
 /**
  * Formatea un monto en USD hacia Dólares ($ USD) o Bolívares a tasa BCV (Bs.)
  */
 export function formatCookiePrice(
-  _amountUsd,
-  currencyMode = 'USD'
+  amountUsd,
+  currencyMode = 'USD',
+  bcvRate = ENV_CONFIG.bcvFallbackRate
 ) {
+  const numUsd = Number(amountUsd) || 0;
   if (currencyMode === 'VES') {
-    return 'Bs.';
+    const amountVes = numUsd * (Number(bcvRate) || ENV_CONFIG.bcvFallbackRate);
+    return `Bs. ${amountVes.toLocaleString('es-VE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
   }
-  return '$';
+  return Number.isInteger(numUsd) ? `$${numUsd}` : `$${numUsd.toFixed(2)}`;
 }
 
 /**
@@ -87,6 +102,7 @@ export function getStoreOpenStatus() {
 
 // ============================================================================
 // DATOS DEL MENÚ PRINCIPAL (#menu en la Home de delulucookies)
+// Sin precios individuales en cada galleta; 3ra sección "Presentación" con Caja Delulu ($15)
 // ============================================================================
 export const HOME_MENU_COOKIES = {
   blurb: 'Galletas Artesanales Estilo NYC',
@@ -97,28 +113,24 @@ export const HOME_MENU_COOKIES = {
         {
           id: 'choco-chip',
           name: 'Choco Chip',
-          priceUsd: 3.5,
           image: '/images/cookie-classic.jpg',
           desc: 'Galleta de beurre noisette, chips de chocolate, chips de chocolate blanco y sal marina.',
         },
         {
           id: 'navidena',
           name: 'Navideña',
-          priceUsd: 3.5,
           image: '/images/hero-cookies.jpg',
           desc: 'Galleta de canela, jengibre, nuez moscada, chips de chocolate blanco, y sal marina.',
         },
         {
           id: 'cookies-and-cream',
           name: 'Cookies & Cream',
-          priceUsd: 3.5,
           image: '/images/cookie-classic.jpg',
           desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
         },
         {
           id: 'caramelo-salado',
           name: 'Caramelo Salado',
-          priceUsd: 3.5,
           image: '/images/delulu-visit.jpeg',
           desc: 'Galleta de chips de chocolate, trozos de caramelo salado, y sal marina.',
         },
@@ -130,30 +142,38 @@ export const HOME_MENU_COOKIES = {
         {
           id: 'almendras',
           name: 'Almendras',
-          priceUsd: 4.0,
           image: '/images/cookie-box.jpg',
           desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
         },
         {
           id: 'choco-mani',
           name: 'Choco Maní',
-          priceUsd: 4.0,
           image: '/images/hero-cookies.jpg',
           desc: 'Galleta de chocolate, chips de chocolate, rellena de mantequilla de maní, y sal marina.',
         },
         {
           id: 'pistacho',
           name: 'Pistacho',
-          priceUsd: 4.0,
           image: '/images/cookie-pistachio.jpg',
           desc: 'Galleta de pistacho, chips de chocolate blanco, rellena de crema de pistacho, y sal marina.',
         },
         {
           id: 'choco-avellana',
           name: 'Choco Avellana',
-          priceUsd: 4.0,
           image: '/images/cookie-classic.jpg',
           desc: 'Galleta de chips de chocolate, rellena de crema de avellanas, y sal marina.',
+        },
+      ],
+    },
+    {
+      title: 'Presentación',
+      items: [
+        {
+          id: 'caja-delulu',
+          name: 'Caja Delulu',
+          desc: '4 galletas a escoger de nuestro menú',
+          priceUsd: 15,
+          showPrice: true,
         },
       ],
     },
@@ -161,7 +181,52 @@ export const HOME_MENU_COOKIES = {
 };
 
 // ============================================================================
-// DATOS DE LA TIENDA / CREA TU PEDIDO (delulucookies store)
+// OPCIONES EXCLUSIVAS PARA EL MODAL DE REDIRECCIÓN (Sección "Galletas estilo NYC")
+// ============================================================================
+export const LINKHUB_FEATURED_COOKIES = [
+  {
+    id: 'choco-chip',
+    name: 'Choco chip',
+    image: '/images/cookie-classic.jpg',
+  },
+  {
+    id: 'navidena',
+    name: 'Navideña',
+    image: '/images/hero-cookies.jpg',
+  },
+  {
+    id: 'pistacho',
+    name: 'Pistacho',
+    image: '/images/cookie-pistachio.jpg',
+  },
+  {
+    id: 'choco-avellana',
+    name: 'Avellana',
+    image: '/images/cookie-classic.jpg',
+  },
+];
+
+// ============================================================================
+// LISTA DE 13 INGREDIENTES ("Nuestros ingredientes" — Inspiración Lavoratti)
+// ============================================================================
+export const INGREDIENTS_LIST = [
+  { id: 'beurre-noisette', name: 'Beurre noisette' },
+  { id: 'sal-marina', name: 'Sal marina' },
+  { id: 'caramelo', name: 'Caramelo' },
+  { id: 'frangipane', name: 'Frangipane' },
+  { id: 'almendras', name: 'Almendras' },
+  { id: 'pistacho', name: 'Pistacho' },
+  { id: 'avellana', name: 'Avellana' },
+  { id: 'chocolate', name: 'Chocolate' },
+  { id: 'cacao-100', name: 'Cacao 100%' },
+  { id: 'azucar-morena', name: 'Azúcar morena' },
+  { id: 'especias-aromaticas', name: 'Especias aromáticas' },
+  { id: 'gingerbread', name: 'Gingerbread' },
+  { id: 'chocolate-blanco', name: 'Chocolate blanco' },
+];
+
+// ============================================================================
+// DATOS DE LA TIENDA / CREA TU PEDIDO (Caja Delulu de 4 galletas variadas a $15)
 // ============================================================================
 export const TAKEOUT_STORE_SECTIONS = [
   {
@@ -172,46 +237,26 @@ export const TAKEOUT_STORE_SECTIONS = [
       {
         id: 'choco-chip',
         name: 'Choco Chip',
-        priceUsd: 3.5,
         image: '/images/cookie-classic.jpg',
         desc: 'Galleta de beurre noisette, chips de chocolate, chips de chocolate blanco y sal marina.',
-        packs: [
-          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 9.5 },
-        ],
       },
       {
         id: 'navidena',
         name: 'Navideña',
-        priceUsd: 3.5,
         image: '/images/hero-cookies.jpg',
         desc: 'Galleta de canela, jengibre, nuez moscada, chips de chocolate blanco, y sal marina.',
-        packs: [
-          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 9.5 },
-        ],
       },
       {
         id: 'cookies-and-cream',
         name: 'Cookies & Cream',
-        priceUsd: 3.5,
         image: '/images/cookie-classic.jpg',
         desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
-        packs: [
-          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 9.5 },
-        ],
       },
       {
         id: 'caramelo-salado',
         name: 'Caramelo Salado',
-        priceUsd: 3.5,
         image: '/images/delulu-visit.jpeg',
         desc: 'Galleta de chips de chocolate, trozos de caramelo salado, y sal marina.',
-        packs: [
-          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 9.5 },
-        ],
       },
     ],
     rows: [],
@@ -224,46 +269,26 @@ export const TAKEOUT_STORE_SECTIONS = [
       {
         id: 'almendras',
         name: 'Almendras',
-        priceUsd: 4.0,
         image: '/images/cookie-box.jpg',
         desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
-        packs: [
-          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 11.0 },
-        ],
       },
       {
         id: 'choco-mani',
         name: 'Choco Maní',
-        priceUsd: 4.0,
         image: '/images/hero-cookies.jpg',
         desc: 'Galleta de chocolate, chips de chocolate, rellena de mantequilla de maní, y sal marina.',
-        packs: [
-          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 11.0 },
-        ],
       },
       {
         id: 'pistacho',
         name: 'Pistacho',
-        priceUsd: 4.0,
         image: '/images/cookie-pistachio.jpg',
         desc: 'Galleta de pistacho, chips de chocolate blanco, rellena de crema de pistacho, y sal marina.',
-        packs: [
-          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 11.0 },
-        ],
       },
       {
         id: 'choco-avellana',
         name: 'Choco Avellana',
-        priceUsd: 4.0,
         image: '/images/cookie-classic.jpg',
         desc: 'Galleta de chips de chocolate, rellena de crema de avellanas, y sal marina.',
-        packs: [
-          { id: 'single', name: 'Individual (1 galleta)', extraUsd: 0 },
-          { id: 'box4', name: 'Caja de 4 galletas', extraUsd: 11.0 },
-        ],
       },
     ],
     rows: [],

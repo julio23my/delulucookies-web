@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DeluluTakeoutStore from './components/DeluluTakeoutStore';
 import LinkHubView from './components/LinkHubView';
+import IngredientsSection from './components/IngredientsSection';
 import {
   ENV_CONFIG,
   HOME_MENU_COOKIES,
-  buildWhatsAppUrl,
   formatCookiePrice,
   getStoreOpenStatus,
 } from './data/cookiesData';
@@ -196,6 +196,7 @@ export default function App() {
           <div className="links">
             <a href="#story">nosotros</a>
             <a href="#menu">menú</a>
+            <a href="#ingredientes">ingredientes</a>
             <a href="#visit">whatsapp</a>
           </div>
 
@@ -215,7 +216,9 @@ export default function App() {
             aria-disabled="true"
             title="Próximamente"
           >
-            <span className="ot">Crea tu pedido (Próximamente)</span>
+            <span className="ot">
+              Crea tu pedido <span className="order-soon">(próximamente)</span>
+            </span>
           </button>
         </nav>
       </div>
@@ -264,9 +267,9 @@ export default function App() {
               3. SHORT DESCRIPTION (.lede)
               ================================================================== */}
           <div className="lede">
-            <div className="eyebrow">obrador artesanal</div>
+            <div className="eyebrow">repostería de autor</div>
 
-            <h1>Cada bocado hecho a mano con amor</h1>
+            <h1>Cada bocado, hecho a mano con amor, técnica y detalle.</h1>
 
             <p>
               Somos una línea de galletas artesanales gigantes y absolutamente
@@ -297,19 +300,26 @@ export default function App() {
                   de internet que describe el acto de abrazar fantasías o ideas
                   que desafían la realidad.
                 </p>
-                <p style={{ marginBottom: 0 }}>
+                <p>
                   Para nosotros, Delulu es un refugio frente al pesimismo al que
                   a veces nos empujan las circunstancias. Es la decisión de
                   mantener un optimismo terco contra todo pronóstico; el impulso
                   de construir algo desde cero que, por más difícil que parezca,
                   nos devuelve las ganas de soñar.
                 </p>
+                <p style={{ marginBottom: 0 }}>
+                  Hoy, esa idea se traduce en algo muy sencillo: repostería de
+                  autor en pequeñas tandas, horneada al instante con
+                  ingredientes de alta calidad para regalarte una pausa
+                  reconfortante en cada bocado. Esto lo hacemos con el corazón,
+                  y es para ti. Te invitamos a soñar con nosotros.
+                </p>
               </div>
             </div>
           </section>
 
           {/* ==================================================================
-              5. MENÚ (#menu — Ítems no seleccionables)
+              5. MENÚ (#menu — Sin precios individuales, con sección Presentación)
               ================================================================== */}
           <section id="menu">
             <h2>Menú</h2>
@@ -352,13 +362,15 @@ export default function App() {
                       <div key={item.id} className="item">
                         <div className="row">
                           <span className="nm">{item.name}</span>
-                          <span className="pr">
-                            {formatCookiePrice(
-                              item.priceUsd,
-                              currencyMode,
-                              bcvRate
-                            )}
-                          </span>
+                          {item.showPrice && (
+                            <span className="pr">
+                              {formatCookiePrice(
+                                item.priceUsd,
+                                currencyMode,
+                                bcvRate
+                              )}
+                            </span>
+                          )}
                         </div>
                         {item.desc && <p className="dsc">{item.desc}</p>}
                       </div>
@@ -380,7 +392,12 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              6. TE ESPERAMOS (#visit — imagen delulu-esperamos-1)
+              6. NUESTROS INGREDIENTES (#ingredientes — Inspiración Lavoratti)
+              ================================================================== */}
+          <IngredientsSection />
+
+          {/* ==================================================================
+              7. TE ESPERAMOS (#visit — imagen delulu-esperamos-1)
               ================================================================== */}
           <section id="visit">
             <h2>Te esperamos</h2>
@@ -388,11 +405,10 @@ export default function App() {
               <div>
                 <p className="big">Mándanos un mensaje</p>
                 <p>
-                  Hacer tu pedido es súper fácil: usa nuestro formulario para
-                  armar tu selección y generar automáticamente tu mensaje a
-                  WhatsApp. Como horneamos al instante de forma artesanal, tu
-                  pedido estará listo para disfrutar en aproximadamente 25
-                  minutos.
+                  Hacer tu pedido es muy fácil: usa nuestro formulario para
+                  generar tu mensaje de WhatsApp automáticamente o escríbenos
+                  directamente. Tu pedido estará listo para disfrutar en
+                  aproximadamente 25 minutos.
                 </p>
 
                 <div className="acts">
