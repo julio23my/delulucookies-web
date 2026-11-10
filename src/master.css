@@ -140,22 +140,22 @@ nav.delulu-top-nav {
 }
 
 .delulu-logo-img {
-  width: 145px;
-  height: 36px;
+  width: 175px;
+  height: 44px;
   object-fit: cover;
   object-position: 50% 46.5%;
   display: block;
 }
 
 .footer-logo-img {
-  width: 135px;
-  height: 34px;
+  width: 160px;
+  height: 40px;
   margin: 0 auto;
 }
 
 .store-logo-img {
-  width: 160px;
-  height: 40px;
+  width: 175px;
+  height: 44px;
 }
 
 nav.delulu-top-nav .links {
@@ -1635,10 +1635,11 @@ footer p {
 }
 
 .linkhub-logo-wrap .delulu-logo-img {
+  width: 175px;
   height: 44px;
-  width: auto;
+  object-fit: cover;
+  object-position: 50% 46.5%;
   display: block;
-  object-fit: contain;
 }
 
 .linkhub-handle {
