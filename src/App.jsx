@@ -27,13 +27,15 @@ export default function App() {
   const openStatus = getStoreOpenStatus();
   const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Asegurar que el video esté siempre en loop y silenciado (mute)
+  // Asegurar que el video esté siempre en loop, sin sonido (mute) y en slow motion (65%)
   useEffect(() => {
     const vid = videoRef.current;
     if (vid) {
       vid.defaultMuted = true;
       vid.muted = true;
       vid.loop = true;
+      vid.defaultPlaybackRate = 0.65;
+      vid.playbackRate = 0.65;
       vid.play().catch(() => {});
     }
   }, [viewMode]);
@@ -79,6 +81,8 @@ export default function App() {
     const vid = videoRef.current;
     if (vid) {
       vid.muted = true;
+      vid.defaultPlaybackRate = 0.65;
+      vid.playbackRate = 0.65;
       if (vid.paused) {
         vid.play();
         setIsVideoPaused(false);
@@ -191,7 +195,7 @@ export default function App() {
 
           <div className="links">
             <a href="#story">nosotros</a>
-            <a href="#menu">menu</a>
+            <a href="#menu">menú</a>
             <a href="#visit">whatsapp</a>
           </div>
 
@@ -207,18 +211,18 @@ export default function App() {
           <button
             type="button"
             className="order"
-            onClick={handleOpenStore}
+            disabled
+            aria-disabled="true"
+            title="Próximamente"
           >
-            <span className="ot">
-              Crea tu pedido{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
-            </span>
+            <span className="ot">Crea tu pedido (Próximamente)</span>
           </button>
         </nav>
       </div>
 
       <main id="main">
         {/* ====================================================================
-            2. FULL-BLEED LOOP VIDEO (100vw .hero en loop y sin sonido)
+            2. FULL-BLEED LOOP VIDEO (100vw .hero en loop, sin sonido y slow-motion)
             ==================================================================== */}
         <div className="hero">
           <video
@@ -229,8 +233,15 @@ export default function App() {
             loop
             playsInline
             preload="auto"
-            poster="/images/delulu-nosotros.jpeg"
+            poster="/images/delulu-nosotros-1.JPG"
             aria-label="delulu cookies loop video"
+            onLoadedMetadata={(e) => {
+              e.currentTarget.defaultPlaybackRate = 0.65;
+              e.currentTarget.playbackRate = 0.65;
+            }}
+            onPlay={(e) => {
+              e.currentTarget.playbackRate = 0.65;
+            }}
           >
             <source src="/images/delulu-video.mp4" type="video/mp4" />
             <source src="/images/delulu-video.mov" type="video/quicktime" />
@@ -265,14 +276,14 @@ export default function App() {
           </div>
 
           {/* ==================================================================
-              4. NOSOTROS (#story — imagen delulu-nosotros)
+              4. NOSOTROS (#story — imagen delulu-nosotros-1)
               ================================================================== */}
           <section id="story">
             <h2>Nosotros</h2>
             <div className="story">
               <div className="ph">
                 <img
-                  src="/images/delulu-nosotros.jpeg"
+                  src="/images/delulu-nosotros-1.JPG"
                   alt="Galletas recién horneadas de delulu cookies"
                   loading="lazy"
                   width="900"
@@ -369,7 +380,7 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              6. TE ESPERAMOS (#visit — imagen delulu-visita)
+              6. TE ESPERAMOS (#visit — imagen delulu-esperamos-1)
               ================================================================== */}
           <section id="visit">
             <h2>Te esperamos</h2>
@@ -377,23 +388,30 @@ export default function App() {
               <div>
                 <p className="big">Mándanos un mensaje</p>
                 <p>
-                  Queremos que hacer tu pedido sea súper fácil. Por eso creamos
-                  un formulario que arma tu mensaje de forma automática: llena
-                  la información y envía directo a WhatsApp. Como horneamos al
-                  momento, tu pedido estará listo en solo 25 minutos.
+                  Hacer tu pedido es súper fácil: usa nuestro formulario para
+                  armar tu selección y generar automáticamente tu mensaje a
+                  WhatsApp. Como horneamos al instante de forma artesanal, tu
+                  pedido estará listo para disfrutar en aproximadamente 25
+                  minutos.
                 </p>
 
                 <div className="acts">
-                  <button type="button" onClick={handleOpenStore}>
-                    Crea tu pedido
-                  </button>
-                  <a
-                    href={buildWhatsAppUrl()}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    title="Próximamente"
                   >
-                    WhatsApp Directo
-                  </a>
+                    Crea tu pedido (Próximamente)
+                  </button>
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    title="Próximamente"
+                  >
+                    WhatsApp (Próximamente)
+                  </button>
                   <a
                     href="https://www.instagram.com/delulucookies.ve/"
                     target="_blank"
@@ -406,7 +424,7 @@ export default function App() {
 
               <div className="ph">
                 <img
-                  src="/images/delulu-visita.jpeg"
+                  src="/images/delulu-esperamos-1.JPG"
                   alt="Galleta recién horneada de delulucookies"
                   loading="lazy"
                   width="900"
@@ -419,7 +437,7 @@ export default function App() {
       </main>
 
       {/* ====================================================================
-          7. FOOTER (sin "obrador artesanal")
+          7. FOOTER (sin "obrador artesanal", WhatsApp sin número y deshabilitado)
           ==================================================================== */}
       <div className="wrap">
         <footer>
@@ -431,13 +449,13 @@ export default function App() {
             />
           </a>
           <p>
-            <a
-              href={buildWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
+            <span
+              className="footer-disabled-link"
+              aria-disabled="true"
+              title="Próximamente"
             >
-              WhatsApp +{ENV_CONFIG.whatsappNumber}
-            </a>{' '}
+              WhatsApp
+            </span>{' '}
             ·{' '}
             <a
               href="https://www.instagram.com/delulucookies.ve/"

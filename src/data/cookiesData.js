@@ -29,19 +29,13 @@ export const ENV_CONFIG = {
  * Formatea un monto en USD hacia Dólares ($ USD) o Bolívares a tasa BCV (Bs.)
  */
 export function formatCookiePrice(
-  amountUsd,
-  currencyMode = 'USD',
-  bcvRate = ENV_CONFIG.bcvFallbackRate
+  _amountUsd,
+  currencyMode = 'USD'
 ) {
-  const numUsd = Number(amountUsd) || 0;
   if (currencyMode === 'VES') {
-    const amountVes = numUsd * (Number(bcvRate) || ENV_CONFIG.bcvFallbackRate);
-    return `Bs. ${amountVes.toLocaleString('es-VE', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
+    return 'Bs.';
   }
-  return `$${numUsd.toFixed(2)}`;
+  return '$';
 }
 
 /**
@@ -95,7 +89,7 @@ export function getStoreOpenStatus() {
 // DATOS DEL MENÚ PRINCIPAL (#menu en la Home de delulucookies)
 // ============================================================================
 export const HOME_MENU_COOKIES = {
-  blurb: 'Galletas estilo NYC',
+  blurb: 'Galletas Artesanales Estilo NYC',
   sections: [
     {
       title: 'Galletas NYC Clásicas',
