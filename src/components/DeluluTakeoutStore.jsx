@@ -212,8 +212,10 @@ export default function DeluluTakeoutStore({
           <div className="to-k">Ordena ahora · Directo por WhatsApp</div>
           <div className="to-big">Listo en aprox. 25 minutos</div>
           <div className="to-small">
-            Presentación única: <strong>Caja Delulu (4 galletas a escoger) · {boxPriceFormatted}</strong> · Tasa BCV:{' '}
-            <strong>Bs. {bcvRate.toFixed(2)}</strong>
+            Presentación única:{' '}
+            <strong>
+              Caja Delulu (4 galletas a escoger) · {boxPriceFormatted}
+            </strong>
           </div>
         </section>
 
@@ -228,7 +230,7 @@ export default function DeluluTakeoutStore({
                     {BOX_DELULU_CONFIG.name} · {boxPriceFormatted}
                   </h3>
                   <p>
-                    Elige 4 galletas de nuestro menú para armar tu caja ({boxSelection.length}/{BOX_DELULU_CONFIG.size} seleccionadas)
+                    Elige 4 galletas del menú para armar tu caja ({boxSelection.length}/{BOX_DELULU_CONFIG.size} seleccionadas)
                   </p>
                 </div>
                 {boxSelection.length > 0 && (
@@ -540,24 +542,13 @@ export default function DeluluTakeoutStore({
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="to-go"
-                style={{ marginTop: '18px', width: '100%' }}
-              >
-                <span>Confirmar y Enviar por WhatsApp</span>
-                <span>
-                  {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)} →
-                </span>
-              </button>
-
               {cartItems.length > 0 && (
                 <button
                   type="button"
                   className="to-notip"
                   onClick={onClearCart}
                 >
-                  Vaciar orden actual
+                  Vaciar mi orden actual
                 </button>
               )}
             </form>

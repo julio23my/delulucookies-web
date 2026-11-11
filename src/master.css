@@ -1441,8 +1441,15 @@ footer p {
 }
 
 /* ==========================================================================
-   6. SECCIÓN INGREDIENTES QUERIDOS (#ingredientes — Inspiración Lavoratti)
+   6. SECCIÓN INGREDIENTES FAVORITOS (#ingredientes — Inspiración Lavoratti)
    ========================================================================== */
+.ing-subtext {
+  text-align: center;
+  color: var(--black);
+  max-width: 660px;
+  margin: 0 auto 28px;
+}
+
 .ing-wrap {
   background: var(--card);
   border: 1.5px solid var(--pink);

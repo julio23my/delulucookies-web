@@ -97,14 +97,19 @@ function IngredientArtwork({ id }) {
       );
 
     case 'pistacho':
-      // Pistachos: pistacho entreabierto en su cáscara mostrando la semilla
+      // Pistachos: dos pistachos claramente reconocibles con su cáscara ovalada entreabierta y el fruto asomando
       return (
         <svg {...baseProps}>
-          <path d="M47 22 C24 30 22 62 42 84 C47 68 40 44 47 22 Z" />
-          <path d="M53 22 C76 30 78 62 58 84 C53 68 60 44 53 22 Z" />
-          <path d="M43 34 C46 26 54 26 57 34" />
-          <ellipse cx="50" cy="52" rx="9" ry="18" />
-          <line x1="50" y1="34" x2="50" y2="48" />
+          {/* Pistacho principal abierto */}
+          <path d="M40 80 C22 72 20 42 36 22 C41 36 42 58 40 80 Z" />
+          <path d="M40 80 C58 72 60 42 44 22 C39 36 38 58 40 80 Z" />
+          {/* Fruto interno de pistacho asomando entre las dos valvas */}
+          <path d="M36 24 C38 16 42 16 44 24 C47 36 46 54 40 66 C34 54 33 36 36 24 Z" />
+          <path d="M38 30 C40 36 40 44 39 50" />
+          {/* Segundo pistacho inclinado a la derecha */}
+          <path d="M58 82 C52 68 58 46 74 36 C74 48 68 68 58 82 Z" />
+          <path d="M58 82 C72 78 84 58 80 40 C73 50 66 68 58 82 Z" />
+          <path d="M74 36 C77 32 80 34 80 40" />
         </svg>
       );
 
@@ -178,14 +183,28 @@ function IngredientArtwork({ id }) {
       );
 
     case 'canela':
-      // Canela: dos ramas de canela enrolladas con espirales en los extremos
+      // Canela: atado de ramas de canela con sus clásicos extremos enrollados en doble espiral y lazo de cordel
       return (
         <svg {...baseProps}>
-          <path d="M24 72 L68 22 L78 30 L34 80 Z" />
-          <ellipse cx="29" cy="76" rx="6.5" ry="4" transform="rotate(-48 29 76)" />
-          <path d="M22 38 L78 64 L72 75 L16 49 Z" />
-          <ellipse cx="19" cy="43.5" rx="6" ry="3.5" transform="rotate(25 19 43.5)" />
-          <path d="M44 46 C48 52 52 56 56 58" />
+          {/* Rama superior de canela */}
+          <path d="M24 38 L72 22" />
+          <path d="M28 50 L76 34" />
+          {/* Doble espiral característica de la corteza de canela (izquierda superior) */}
+          <path d="M24 38 C19 40 19 46 24 45 C22 43 24 41 26 42" />
+          <path d="M28 50 C23 52 21 47 24 45 C26 44 28 46 26 48" />
+          <path d="M72 22 C76 23 78 30 76 34" />
+          {/* Rama inferior de canela */}
+          <path d="M22 58 L74 44" />
+          <path d="M26 70 L78 56" />
+          {/* Doble espiral de la corteza (izquierda inferior) */}
+          <path d="M22 58 C17 60 17 66 22 65 C20 63 22 61 24 62" />
+          <path d="M26 70 C21 72 19 67 22 65 C24 64 26 66 24 68" />
+          <path d="M74 44 C78 45 80 52 78 56" />
+          {/* Cordel atando las ramas al centro con lazo */}
+          <path d="M45 30 L55 62" />
+          <path d="M49 29 L59 61" />
+          <path d="M54 62 C50 72 42 70 48 63" />
+          <path d="M56 62 C62 72 68 68 60 61" />
         </svg>
       );
 
@@ -258,7 +277,12 @@ function IngredientArtwork({ id }) {
 export default function IngredientsSection() {
   return (
     <section id="ingredientes" aria-labelledby="ingredientes-heading">
-      <h2 id="ingredientes-heading">Ingredientes queridos</h2>
+      <h2 id="ingredientes-heading">Ingredientes favoritos</h2>
+      <p className="ing-subtext">
+        Hay ingredientes que siempre son favoritos y habitan detrás de las
+        recetas: unos piden técnica, otros experimento y otros búsqueda, para
+        que, cuando estén presentes, sean protagonistas en cada bocado.
+      </p>
       <div className="ing-wrap">
         <div className="ing-grid" role="list">
           {INGREDIENTS_LIST.map((ing) => (

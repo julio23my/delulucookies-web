@@ -108,7 +108,7 @@ export const HOME_MENU_COOKIES = {
   blurb: 'Galletas Artesanales Estilo NYC',
   sections: [
     {
-      title: 'Galletas NYC Clásicas',
+      title: 'Galletas Clásicas',
       items: [
         {
           id: 'choco-chip',
@@ -137,7 +137,7 @@ export const HOME_MENU_COOKIES = {
       ],
     },
     {
-      title: 'Galletas NYC Rellenas',
+      title: 'Galletas Rellenas',
       items: [
         {
           id: 'almendras',
@@ -236,7 +236,7 @@ export const INGREDIENTS_LIST = [
 export const TAKEOUT_STORE_SECTIONS = [
   {
     id: 'clasicas',
-    title: 'Galletas NYC Clásicas',
+    title: 'Galletas Clásicas',
     kind: 'cookies',
     tiles: [
       {
@@ -268,7 +268,7 @@ export const TAKEOUT_STORE_SECTIONS = [
   },
   {
     id: 'rellenas',
-    title: 'Galletas NYC Rellenas',
+    title: 'Galletas Rellenas',
     kind: 'cookies',
     tiles: [
       {

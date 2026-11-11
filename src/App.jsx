@@ -378,8 +378,8 @@ export default function App() {
 
               <p className="legend">Tasa BCV Bs. {bcvRate.toFixed(2)}</p>
               <p className="allergy">
-                ¡Por favor recuerda detallar cualquier alergia a frutos secos,
-                lácteos o gluten al enviar tu pedido!
+                Por favor recuerda detallar cualquier alergia a frutos secos,
+                lácteos o gluten al enviar tu pedido
               </p>
               <p className="mver">
                 Menú y precios en USD ($) y bolívares (BCV) · Actualizado
