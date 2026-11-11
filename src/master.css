@@ -1441,73 +1441,78 @@ footer p {
 }
 
 /* ==========================================================================
-   6. SECCIÓN NUESTROS INGREDIENTES (#ingredientes — Inspiración Lavoratti)
+   6. SECCIÓN INGREDIENTES QUERIDOS (#ingredientes — Inspiración Lavoratti)
    ========================================================================== */
 .ing-wrap {
   background: var(--card);
   border: 1.5px solid var(--pink);
   border-radius: 18px;
-  padding: 40px 36px;
+  padding: 44px 36px;
   user-select: none;
 }
 
 .ing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
-  gap: 24px 18px;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px 24px;
 }
 
 .ing-card {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   gap: 10px;
-  width: 100%;
+  width: 132px;
   pointer-events: none;
   user-select: none;
   cursor: default;
 }
 
 .ing-media {
-  width: 112px;
-  height: 112px;
-  border-radius: 50%;
-  background-color: #fdfbf9;
-  border: 1px solid var(--pink);
+  width: 88px;
+  height: 88px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
 }
 
 .ing-svg {
   width: 100%;
   height: 100%;
   display: block;
+  margin: 0 auto;
 }
 
 .ing-name {
   font-family: var(--serif);
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.2;
   color: var(--black);
+  text-align: center;
 }
 
 @media (max-width: 720px) {
   .ing-wrap {
-    padding: 28px 18px;
+    padding: 28px 16px;
   }
 
   .ing-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px 14px;
+    gap: 24px 14px;
+  }
+
+  .ing-card {
+    width: calc(50% - 10px);
+    max-width: 145px;
   }
 
   .ing-media {
-    width: 96px;
-    height: 96px;
+    width: 78px;
+    height: 78px;
   }
 }
 
@@ -1606,7 +1611,7 @@ footer p {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1.25rem 3.5rem;
+  padding: 2rem 1.25rem;
   background-color: #fdfbf9;
   color: var(--ink);
   font-family: var(--sans);
@@ -1618,20 +1623,20 @@ footer p {
   background-color: #fdfbf9;
   border: 1.5px solid var(--pink);
   border-radius: 18px;
-  padding: 2rem 1.75rem;
+  padding: 2.25rem 1.85rem 1.85rem;
   position: relative;
   overflow: hidden;
 }
 
 .linkhub-header {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.35rem;
 }
 
 .linkhub-logo-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.65rem;
 }
 
 .linkhub-logo-wrap .delulu-logo-img {
@@ -1642,18 +1647,14 @@ footer p {
   display: block;
 }
 
-.linkhub-handle {
-  font-size: 0.82rem;
-  color: var(--pink);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  margin: 0 0 0.4rem;
-}
-
 .linkhub-bio {
-  font-size: 0.92rem;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
   color: var(--ink);
-  max-width: 390px;
+  max-width: 420px;
   margin: 0 auto;
 }
 
@@ -1661,8 +1662,8 @@ footer p {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  height: 175px;
-  margin-bottom: 1.15rem;
+  height: 185px;
+  margin-bottom: 1rem;
   cursor: pointer;
   border: 1px solid var(--pink);
 }
@@ -1736,76 +1737,32 @@ footer p {
   display: block;
 }
 
-.linkhub-quick-flavors {
-  margin-top: 1.5rem;
-}
-
-.linkhub-quick-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink);
-}
-
-.linkhub-flavor-pills {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.6rem;
-}
-
-.flavor-mini-card {
-  background-color: #fdfbf9;
-  border: 1px solid var(--pink);
-  border-radius: 12px;
-  padding: 0.55rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-  text-align: left;
-  font-family: var(--sans);
-  color: var(--pink);
-}
-
-.flavor-mini-card:hover {
-  background-color: var(--pink);
-  color: #ffffff;
-}
-
-.flavor-mini-card img {
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.flavor-mini-info h5 {
-  margin: 0;
-  font-size: 0.82rem;
-  font-weight: 600;
-  line-height: 1.2;
+.linkhub-btn-subtitle {
+  font-size: 0.78rem;
+  color: inherit;
+  opacity: 0.85;
+  display: block;
+  margin-top: 2px;
 }
 
 .linkhub-footer {
-  margin-top: 1.5rem;
+  margin-top: 1.35rem;
   display: flex;
   justify-content: center;
 }
 
 .linkhub-socials {
   display: flex;
+  align-items: center;
   gap: 0.75rem;
 }
 
 .social-circle-link {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
   border-radius: 50%;
   border: 1px solid var(--pink);
   background-color: #fdfbf9;
@@ -1815,6 +1772,13 @@ footer p {
   color: var(--pink);
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
+}
+
+.social-circle-link svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  flex-shrink: 0;
 }
 
 .social-circle-link:hover:not(:disabled) {
@@ -1840,10 +1804,4 @@ nav.delulu-top-nav .order:disabled,
 .footer-disabled-link {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-@media (max-width: 520px) {
-  .linkhub-flavor-pills {
-    grid-template-columns: 1fr;
-  }
 }

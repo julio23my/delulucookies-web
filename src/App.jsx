@@ -194,7 +194,7 @@ export default function App() {
           </a>
 
           <div className="links">
-            <a href="#story">nosotros</a>
+            <a href="#story">historia</a>
             <a href="#menu">menú</a>
             <a href="#ingredientes">ingredientes</a>
             <a href="#visit">whatsapp</a>
@@ -212,12 +212,10 @@ export default function App() {
           <button
             type="button"
             className="order"
-            disabled
-            aria-disabled="true"
-            title="Próximamente"
+            onClick={handleOpenStore}
           >
             <span className="ot">
-              Crea tu pedido <span className="order-soon">(próximamente)</span>
+              Crea tu pedido{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
             </span>
           </button>
         </nav>
@@ -267,22 +265,24 @@ export default function App() {
               3. SHORT DESCRIPTION (.lede)
               ================================================================== */}
           <div className="lede">
-            <div className="eyebrow">repostería de autor</div>
+            <div className="eyebrow">
+              repostería de autor · san antonio de los altos
+            </div>
 
             <h1>Cada bocado, hecho a mano con amor, técnica y detalle.</h1>
 
             <p>
-              Somos una línea de galletas artesanales gigantes y absolutamente
-              deliciosas inspiradas en las famosas galletas de la ciudad de
-              Nueva York.
+              Delulu es una línea de galletas artesanales gorditas y
+              absolutamente deliciosas, que nacen como reinterpretación de las
+              famosas galletas de la ciudad de Nueva York.
             </p>
           </div>
 
           {/* ==================================================================
-              4. NOSOTROS (#story — imagen delulu-nosotros-1)
+              4. HISTORIA (#story — imagen delulu-nosotros-1)
               ================================================================== */}
           <section id="story">
-            <h2>Nosotros</h2>
+            <h2>Historia</h2>
             <div className="story">
               <div className="ph">
                 <img
@@ -296,23 +296,20 @@ export default function App() {
               <div>
                 <h3>Delulu es la Solulu</h3>
                 <p>
-                  Delulu — del inglés <em>delusional</em>, es una palabra lúdica
-                  de internet que describe el acto de abrazar fantasías o ideas
-                  que desafían la realidad.
+                  Delulu —del inglés <em>delusional</em>, es una palabra de
+                  internet que describe el acto de abrazar fantasías que
+                  desafían la realidad.
                 </p>
                 <p>
-                  Para nosotros, Delulu es un refugio frente al pesimismo al que
-                  a veces nos empujan las circunstancias. Es la decisión de
-                  mantener un optimismo terco contra todo pronóstico; el impulso
-                  de construir algo desde cero que, por más difícil que parezca,
-                  nos devuelve las ganas de soñar.
+                  Aquí, Delulu es un refugio de optimismo terco contra todo
+                  pronóstico: la decisión de soñar con la imaginación como único
+                  límite.
                 </p>
                 <p style={{ marginBottom: 0 }}>
-                  Hoy, esa idea se traduce en algo muy sencillo: repostería de
-                  autor en pequeñas tandas, horneada al instante con
-                  ingredientes de alta calidad para regalarte una pausa
-                  reconfortante en cada bocado. Esto lo hacemos con el corazón,
-                  y es para ti. Te invitamos a soñar con nosotros.
+                  Hoy, esa idea se traduce en repostería apasionante de
+                  experimentación continua, procesos artesanales e ingredientes
+                  de calidad, con el fin de regalarle una pausa reconfortante
+                  al corazón.
                 </p>
               </div>
             </div>
@@ -381,8 +378,8 @@ export default function App() {
 
               <p className="legend">Tasa BCV Bs. {bcvRate.toFixed(2)}</p>
               <p className="allergy">
-                Por favor infórmanos sobre cualquier alergia a frutos secos,
-                lácteos o gluten al enviar tu pedido por WhatsApp.
+                ¡Por favor recuerda detallar cualquier alergia a frutos secos,
+                lácteos o gluten al enviar tu pedido!
               </p>
               <p className="mver">
                 Menú y precios en USD ($) y bolívares (BCV) · Actualizado
@@ -392,7 +389,7 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              6. NUESTROS INGREDIENTES (#ingredientes — Inspiración Lavoratti)
+              6. INGREDIENTES QUERIDOS (#ingredientes — Inspiración Lavoratti)
               ================================================================== */}
           <IngredientsSection />
 
@@ -403,22 +400,17 @@ export default function App() {
             <h2>Te esperamos</h2>
             <div className="visit">
               <div>
-                <p className="big">Mándanos un mensaje</p>
+                <p className="big">Envía tu mensaje</p>
                 <p>
-                  Hacer tu pedido es muy fácil: usa nuestro formulario para
-                  generar tu mensaje de WhatsApp automáticamente o escríbenos
-                  directamente. Tu pedido estará listo para disfrutar en
+                  Hacer tu pedido es muy fácil: usa el formulario para generar
+                  tu mensaje de WhatsApp automáticamente o escribe directamente
+                  al chat. Tu pedido estará listo para disfrutar en
                   aproximadamente 25 minutos.
                 </p>
 
                 <div className="acts">
-                  <button
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    title="Próximamente"
-                  >
-                    Crea tu pedido (Próximamente)
+                  <button type="button" onClick={handleOpenStore}>
+                    Crea tu pedido
                   </button>
                   <button
                     type="button"

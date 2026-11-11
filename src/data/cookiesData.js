@@ -7,11 +7,11 @@ export const ENV_CONFIG = {
   brandName: import.meta.env.VITE_BRAND_NAME || 'delulucookies',
   brandTagline:
     import.meta.env.VITE_BRAND_TAGLINE ||
-    'Somos una línea de galletas artesanales gigantes y absolutamente deliciosas inspiradas en las famosas galletas de la ciudad de Nueva York.',
+    'Delulu es una línea de galletas artesanales gorditas y absolutamente deliciosas, que nacen como reinterpretación de las famosas galletas de la ciudad de Nueva York.',
   brandHandle: import.meta.env.VITE_BRAND_HANDLE || '@delulucookies.ve',
   brandLocation:
     import.meta.env.VITE_BRAND_LOCATION ||
-    'repostería de autor',
+    'repostería de autor · san antonio de los altos',
   instagramUrl:
     import.meta.env.VITE_INSTAGRAM_URL ||
     'https://www.instagram.com/delulucookies.ve/',
@@ -29,7 +29,7 @@ export const ENV_CONFIG = {
 export const BOX_DELULU_CONFIG = {
   id: 'caja-delulu',
   name: 'Caja Delulu',
-  desc: '4 galletas a escoger de nuestro menú',
+  desc: '4 galletas a escoger del menú',
   size: 4,
   priceUsd: 15,
 };
@@ -171,7 +171,7 @@ export const HOME_MENU_COOKIES = {
         {
           id: 'caja-delulu',
           name: 'Caja Delulu',
-          desc: '4 galletas a escoger de nuestro menú',
+          desc: '4 galletas a escoger del menú',
           priceUsd: 15,
           showPrice: true,
         },
@@ -207,22 +207,27 @@ export const LINKHUB_FEATURED_COOKIES = [
 ];
 
 // ============================================================================
-// LISTA DE 13 INGREDIENTES ("Nuestros ingredientes" — Inspiración Lavoratti)
+// LISTA DE 18 INGREDIENTES ("Ingredientes queridos" — Inspiración Lavoratti)
 // ============================================================================
 export const INGREDIENTS_LIST = [
-  { id: 'beurre-noisette', name: 'Beurre noisette' },
-  { id: 'sal-marina', name: 'Sal marina' },
-  { id: 'caramelo', name: 'Caramelo' },
+  { id: 'beurre-noisette', name: 'Beurre Noisette' },
+  { id: 'sal-marina', name: 'Sal Marina' },
+  { id: 'vainilla', name: 'Vainilla' },
+  { id: 'caramelo-salado', name: 'Caramelo Salado' },
   { id: 'frangipane', name: 'Frangipane' },
   { id: 'almendras', name: 'Almendras' },
   { id: 'pistacho', name: 'Pistacho' },
   { id: 'avellana', name: 'Avellana' },
   { id: 'chocolate', name: 'Chocolate' },
+  { id: 'chocolate-blanco', name: 'Chocolate Blanco' },
   { id: 'cacao-100', name: 'Cacao 100%' },
-  { id: 'azucar-morena', name: 'Azúcar morena' },
-  { id: 'especias-aromaticas', name: 'Especias aromáticas' },
+  { id: 'azucar-morena', name: 'Azúcar Morena' },
+  { id: 'canela', name: 'Canela' },
+  { id: 'jengibre', name: 'Jengibre' },
+  { id: 'nuez-moscada', name: 'Nuez Moscada' },
   { id: 'gingerbread', name: 'Gingerbread' },
-  { id: 'chocolate-blanco', name: 'Chocolate blanco' },
+  { id: 'amaretto', name: 'Amaretto' },
+  { id: 'mantequilla', name: 'Mantequilla' },
 ];
 
 // ============================================================================

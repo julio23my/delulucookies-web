@@ -1,8 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { ENV_CONFIG, LINKHUB_FEATURED_COOKIES } from '../data/cookiesData';
 
-export default function LinkHubView({ onEnterMainSite }) {
+export default function LinkHubView({ onEnterMainSite, onOpenStore }) {
   return (
     <main className="linkhub-wrapper">
       <section className="linkhub-card" aria-label="Enlaces principales de Delulu Cookies">
@@ -15,13 +14,12 @@ export default function LinkHubView({ onEnterMainSite }) {
               className="delulu-logo-img"
             />
           </div>
-          <p className="linkhub-handle">@delulucookies.ve</p>
           <p className="linkhub-bio">
-            Repostería de autor · San Antonio de Los Altos
+            REPOSTERÍA DE AUTOR · SAN ANTONIO DE LOS ALTOS
           </p>
         </header>
 
-        {/* Banner destacado que lleva al Sitio Web y Menú con imagen delulu-nosotros-1 */}
+        {/* Banner destacado que lleva al Sitio Web y Menú */}
         <div
           className="linkhub-featured-banner"
           onClick={() => onEnterMainSite('top')}
@@ -41,18 +39,20 @@ export default function LinkHubView({ onEnterMainSite }) {
           </div>
         </div>
 
-        {/* Pila de Botones de Redirección (texto brown y outline coherente) */}
+        {/* Pila de Botones de Redirección (sin opción de Instagram, Crear pedido habilitado) */}
         <div className="linkhub-links-stack">
           <button
             type="button"
             className="linkhub-action-btn"
-            disabled
-            aria-disabled="true"
-            title="Próximamente"
+            onClick={onOpenStore}
           >
-            <span className="linkhub-btn-title">
-              Crea tu pedido (Próximamente)
-            </span>
+            <div>
+              <span className="linkhub-btn-title">Crea tu pedido</span>
+              <span className="linkhub-btn-subtitle">
+                Arma tu Caja Delulu de 4 galletas y envía a WhatsApp
+              </span>
+            </div>
+            <ArrowUpRight size={18} />
           </button>
 
           <button
@@ -62,50 +62,17 @@ export default function LinkHubView({ onEnterMainSite }) {
             aria-disabled="true"
             title="Próximamente"
           >
-            <span className="linkhub-btn-title">
-              WhatsApp (Próximamente!)
-            </span>
+            <div>
+              <span className="linkhub-btn-title">WhatsApp (Próximamente)</span>
+            </div>
           </button>
-
-          <a
-            href={ENV_CONFIG.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="linkhub-action-btn"
-          >
-            <span className="linkhub-btn-title">Instagram</span>
-            <ArrowUpRight size={17} />
-          </a>
         </div>
 
-        {/* Sección "Galletas estilo NYC" con las 4 opciones exclusivas */}
-        <div className="linkhub-quick-flavors">
-          <div className="linkhub-quick-header">
-            <span>Galletas estilo NYC</span>
-          </div>
-          <div className="linkhub-flavor-pills">
-            {LINKHUB_FEATURED_COOKIES.map((cookie) => (
-              <button
-                key={cookie.id}
-                type="button"
-                className="flavor-mini-card"
-                onClick={() => onEnterMainSite('menu')}
-                title={`Ver ${cookie.name} en el menú`}
-              >
-                <img src={cookie.image} alt={cookie.name} />
-                <div className="flavor-mini-info">
-                  <h5>{cookie.name}</h5>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Pie del Modal con logos oficiales de Instagram y WhatsApp (deshabilitado) */}
+        {/* Pie del Modal con iconos del mismo tamaño exacto */}
         <footer className="linkhub-footer">
           <div className="linkhub-socials">
             <a
-              href={ENV_CONFIG.instagramUrl}
+              href="https://www.instagram.com/delulucookies.ve/"
               target="_blank"
               rel="noopener noreferrer"
               className="social-circle-link"
@@ -148,8 +115,8 @@ export default function LinkHubView({ onEnterMainSite }) {
                 strokeLinejoin="round"
                 aria-hidden="true"
               >
-                <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
-                <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                <path d="M9.5 9.5c.3 1.8 1.7 3.2 3.5 3.5" />
               </svg>
             </button>
           </div>

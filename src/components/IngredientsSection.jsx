@@ -1,302 +1,255 @@
 import React from 'react';
 import { INGREDIENTS_LIST } from '../data/cookiesData';
 
+const STROKE_COLOR = '#d32240';
+
 function IngredientArtwork({ id }) {
+  const baseProps = {
+    viewBox: '0 0 100 100',
+    fill: 'none',
+    stroke: STROKE_COLOR,
+    strokeWidth: '1.4',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    className: 'ing-svg',
+    'aria-hidden': 'true',
+  };
+
   switch (id) {
     case 'beurre-noisette':
-      // Imagen que represente mantequilla (bloque de mantequilla avellanada con corte y gota fundida)
+      // Brown butter: cazo de pastelería con mantequilla dorándose y espirales de aroma
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          <ellipse cx="60" cy="84" rx="44" ry="14" fill="#f5e6d3" stroke="#da8a41" strokeWidth="2" />
-          <path d="M30 62 L68 46 L90 58 L52 74 Z" fill="#f9dfb8" stroke="#da8a41" strokeWidth="2" strokeLinejoin="round" />
-          <path d="M30 62 L30 78 L52 90 L52 74 Z" fill="#efc284" stroke="#da8a41" strokeWidth="2" strokeLinejoin="round" />
-          <path d="M52 74 L52 90 L90 74 L90 58 Z" fill="#e5ae63" stroke="#da8a41" strokeWidth="2" strokeLinejoin="round" />
-          {/* Rebanada de mantequilla */}
-          <path d="M24 68 L36 62 L36 80 L24 86 Z" fill="#f7d49e" stroke="#da8a41" strokeWidth="1.8" strokeLinejoin="round" />
-          {/* Gotas doradas de beurre noisette */}
-          <path d="M60 30 C60 30 53 39 53 43 A7 7 0 0 0 67 43 C67 39 60 30 60 30 Z" fill="#da8a41" opacity="0.85" />
-          <circle cx="44" cy="40" r="2.5" fill="#da8a41" />
-          <circle cx="76" cy="36" r="2" fill="#da8a41" />
+        <svg {...baseProps}>
+          <ellipse cx="44" cy="58" rx="24" ry="8" />
+          <path d="M20 58 V70 C20 76 31 80 44 80 C57 80 68 76 68 70 V58" />
+          <path d="M68 61 L90 50" />
+          <path d="M68 65 L91 54" />
+          <ellipse cx="44" cy="58" rx="14" ry="4" strokeDasharray="2 3" />
+          <path d="M35 46 C33 41 38 37 36 32 C34 27 38 23 37 20" />
+          <path d="M45 44 C43 39 48 35 46 30 C44 25 48 21 47 18" />
+          <path d="M55 46 C53 41 58 37 56 32" />
         </svg>
       );
 
     case 'sal-marina':
-      // Imagen que represente sal marina (escamas piramidales y cristales de sal marina)
+      // Escama de sal: cristal piramidal hueco de sal marina con facetas finas
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Cristal piramidal central */}
-          <polygon points="60,26 88,68 60,84 32,68" fill="#fdfbf9" stroke="#da8a41" strokeWidth="2.2" strokeLinejoin="round" />
-          <line x1="60" y1="26" x2="60" y2="84" stroke="#da8a41" strokeWidth="1.8" />
-          <line x1="32" y1="68" x2="88" y2="68" stroke="#da8a41" strokeWidth="1.4" strokeDasharray="3 3" />
-          {/* Cristales secundarios */}
-          <polygon points="30,44 44,54 36,68 22,58" fill="#f5e6d3" stroke="#da8a41" strokeWidth="1.8" strokeLinejoin="round" />
-          <polygon points="88,40 100,52 90,64 78,52" fill="#f5e6d3" stroke="#da8a41" strokeWidth="1.8" strokeLinejoin="round" />
-          {/* Escamas sueltas */}
-          <rect x="40" y="88" width="8" height="8" transform="rotate(20 44 92)" fill="#e8c39e" stroke="#da8a41" strokeWidth="1.5" />
-          <rect x="70" y="86" width="9" height="9" transform="rotate(-18 74 90)" fill="#f5e6d3" stroke="#da8a41" strokeWidth="1.5" />
-          <circle cx="58" cy="95" r="2.5" fill="#da8a41" />
+        <svg {...baseProps}>
+          <polygon points="50,18 82,56 50,82 18,56" />
+          <polygon points="50,30 70,55 50,71 30,55" />
+          <polygon points="50,41 59,54 50,61 41,54" />
+          <line x1="50" y1="18" x2="50" y2="41" />
+          <line x1="82" y1="56" x2="59" y2="54" />
+          <line x1="50" y1="82" x2="50" y2="61" />
+          <line x1="18" y1="56" x2="41" y2="54" />
         </svg>
       );
 
-    case 'caramelo':
-      // Imagen que represente toffee (cubos de toffee artesanal con baño de caramelo fundido)
+    case 'vainilla':
+      // Vainilla: flor de orquídea de vainilla con dos vainas finas curvadas
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Cubo principal de toffee */}
-          <rect x="32" y="42" width="44" height="44" rx="8" fill="#e59a52" stroke="#da8a41" strokeWidth="2.2" />
-          {/* Cubo secundario superpuesto */}
-          <rect x="52" y="34" width="38" height="38" rx="7" fill="#f1b97a" stroke="#da8a41" strokeWidth="2" />
-          {/* Glaseado de caramelo derritiéndose */}
-          <path
-            d="M32 52 Q42 64 46 54 Q52 46 58 62 Q64 74 70 56 Q76 48 86 58 L86 42 Q86 34 78 34 L40 34 Q32 34 32 42 Z"
-            fill="#da8a41"
-          />
-          {/* Hilos de caramelo */}
-          <path d="M26 92 Q60 84 94 92" fill="none" stroke="#da8a41" strokeWidth="2.2" strokeLinecap="round" />
-          <circle cx="48" cy="76" r="2.2" fill="#fdfbf9" />
+        <svg {...baseProps}>
+          <path d="M24 80 C34 62 56 44 78 22" />
+          <path d="M28 83 C40 65 60 47 81 25" />
+          <path d="M20 72 C38 66 58 58 80 64" />
+          {/* Flor botánica de vainilla */}
+          <path d="M46 42 C40 30 48 20 52 32" />
+          <path d="M52 32 C60 22 68 30 56 40" />
+          <path d="M56 40 C68 44 62 56 52 46" />
+          <path d="M52 46 C46 58 36 50 46 42" />
+          <circle cx="51" cy="40" r="3" />
+        </svg>
+      );
+
+    case 'caramelo-salado':
+      // Gota de caramelo: gota suave y fluida con ondas concéntricas en la base
+      return (
+        <svg {...baseProps}>
+          <path d="M50 18 C55 31 70 46 70 60 C70 71 61 79 50 79 C39 79 30 71 30 60 C30 46 45 31 50 18 Z" />
+          <path d="M39 56 C38 64 42 70 49 72" />
+          <path d="M24 82 C32 86 68 86 76 82" />
+          <path d="M34 88 C42 90 58 90 66 88" />
         </svg>
       );
 
     case 'frangipane':
-      // Imagen que represente crema (cuenco con crema de almendras batida en espiral suave)
+      // Crema: cuenco con crema batida en espiral suave
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Pico cremoso de frangipane */}
-          <path
-            d="M32 62 C32 44 48 38 56 26 C64 36 88 42 88 62 Z"
-            fill="#f7e3c4"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          <path d="M44 54 Q60 44 74 54" fill="none" stroke="#da8a41" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M50 43 Q60 36 68 43" fill="none" stroke="#da8a41" strokeWidth="1.8" strokeLinecap="round" />
-          {/* Cuenco de pastelería */}
-          <path
-            d="M24 62 L96 62 C94 84 78 94 60 94 C42 94 26 84 24 62 Z"
-            fill="#efcaa1"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          <line x1="42" y1="94" x2="78" y2="94" stroke="#da8a41" strokeWidth="2.5" strokeLinecap="round" />
+        <svg {...baseProps}>
+          <path d="M26 56 C26 42 40 38 48 24 C56 32 74 38 74 56" />
+          <path d="M35 49 C44 41 56 41 64 49" />
+          <path d="M42 39 C48 34 55 35 59 40" />
+          <path d="M20 56 H80 C78 74 65 84 50 84 C35 84 22 74 20 56 Z" />
+          <line x1="36" y1="84" x2="64" y2="84" />
         </svg>
       );
 
     case 'almendras':
-      // Imagen que represente almendras (almendras enteras y fileteadas con vetas botánicas)
+      // Almendras: dos almendras botánicas con vetas finas y hojas
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Almendra izquierda */}
-          <path
-            d="M46 28 C28 46 26 72 42 88 C58 76 62 50 46 28 Z"
-            fill="#e29d5c"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          <path d="M45 36 Q38 58 42 80" fill="none" stroke="#fdfbf9" strokeWidth="1.5" strokeLinecap="round" />
-          {/* Almendra derecha / fileteada */}
-          <path
-            d="M76 34 C58 50 56 76 72 90 C88 78 92 54 76 34 Z"
-            fill="#f7e3c4"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          <path d="M74 44 Q68 62 72 82" fill="none" stroke="#da8a41" strokeWidth="1.5" strokeLinecap="round" />
+        <svg {...baseProps}>
+          <path d="M42 22 C24 38 22 64 38 80 C54 68 58 42 42 22 Z" />
+          <path d="M41 30 C35 46 35 60 38 72" />
+          <path d="M66 30 C52 44 50 68 64 82 C78 70 82 48 66 30 Z" />
+          <path d="M65 38 C60 52 60 64 64 74" />
+          <path d="M24 52 C14 46 14 34 26 36" />
         </svg>
       );
 
     case 'pistacho':
-      // Imagen de pistachos (pistacho entreabierto en su cáscara mostrando el fruto)
+      // Pistachos: pistacho entreabierto en su cáscara mostrando la semilla
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Fruto central de pistacho */}
-          <ellipse cx="60" cy="58" rx="18" ry="26" fill="#c7d39b" stroke="#da8a41" strokeWidth="2" />
-          {/* Cáscara izquierda */}
-          <path
-            d="M56 26 C30 34 26 68 48 92 C54 76 46 50 56 26 Z"
-            fill="#f5e6d3"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          {/* Cáscara derecha */}
-          <path
-            d="M64 26 C90 34 94 68 72 92 C66 76 74 50 64 26 Z"
-            fill="#efcaa1"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          <path d="M60 36 L60 52" stroke="#da8a41" strokeWidth="1.6" strokeLinecap="round" />
+        <svg {...baseProps}>
+          <path d="M47 22 C24 30 22 62 42 84 C47 68 40 44 47 22 Z" />
+          <path d="M53 22 C76 30 78 62 58 84 C53 68 60 44 53 22 Z" />
+          <path d="M43 34 C46 26 54 26 57 34" />
+          <ellipse cx="50" cy="52" rx="9" ry="18" />
+          <line x1="50" y1="34" x2="50" y2="48" />
         </svg>
       );
 
     case 'avellana':
-      // Imagen que represente avellanas (avellana redondeada con cúpula superior y hoja)
+      // Avellanas: avellana botánica con su cúpula estriada y hoja
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Cuerpo de la avellana */}
-          <path
-            d="M60 28 C36 40 30 64 42 84 C50 94 70 94 78 84 C90 64 84 40 60 28 Z"
-            fill="#e29d5c"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-          />
-          {/* Cúpula texturizada superior */}
-          <path
-            d="M36 52 Q48 60 60 52 Q72 60 84 52 C80 38 70 30 60 28 C50 30 40 38 36 52 Z"
-            fill="#f3cfa6"
-            stroke="#da8a41"
-            strokeWidth="2"
-            strokeLinejoin="round"
-          />
-          {/* Vetas de la avellana */}
-          <path d="M52 60 Q50 74 54 86" fill="none" stroke="#fdfbf9" strokeWidth="1.5" strokeLinecap="round" />
-          <path d="M68 60 Q70 74 66 86" fill="none" stroke="#fdfbf9" strokeWidth="1.5" strokeLinecap="round" />
+        <svg {...baseProps}>
+          <path d="M50 22 C28 34 24 58 35 76 C43 86 57 86 65 76 C76 58 72 34 50 22 Z" />
+          <path d="M29 45 Q40 52 50 45 Q60 52 71 45" />
+          <path d="M42 52 C40 62 42 72 45 78" />
+          <path d="M58 52 C60 62 58 72 55 78" />
+          <path d="M50 16 V22" />
+          <path d="M50 20 C62 14 74 18 70 28 C62 28 54 24 50 20 Z" />
         </svg>
       );
 
     case 'chocolate':
-      // Imagen que represente gota de chocolate (chip / gota de chocolate oscuro con rizo superior)
+      // Chispa de chocolate: gota clásica de chocolate con rizo superior
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          <path
-            d="M60 24 C66 36 88 54 88 74 C88 89 75 96 60 96 C45 96 32 89 32 74 C32 54 54 36 60 24 Z"
-            fill="#da8a41"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          {/* Brillo lateral de la gota de chocolate */}
-          <path
-            d="M46 62 C44 72 48 82 56 86"
-            fill="none"
-            stroke="#fdfbf9"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-          />
-          <circle cx="48" cy="52" r="2.2" fill="#fdfbf9" />
-        </svg>
-      );
-
-    case 'cacao-100':
-      // Imagen que represente cacao (mazorca de cacao venezolano con granos internos)
-      return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Mazorca de cacao */}
-          <path
-            d="M60 20 C36 34 32 62 46 92 C54 100 66 100 74 92 C88 62 84 34 60 20 Z"
-            fill="#f3cfa6"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-          />
-          {/* Surcos longitudinales */}
-          <path d="M60 20 L60 98" stroke="#da8a41" strokeWidth="1.8" />
-          <path d="M48 28 Q38 60 50 92" fill="none" stroke="#da8a41" strokeWidth="1.6" />
-          <path d="M72 28 Q82 60 70 92" fill="none" stroke="#da8a41" strokeWidth="1.6" />
-          {/* Granos de cacao al centro */}
-          <ellipse cx="53" cy="54" rx="5" ry="7" fill="#da8a41" />
-          <ellipse cx="67" cy="54" rx="5" ry="7" fill="#da8a41" />
-          <ellipse cx="53" cy="70" rx="5" ry="7" fill="#da8a41" />
-          <ellipse cx="67" cy="70" rx="5" ry="7" fill="#da8a41" />
-        </svg>
-      );
-
-    case 'azucar-morena':
-      // Imagen que represente azúcar (terrones y cristales cálidos de azúcar morena de caña)
-      return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Montículo de azúcar morena */}
-          <path
-            d="M24 84 Q42 42 60 42 Q78 42 96 84 Z"
-            fill="#ecc194"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          {/* Terrones cristalinos */}
-          <rect x="46" y="54" width="14" height="14" rx="2" fill="#da8a41" opacity="0.85" />
-          <rect x="62" y="60" width="12" height="12" rx="2" fill="#fdfbf9" stroke="#da8a41" strokeWidth="1.6" />
-          {/* Granos sueltos */}
-          <circle cx="40" cy="74" r="2.2" fill="#da8a41" />
-          <circle cx="56" cy="76" r="2.2" fill="#da8a41" />
-          <circle cx="78" cy="76" r="2" fill="#da8a41" />
-          <circle cx="60" cy="32" r="2.5" fill="#da8a41" />
-          <circle cx="48" cy="36" r="2" fill="#da8a41" />
-          <circle cx="72" cy="36" r="2" fill="#da8a41" />
-        </svg>
-      );
-
-    case 'especias-aromaticas':
-      // Imagen que represente rama de canela (ramas de canela enrolladas con estrella de anís)
-      return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Rama de canela 1 */}
-          <path
-            d="M30 82 L76 28 L88 38 L42 92 Z"
-            fill="#e59a52"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          {/* Espiral del rollo de canela */}
-          <ellipse cx="36" cy="87" rx="8" ry="5" transform="rotate(-48 36 87)" fill="#fdfbf9" stroke="#da8a41" strokeWidth="2" />
-          {/* Rama de canela 2 cruzada */}
-          <path
-            d="M28 44 L86 74 L80 86 L22 56 Z"
-            fill="#f5dec3"
-            stroke="#da8a41"
-            strokeWidth="2"
-            strokeLinejoin="round"
-          />
-          {/* Anís estrellado decorativo */}
-          <circle cx="78" cy="78" r="4" fill="#da8a41" />
-        </svg>
-      );
-
-    case 'gingerbread':
-      // Imagen que represente gingerbread (clásico muñeco/galleta de jengibre decorado)
-      return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Cabeza y cuerpo de galleta gingerbread */}
-          <circle cx="60" cy="34" r="14" fill="#e59a52" stroke="#da8a41" strokeWidth="2.2" />
-          <path
-            d="M46 46 L28 52 C24 54 24 62 30 64 L44 62 L40 88 C39 94 48 96 52 90 L60 76 L68 90 C72 96 81 94 80 88 L76 62 L90 64 C96 62 96 54 92 52 L74 46 Z"
-            fill="#e59a52"
-            stroke="#da8a41"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          {/* Detalles de glaseado blanco */}
-          <circle cx="55" cy="32" r="1.8" fill="#fdfbf9" />
-          <circle cx="65" cy="32" r="1.8" fill="#fdfbf9" />
-          <path d="M55 39 Q60 43 65 39" fill="none" stroke="#fdfbf9" strokeWidth="1.8" strokeLinecap="round" />
-          <circle cx="60" cy="56" r="2.5" fill="#fdfbf9" />
-          <circle cx="60" cy="66" r="2.5" fill="#fdfbf9" />
+        <svg {...baseProps}>
+          <path d="M52 20 C46 22 46 28 49 31 C36 42 26 54 26 67 C26 78 37 84 50 84 C63 84 74 78 74 67 C74 51 60 36 52 20 Z" />
+          <path d="M36 58 C34 66 38 74 46 77" />
+          <path d="M34 84 H66" />
         </svg>
       );
 
     case 'chocolate-blanco':
-    default:
-      // Imagen que represente chocolate blanco (tableta cremosa de chocolate blanco y gota marfil)
+      // Chocolate blanco: tableta fina de chocolate dividida en onzas
       return (
-        <svg viewBox="0 0 120 120" aria-hidden="true" className="ing-svg">
-          {/* Tableta de chocolate blanco */}
-          <rect x="28" y="26" width="52" height="66" rx="6" fill="#fdfbf9" stroke="#da8a41" strokeWidth="2.2" />
-          <rect x="35" y="33" width="16" height="16" rx="2" fill="#f7e6cf" stroke="#da8a41" strokeWidth="1.6" />
-          <rect x="57" y="33" width="16" height="16" rx="2" fill="#f7e6cf" stroke="#da8a41" strokeWidth="1.6" />
-          <rect x="35" y="55" width="16" height="16" rx="2" fill="#f7e6cf" stroke="#da8a41" strokeWidth="1.6" />
-          <rect x="57" y="55" width="16" height="16" rx="2" fill="#f7e6cf" stroke="#da8a41" strokeWidth="1.6" />
-          {/* Gota cremosa superpuesta */}
-          <path
-            d="M82 54 C86 62 96 72 96 82 C96 90 90 95 82 95 C74 95 68 90 68 82 C68 72 78 62 82 54 Z"
-            fill="#f5dec3"
-            stroke="#da8a41"
-            strokeWidth="2"
-          />
+        <svg {...baseProps}>
+          <rect x="26" y="18" width="48" height="64" rx="4" />
+          <rect x="32" y="24" width="15" height="15" rx="1.5" />
+          <rect x="53" y="24" width="15" height="15" rx="1.5" />
+          <rect x="32" y="43" width="15" height="15" rx="1.5" />
+          <rect x="53" y="43" width="15" height="15" rx="1.5" />
+          <rect x="32" y="62" width="15" height="14" rx="1.5" />
+          <rect x="53" y="62" width="15" height="14" rx="1.5" />
+        </svg>
+      );
+
+    case 'cacao-100':
+      // Cacao 100%: mazorca de cacao venezolano con surcos y granos internos
+      return (
+        <svg {...baseProps}>
+          <path d="M50 14 C28 28 24 56 38 82 C45 90 55 90 62 82 C76 56 72 28 50 14 Z" />
+          <path d="M50 14 V88" />
+          <path d="M39 22 C31 46 31 62 41 82" />
+          <path d="M61 22 C69 46 69 62 59 82" />
+          <ellipse cx="45" cy="46" rx="3.5" ry="5.5" />
+          <ellipse cx="55" cy="46" rx="3.5" ry="5.5" />
+          <ellipse cx="45" cy="60" rx="3.5" ry="5.5" />
+          <ellipse cx="55" cy="60" rx="3.5" ry="5.5" />
+        </svg>
+      );
+
+    case 'azucar-morena':
+      // Cubo de azúcar: cubo isométrico de azúcar morena con granos finos
+      return (
+        <svg {...baseProps}>
+          <polygon points="50,22 76,36 50,50 24,36" />
+          <polygon points="24,36 50,50 50,80 24,66" />
+          <polygon points="50,50 76,36 76,66 50,80" />
+          <circle cx="50" cy="36" r="1.2" fill={STROKE_COLOR} />
+          <circle cx="42" cy="35" r="1" fill={STROKE_COLOR} />
+          <circle cx="58" cy="37" r="1" fill={STROKE_COLOR} />
+          <circle cx="38" cy="56" r="1.2" fill={STROKE_COLOR} />
+          <circle cx="62" cy="58" r="1.2" fill={STROKE_COLOR} />
+          <circle cx="20" cy="76" r="1.2" fill={STROKE_COLOR} />
+          <circle cx="80" cy="74" r="1.2" fill={STROKE_COLOR} />
+        </svg>
+      );
+
+    case 'canela':
+      // Canela: dos ramas de canela enrolladas con espirales en los extremos
+      return (
+        <svg {...baseProps}>
+          <path d="M24 72 L68 22 L78 30 L34 80 Z" />
+          <ellipse cx="29" cy="76" rx="6.5" ry="4" transform="rotate(-48 29 76)" />
+          <path d="M22 38 L78 64 L72 75 L16 49 Z" />
+          <ellipse cx="19" cy="43.5" rx="6" ry="3.5" transform="rotate(25 19 43.5)" />
+          <path d="M44 46 C48 52 52 56 56 58" />
+        </svg>
+      );
+
+    case 'jengibre':
+      // Raíz de jengibre: rizoma botánico ramificado con anillos naturales
+      return (
+        <svg {...baseProps}>
+          <path d="M24 64 C18 58 20 46 30 46 C32 34 44 30 50 38 C56 26 72 28 72 40 C82 42 84 56 74 62 C76 74 62 80 52 72 C42 80 28 74 24 64 Z" />
+          <path d="M34 52 C38 50 42 52 45 55" />
+          <path d="M54 44 C58 43 62 45 64 48" />
+          <path d="M46 64 C50 62 55 63 58 66" />
+        </svg>
+      );
+
+    case 'nuez-moscada':
+      // Nuez moscada: semilla ovalada entera y mitad con su característico veteado interior
+      return (
+        <svg {...baseProps}>
+          <ellipse cx="38" cy="50" rx="16" ry="24" transform="rotate(-15 38 50)" />
+          <path d="M32 32 C28 44 30 58 36 68" />
+          <ellipse cx="64" cy="54" rx="16" ry="22" transform="rotate(12 64 54)" />
+          <path d="M64 36 C60 44 68 48 62 56 C58 62 66 66 63 72" />
+          <path d="M54 48 C58 50 61 49 64 47" />
+          <path d="M64 58 C68 59 71 58 74 56" />
+        </svg>
+      );
+
+    case 'gingerbread':
+      // Galleta de jengibre: silueta clásica minimalista con detalles de glaseado
+      return (
+        <svg {...baseProps}>
+          <circle cx="50" cy="28" r="12" />
+          <path d="M39 38 L22 44 C18 46 18 53 24 55 L37 53 L33 77 C32 83 40 85 44 79 L50 67 L56 79 C60 85 68 83 67 77 L63 53 L76 55 C82 53 82 46 78 44 L61 38" />
+          <circle cx="46" cy="26" r="1" fill={STROKE_COLOR} />
+          <circle cx="54" cy="26" r="1" fill={STROKE_COLOR} />
+          <path d="M46 32 Q50 35 54 32" />
+          <circle cx="50" cy="48" r="1.8" />
+          <circle cx="50" cy="57" r="1.8" />
+        </svg>
+      );
+
+    case 'amaretto':
+      // Amaretto: botella clásica italiana cuadrada de hombro tallado y tapón geométrico
+      return (
+        <svg {...baseProps}>
+          <rect x="41" y="16" width="18" height="10" rx="1.5" />
+          <path d="M45 26 V34 L30 42 V82 C30 84 32 86 34 86 H66 C68 86 70 84 70 82 V42 L55 34 V26" />
+          <rect x="36" y="52" width="28" height="20" rx="1.5" />
+          <line x1="42" y1="59" x2="58" y2="59" />
+          <line x1="45" y1="65" x2="55" y2="65" />
+        </svg>
+      );
+
+    case 'mantequilla':
+    default:
+      // Mantequilla: bloque de mantequilla con dos rebanadas sobre plato fino
+      return (
+        <svg {...baseProps}>
+          <path d="M22 52 L56 38 L78 48 L44 62 Z" />
+          <path d="M22 52 V68 L44 78 V62" />
+          <path d="M44 62 V78 L78 64 V48" />
+          <line x1="33" y1="47.5" x2="55" y2="57.5" />
+          <line x1="55" y1="57.5" x2="55" y2="73.5" />
+          <path d="M14 70 L50 86 L86 70" />
         </svg>
       );
   }
@@ -305,7 +258,7 @@ function IngredientArtwork({ id }) {
 export default function IngredientsSection() {
   return (
     <section id="ingredientes" aria-labelledby="ingredientes-heading">
-      <h2 id="ingredientes-heading">Nuestros ingredientes</h2>
+      <h2 id="ingredientes-heading">Ingredientes queridos</h2>
       <div className="ing-wrap">
         <div className="ing-grid" role="list">
           {INGREDIENTS_LIST.map((ing) => (
@@ -321,4 +274,3 @@ export default function IngredientsSection() {
     </section>
   );
 }
-
