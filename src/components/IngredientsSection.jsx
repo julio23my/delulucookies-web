@@ -293,12 +293,8 @@ function IngredientArtwork({ id }) {
 export default function IngredientsSection() {
   return (
     <section id="ingredientes" aria-labelledby="ingredientes-heading">
-      <h2 id="ingredientes-heading">Ingredientes favoritos</h2>
-      <p className="ing-subtext">
-        Sabores que habitan en el corazón de cada receta: unos piden técnica,
-        otros curiosidad y otros búsqueda, siempre con el fin de que, cuando
-        estén presentes, sean protagonistas en cada bocado.
-      </p>
+      <h2 id="ingredientes-heading">Queridos ingredientes</h2>
+      <p className="ing-subtext">Los protagonistas en cada bocado.</p>
       <div className="ing-wrap">
         <div className="ing-grid" role="list">
           {INGREDIENTS_LIST.map((ing) => (
@@ -306,7 +302,7 @@ export default function IngredientsSection() {
               <div className="ing-media">
                 <IngredientArtwork id={ing.id} />
               </div>
-              <span className="ing-name">{ing.name}</span>
+              <span className="ing-name">{ing.name.toLowerCase()}</span>
             </div>
           ))}
         </div>

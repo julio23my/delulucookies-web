@@ -15,7 +15,7 @@ export default function LinkHubView({ onEnterMainSite, onOpenStore }) {
             />
           </div>
           <p className="linkhub-bio">
-            REPOSTERÍA DE AUTOR · SAN ANTONIO DE LOS ALTOS
+            SAN ANTONIO DE LOS ALTOS
           </p>
         </header>
 
@@ -47,7 +47,7 @@ export default function LinkHubView({ onEnterMainSite, onOpenStore }) {
             onClick={onOpenStore}
           >
             <div>
-              <span className="linkhub-btn-title">Crea tu pedido</span>
+              <span className="linkhub-btn-title">Crear pedido</span>
               <span className="linkhub-btn-subtitle">
                 Arma tu Caja Delulu de 4 galletas y envía a WhatsApp
               </span>

@@ -4,8 +4,8 @@ import {
   BOX_DELULU_CONFIG,
   TAKEOUT_STORE_SECTIONS,
   buildWhatsAppUrl,
-  formatCookiePrice,
-  formatDualPrice,
+  // formatCookiePrice, // Comentado temporalmente junto a los precios de la Caja Delulu
+  // formatDualPrice,
 } from '../data/cookiesData';
 
 const ALL_STORE_COOKIES = TAKEOUT_STORE_SECTIONS.flatMap((sec) => sec.tiles);
@@ -18,17 +18,19 @@ export default function DeluluTakeoutStore({
   onClearCart,
   currencyMode,
   onToggleCurrency,
-  bcvRate,
+  // bcvRate, // Comentado temporalmente junto a los precios de la Caja Delulu
 }) {
-  // Selección actual para armar una Caja Delulu de 4 galletas variadas ($15)
+  // Selección actual para armar una Caja Delulu de 4 galletas variadas
   const [boxSelection, setBoxSelection] = useState([]);
-  const [boxQty, setBoxQty] = useState(1);
 
   // Modal de detalle de galleta para armar Caja Delulu con 4 sabores
   const [activeSheetItem, setActiveSheetItem] = useState(null);
 
-  // Vista de revisión de bolsa/checkout dentro de la tienda ('browse' | 'checkout')
+  // Vista activa dentro de la tienda ('browse' | 'checkout')
   const [storeStep, setStoreStep] = useState('browse');
+  // Indica si el usuario regresó a armar otra caja desde la vista de revisión de pedido
+  const [cameFromCheckout, setCameFromCheckout] = useState(false);
+
   const [whenMode, setWhenMode] = useState('ASAP (aprox. 25 min)');
   const [deliveryType, setDeliveryType] = useState('Delivery');
   const [paymentMethod, setPaymentMethod] = useState('Pago Móvil (Tasa BCV)');
@@ -36,11 +38,18 @@ export default function DeluluTakeoutStore({
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
 
-  const totalItemsCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
+  const totalBoxesCount = cartItems.length;
+  /* Precio de la Caja Delulu comentado temporalmente:
   const totalUsdAmount = cartItems.reduce(
     (sum, i) => sum + i.unitPrice * i.quantity,
     0
   );
+  const boxPriceFormatted = formatCookiePrice(
+    BOX_DELULU_CONFIG.priceUsd,
+    currencyMode,
+    bcvRate
+  );
+  */
 
   // Contabiliza cuántas veces está un sabor dentro de la caja actual (máx. 4 galletas en total)
   const getCountInCurrentBox = (cookieId) =>
@@ -67,13 +76,12 @@ export default function DeluluTakeoutStore({
     setActiveSheetItem(item);
     // Si la caja está vacía al abrir el modal, preselecciona esta galleta como la primera de las 4
     setBoxSelection((prev) => (prev.length === 0 ? [item] : prev));
-    setBoxQty(1);
   };
 
+  // Guarda la caja actual como una caja independiente en la orden (sin opción de duplicar)
   const commitCurrentBoxToCart = () => {
     if (boxSelection.length !== BOX_DELULU_CONFIG.size) return false;
 
-    // Agrupa los 4 sabores seleccionados para mostrar el detalle de la Caja Delulu
     const countsMap = {};
     boxSelection.forEach((c) => {
       countsMap[c.name] = (countsMap[c.name] || 0) + 1;
@@ -82,47 +90,44 @@ export default function DeluluTakeoutStore({
       .map(([name, count]) => (count > 1 ? `${count}x ${name}` : name))
       .join(', ');
 
-    const sortedIds = boxSelection
-      .map((c) => c.id)
-      .sort()
-      .join('-');
-    const cartKey = `caja-delulu-${sortedIds}`;
+    const uniqueKey = `caja-delulu-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2, 7)}`;
 
-    onAddToCart(
-      {
-        cartKey,
-        id: BOX_DELULU_CONFIG.id,
-        name: BOX_DELULU_CONFIG.name,
-        packLabel: `4 galletas: ${flavorsSummary}`,
-        unitPrice: BOX_DELULU_CONFIG.priceUsd,
-        image: boxSelection[0]?.image || '/images/cookie-box.jpg',
-      },
-      boxQty
-    );
+    onAddToCart({
+      cartKey: uniqueKey,
+      id: BOX_DELULU_CONFIG.id,
+      name: BOX_DELULU_CONFIG.name,
+      packLabel: `4 galletas: ${flavorsSummary}`,
+      cookiesList: boxSelection.map((c) => c.name),
+      unitPrice: BOX_DELULU_CONFIG.priceUsd,
+      image: boxSelection[0]?.image || '/images/cookie-box.jpg',
+    });
 
     setBoxSelection([]);
-    setBoxQty(1);
     return true;
   };
 
+  // Guarda la caja actual y pasa directamente a completar el pedido
   const handleConfirmCompletedBox = () => {
     if (!commitCurrentBoxToCart()) return;
     setActiveSheetItem(null);
+    setCameFromCheckout(false);
     setStoreStep('checkout');
   };
 
+  // Guarda la caja actual y mantiene al usuario en Crear Pedido viendo las cajas guardadas mientras arma la siguiente
   const handleConfirmAndBuildAnotherBox = () => {
     if (!commitCurrentBoxToCart()) return;
-    // Mantiene abierto el modal o el armador con 0/4 para armar otra caja de inmediato
+    setCameFromCheckout(false);
   };
 
-  const handleStartAnotherBox = () => {
+  // Flujo de armar otra caja viniendo desde la revisión de pedido (mantiene el comportamiento actual)
+  const handleReturnFromCheckoutToBuildAnother = () => {
     setBoxSelection([]);
-    setBoxQty(1);
+    setCameFromCheckout(true);
     setStoreStep('browse');
-    if (ALL_STORE_COOKIES.length > 0) {
-      setActiveSheetItem(ALL_STORE_COOKIES[0]);
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSendWhatsAppCheckout = (e) => {
@@ -134,26 +139,33 @@ export default function DeluluTakeoutStore({
 
     const lines = cartItems
       .map(
-        (item) =>
-          `- ${item.quantity}x *${item.name}* (${item.packLabel}) — ${formatDualPrice(
-            item.unitPrice * item.quantity,
-            bcvRate
-          )}`
+        (item, idx) =>
+          `- *${item.name} #${idx + 1}* (${item.packLabel})`
+        /* Precio por caja comentado temporalmente:
+        `- *${item.name} #${idx + 1}* (${item.packLabel}) — ${formatDualPrice(
+          item.unitPrice,
+          bcvRate
+        )}`
+        */
       )
       .join('\n');
 
     const msgParts = [
       `¡Hola *${ENV_CONFIG.brandName}*!`,
-      `Nuevo pedido desde *Crea tu pedido*:`,
+      `Nuevo pedido desde *Crear pedido* (${totalBoxesCount} ${
+        totalBoxesCount === 1 ? 'caja armada' : 'cajas armadas'
+      }):`,
       ``,
       lines,
       ``,
+      /* Totales de precio comentados temporalmente:
       `*Total en Dólares:* ${formatCookiePrice(totalUsdAmount, 'USD', bcvRate)}`,
       `*Total en Bolívares (BCV Bs. ${bcvRate.toFixed(2)}):* ${formatCookiePrice(
         totalUsdAmount,
         'VES',
         bcvRate
       )}`,
+      */
       `*Entrega:* ${deliveryType} (${whenMode})`,
       `*Método de Pago:* ${paymentMethod}`,
     ];
@@ -168,12 +180,6 @@ export default function DeluluTakeoutStore({
 
     window.open(buildWhatsAppUrl(msgParts.join('\n')), '_blank', 'noopener,noreferrer');
   };
-
-  const boxPriceFormatted = formatCookiePrice(
-    BOX_DELULU_CONFIG.priceUsd,
-    currencyMode,
-    bcvRate
-  );
 
   return (
     <div className="cm">
@@ -234,23 +240,76 @@ export default function DeluluTakeoutStore({
           <div className="to-small">
             Presentación única:{' '}
             <strong>
-              Caja Delulu (4 galletas a escoger) · {boxPriceFormatted}
+              Caja Delulu (4 galletas a escoger)
+              {/* · {boxPriceFormatted} */}
             </strong>
           </div>
         </section>
 
         {storeStep === 'browse' ? (
           <>
-            {/* Armador interactivo de Caja Delulu (4 galletas variadas por $15) */}
+            {/* Armador interactivo de Caja Delulu (sin duplicación, mostrando cajas previas) */}
             <section className="to-box-builder" aria-label="Armador de Caja Delulu">
+              {/* Contador total de cajas armadas en la orden */}
+              <div className="to-order-counter-bar">
+                <span className="to-order-counter-badge">
+                  Cajas armadas en tu orden: <strong>{totalBoxesCount}</strong>
+                </span>
+                {totalBoxesCount > 0 && (
+                  <button
+                    type="button"
+                    className="to-complete-now-link"
+                    onClick={() => setStoreStep('checkout')}
+                  >
+                    Completar mi pedido ({totalBoxesCount}) →
+                  </button>
+                )}
+              </div>
+
+              {/* Cajas ya creadas visibles mientras se construye la siguiente en Crear Pedido */}
+              {!cameFromCheckout && cartItems.length > 0 && (
+                <div className="to-saved-boxes-panel" aria-live="polite">
+                  <div className="to-saved-boxes-title">
+                    {cartItems.length === 1
+                      ? '1 caja guardada en tu pedido:'
+                      : `${cartItems.length} cajas guardadas en tu pedido:`}
+                  </div>
+                  <ul className="to-saved-boxes-list">
+                    {cartItems.map((savedBox, idx) => (
+                      <li key={savedBox.cartKey} className="to-saved-box-card">
+                        <div className="to-saved-box-info">
+                          <strong>
+                            {savedBox.name} #{idx + 1}
+                          </strong>
+                          <span>{savedBox.packLabel}</span>
+                        </div>
+                        <button
+                          type="button"
+                          className="to-saved-box-remove"
+                          onClick={() => onUpdateQty(savedBox.cartKey, 0)}
+                          aria-label={`Eliminar ${savedBox.name} #${idx + 1}`}
+                        >
+                          Quitar
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               <div className="to-box-builder-head">
                 <div>
-                  <span className="to-k">Presentación única</span>
+                  <span className="to-k">
+                    {totalBoxesCount > 0
+                      ? `Armando Caja #${totalBoxesCount + 1}`
+                      : 'Presentación única'}
+                  </span>
                   <h3>
-                    {BOX_DELULU_CONFIG.name} · {boxPriceFormatted}
+                    {BOX_DELULU_CONFIG.name} #{totalBoxesCount + 1}
+                    {/* · {boxPriceFormatted} */}
                   </h3>
                   <p>
-                    Elige 4 galletas del menú para armar tu caja ({boxSelection.length}/{BOX_DELULU_CONFIG.size} seleccionadas)
+                    Elige 4 galletas del menú para armar esta caja ({boxSelection.length}/{BOX_DELULU_CONFIG.size} seleccionadas)
                   </p>
                 </div>
                 {boxSelection.length > 0 && (
@@ -295,45 +354,24 @@ export default function DeluluTakeoutStore({
 
               {boxSelection.length === BOX_DELULU_CONFIG.size && (
                 <div className="to-box-complete-bar">
-                  <div className="to-box-complete-row">
-                    <div className="to-qty">
-                      <button
-                        type="button"
-                        onClick={() => setBoxQty((q) => Math.max(1, q - 1))}
-                      >
-                        −
-                      </button>
-                      <span>{boxQty} {boxQty === 1 ? 'caja' : 'cajas'}</span>
-                      <button
-                        type="button"
-                        onClick={() => setBoxQty((q) => q + 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <button
-                      type="button"
-                      className="to-go"
-                      onClick={handleConfirmCompletedBox}
-                    >
-                      <span>Cerrar pedido ({boxQty} {boxQty === 1 ? 'caja' : 'cajas'})</span>
-                      <span>
-                        {formatCookiePrice(
-                          BOX_DELULU_CONFIG.priceUsd * boxQty,
-                          currencyMode,
-                          bcvRate
-                        )}
-                      </span>
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className="to-go"
+                    onClick={handleConfirmCompletedBox}
+                  >
+                    <span>Guardar caja y completar pedido</span>
+                    <span>→</span>
+                    {/* Precio comentado temporalmente:
+                    <span>{boxPriceFormatted}</span>
+                    */}
+                  </button>
 
                   <button
                     type="button"
                     className="to-another-box-btn"
                     onClick={handleConfirmAndBuildAnotherBox}
                   >
-                    + Armar otra caja
+                    + Guardar y armar otra caja
                   </button>
                 </div>
               )}
@@ -378,7 +416,7 @@ export default function DeluluTakeoutStore({
                           <div className="to-line">
                             <span>{item.name}</span>
                             {countInBox > 0 && (
-                              <span>{countInBox} en tu caja</span>
+                              <span>{countInBox} en esta caja</span>
                             )}
                           </div>
                           {item.desc && <div className="to-tag">{item.desc}</div>}
@@ -403,11 +441,15 @@ export default function DeluluTakeoutStore({
           </>
         ) : (
           /* ==================================================================
-             PASO DE REVISIÓN Y ENVÍO A WHATSAPP (.to-cart / .to-form / .to-sum)
+             PASO DE REVISIÓN Y ENVÍO A WHATSAPP (.to-cart / .to-form)
              ================================================================== */
           <section className="to-sec to-cart">
             <h2>Tu Pedido</h2>
-            <p className="to-sub">Revisa tu pedido y envía directo a WhatsApp</p>
+            <p className="to-sub">
+              Revisa tus cajas armadas ({totalBoxesCount}{' '}
+              {totalBoxesCount === 1 ? 'caja' : 'cajas'}) y envía directo a
+              WhatsApp
+            </p>
 
             <div className="to-box" style={{ marginTop: '14px' }}>
               {cartItems.length === 0 ? (
@@ -424,38 +466,32 @@ export default function DeluluTakeoutStore({
                 </p>
               ) : (
                 <ul className="to-lines">
-                  {cartItems.map((item) => (
+                  {cartItems.map((item, idx) => (
                     <li key={item.cartKey}>
                       <div>
-                        <b>{item.name}</b>
+                        <b>
+                          {item.name} #{idx + 1}
+                        </b>
                         <span>
-                          {item.packLabel} ·{' '}
+                          {item.packLabel}
+                          {/* Precio comentado temporalmente:
+                          {' · '}
                           {formatCookiePrice(
                             item.unitPrice * item.quantity,
                             currencyMode,
                             bcvRate
                           )}
+                          */}
                         </span>
                       </div>
-                      <div className="to-qty sm">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onUpdateQty(item.cartKey, item.quantity - 1)
-                          }
-                        >
-                          −
-                        </button>
-                        <span>{item.quantity}</span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onUpdateQty(item.cartKey, item.quantity + 1)
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        className="to-saved-box-remove"
+                        onClick={() => onUpdateQty(item.cartKey, 0)}
+                        aria-label={`Eliminar ${item.name} #${idx + 1}`}
+                      >
+                        Quitar
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -464,7 +500,7 @@ export default function DeluluTakeoutStore({
               <button
                 type="button"
                 className="to-more"
-                onClick={() => setStoreStep('browse')}
+                onClick={handleReturnFromCheckoutToBuildAnother}
               >
                 + Armar otra Caja Delulu (4 galletas)
               </button>
@@ -551,6 +587,7 @@ export default function DeluluTakeoutStore({
                 />
               </label>
 
+              {/* Resumen de precios de Caja Delulu comentado temporalmente:
               <div className="to-sum">
                 <div className="m">
                   <span>Subtotal en Dólares (USD)</span>
@@ -571,6 +608,7 @@ export default function DeluluTakeoutStore({
                   </strong>
                 </div>
               </div>
+              */}
 
               {cartItems.length > 0 && (
                 <button
@@ -587,7 +625,7 @@ export default function DeluluTakeoutStore({
       </div>
 
       {/* Barra fija inferior .to-bar */}
-      {totalItemsCount > 0 && (
+      {totalBoxesCount > 0 && (
         <div className="to-bar">
           <div className="to-bar-inner">
             <button
@@ -601,26 +639,22 @@ export default function DeluluTakeoutStore({
             >
               <span>
                 {storeStep === 'browse'
-                  ? `Cerrar pedido (${totalItemsCount} ${totalItemsCount === 1 ? 'caja' : 'cajas'})`
-                  : `Enviar por WhatsApp (${totalItemsCount} ${totalItemsCount === 1 ? 'caja' : 'cajas'})`}
+                  ? `Completar pedido (${totalBoxesCount} ${
+                      totalBoxesCount === 1 ? 'caja armada' : 'cajas armadas'
+                    })`
+                  : `Enviar por WhatsApp (${totalBoxesCount} ${
+                      totalBoxesCount === 1 ? 'caja' : 'cajas'
+                    })`}
               </span>
               <span>
-                {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)} →
+                {/* {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)} */} →
               </span>
-            </button>
-
-            <button
-              type="button"
-              className="to-another-box-btn"
-              onClick={handleStartAnotherBox}
-            >
-              + Armar otra caja
             </button>
           </div>
         </div>
       )}
 
-      {/* Modal / Bottom Sheet para elegir los 4 sabores de la Caja Delulu ($15) */}
+      {/* Modal / Bottom Sheet para elegir los 4 sabores de la Caja Delulu */}
       {activeSheetItem && (
         <div
           className="to-shade"
@@ -645,14 +679,48 @@ export default function DeluluTakeoutStore({
             />
 
             <div className="to-sheethead">
-              <h3>{BOX_DELULU_CONFIG.name}</h3>
-              <span>{boxPriceFormatted}</span>
+              <h3>
+                {BOX_DELULU_CONFIG.name} #{totalBoxesCount + 1}
+              </h3>
+              {/* <span>{boxPriceFormatted}</span> */}
             </div>
 
             <p className="to-desc">{activeSheetItem.desc}</p>
             <p className="to-fresh">
-              Selecciona 4 galletas variadas para tu caja ({boxSelection.length}/{BOX_DELULU_CONFIG.size})
+              Cajas armadas en tu orden: <strong>{totalBoxesCount}</strong> ·
+              Selecciona 4 galletas para esta caja ({boxSelection.length}/
+              {BOX_DELULU_CONFIG.size})
             </p>
+
+            {/* Cajas previamente guardadas visibles dentro del modal mientras arma la siguiente */}
+            {!cameFromCheckout && cartItems.length > 0 && (
+              <div className="to-saved-boxes-panel to-saved-boxes-modal">
+                <div className="to-saved-boxes-title">
+                  {cartItems.length === 1
+                    ? '1 caja guardada en tu orden:'
+                    : `${cartItems.length} cajas guardadas en tu orden:`}
+                </div>
+                <ul className="to-saved-boxes-list">
+                  {cartItems.map((savedBox, idx) => (
+                    <li key={savedBox.cartKey} className="to-saved-box-card">
+                      <div className="to-saved-box-info">
+                        <strong>
+                          {savedBox.name} #{idx + 1}
+                        </strong>
+                        <span>{savedBox.packLabel}</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="to-saved-box-remove"
+                        onClick={() => onUpdateQty(savedBox.cartKey, 0)}
+                      >
+                        Quitar
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <fieldset className="to-group">
               <legend>
@@ -693,22 +761,6 @@ export default function DeluluTakeoutStore({
 
             <div className="to-sheetbar">
               <div className="to-sheetbar-row">
-                <div className="to-qty">
-                  <button
-                    type="button"
-                    onClick={() => setBoxQty((q) => Math.max(1, q - 1))}
-                  >
-                    −
-                  </button>
-                  <span>{boxQty}</span>
-                  <button
-                    type="button"
-                    onClick={() => setBoxQty((q) => q + 1)}
-                  >
-                    +
-                  </button>
-                </div>
-
                 <button
                   type="button"
                   className="to-go"
@@ -717,16 +769,17 @@ export default function DeluluTakeoutStore({
                 >
                   <span>
                     {boxSelection.length === BOX_DELULU_CONFIG.size
-                      ? `Cerrar pedido (${boxQty} ${boxQty === 1 ? 'caja' : 'cajas'})`
-                      : `Elige ${BOX_DELULU_CONFIG.size - boxSelection.length} más`}
+                      ? 'Guardar caja y completar pedido'
+                      : `Elige ${BOX_DELULU_CONFIG.size - boxSelection.length} ${
+                          BOX_DELULU_CONFIG.size - boxSelection.length === 1
+                            ? 'galleta más'
+                            : 'galletas más'
+                        }`}
                   </span>
-                  <span>
-                    {formatCookiePrice(
-                      BOX_DELULU_CONFIG.priceUsd * boxQty,
-                      currencyMode,
-                      bcvRate
-                    )}
-                  </span>
+                  <span>→</span>
+                  {/* Precio comentado temporalmente:
+                  <span>{boxPriceFormatted}</span>
+                  */}
                 </button>
               </div>
 
@@ -736,7 +789,7 @@ export default function DeluluTakeoutStore({
                   className="to-another-box-btn"
                   onClick={handleConfirmAndBuildAnotherBox}
                 >
-                  + Armar otra caja
+                  + Guardar y armar otra caja
                 </button>
               )}
             </div>

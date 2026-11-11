@@ -1536,7 +1536,8 @@ footer p {
   font-family: var(--serif);
   font-size: 17px;
   line-height: 1.2;
-  color: var(--black);
+  color: #d32240;
+  text-transform: lowercase;
   text-align: center;
 }
 
@@ -1561,7 +1562,7 @@ footer p {
 }
 
 /* ==========================================================================
-   ARMADOR DE CAJA DELULU (4 GALLETAS — $15) EN TIENDA
+   ARMADOR DE CAJA DELULU (4 GALLETAS) EN TIENDA
    ========================================================================== */
 .to-box-builder {
   margin-top: 18px;
@@ -1569,6 +1570,130 @@ footer p {
   border: 1.5px solid var(--pink);
   border-radius: 14px;
   padding: 18px 20px;
+}
+
+.to-order-counter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+}
+
+.to-order-counter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pink);
+  border: 1px solid var(--pink);
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: #ffffff;
+}
+
+.to-order-counter-badge strong {
+  font-weight: 700;
+}
+
+.to-wrap .to-complete-now-link {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pink);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.to-saved-boxes-panel {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--pink);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.to-saved-boxes-modal {
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.to-saved-boxes-title {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 8px;
+}
+
+.to-saved-boxes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.to-saved-box-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(211, 34, 64, 0.35);
+  background: var(--paper);
+}
+
+.to-saved-box-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.to-saved-box-info strong {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.to-saved-box-info span {
+  font-size: 13px;
+  color: var(--black);
+  line-height: 1.35;
+}
+
+.to-wrap .to-saved-box-remove,
+.to-sheet .to-saved-box-remove {
+  flex-shrink: 0;
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pink);
+  border: 1px solid var(--pink);
+  border-radius: 999px;
+  padding: 5px 11px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.to-wrap .to-saved-box-remove:hover,
+.to-sheet .to-saved-box-remove:hover {
+  background: var(--pink);
+  color: #ffffff;
 }
 
 .to-box-builder-head {

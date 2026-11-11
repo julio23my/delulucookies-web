@@ -95,34 +95,20 @@ export default function App() {
     setIsVideoPaused((prev) => !prev);
   };
 
-  const handleAddToCart = (newItem, qtyToAdd = 1) => {
-    setCartItems((prev) => {
-      const idx = prev.findIndex((item) => item.cartKey === newItem.cartKey);
-      if (idx > -1) {
-        const next = [...prev];
-        next[idx] = { ...next[idx], quantity: next[idx].quantity + qtyToAdd };
-        return next;
-      }
-      return [
-        ...prev,
-        {
-          ...newItem,
-          quantity: qtyToAdd,
-        },
-      ];
-    });
+  const handleAddToCart = (newItem) => {
+    setCartItems((prev) => [
+      ...prev,
+      {
+        ...newItem,
+        quantity: 1,
+      },
+    ]);
   };
 
   const handleUpdateQty = (cartKey, newQty) => {
     if (newQty <= 0) {
       setCartItems((prev) => prev.filter((item) => item.cartKey !== cartKey));
-      return;
     }
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.cartKey === cartKey ? { ...item, quantity: newQty } : item
-      )
-    );
   };
 
   const handleEnterMainSite = (sectionId = 'top') => {
@@ -215,7 +201,7 @@ export default function App() {
             onClick={handleOpenStore}
           >
             <span className="ot">
-              Crea tu pedido{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
+              Crear pedido{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
             </span>
           </button>
         </nav>
@@ -269,12 +255,11 @@ export default function App() {
               repostería de autor · san antonio de los altos
             </div>
 
-            <h1>Cada bocado, hecho a mano con amor, técnica y detalle.</h1>
+            <h1>Hecho a mano con amor…</h1>
 
             <p>
-              Delulu es una línea de galletas artesanales gorditas y
-              absolutamente deliciosas, que nacen como reinterpretación de las
-              famosas galletas de la ciudad de Nueva York.
+              Con ilusión y años de amor a la repostería, cada detalle se
+              convierte en un regalito para el alma.
             </p>
           </div>
 
@@ -296,20 +281,18 @@ export default function App() {
               <div>
                 <h3>Delulu es la Solulu</h3>
                 <p>
-                  Delulu —del inglés <em>delusional</em>, es una palabra de
+                  Delulu viene del inglés <em>delusional</em>, un término de
                   internet que describe el acto de abrazar fantasías que
                   desafían la realidad.
                 </p>
                 <p>
-                  Aquí, Delulu es un refugio de optimismo terco contra todo
+                  Aquí significa un refugio de optimismo terco contra todo
                   pronóstico: la decisión de soñar con la imaginación como único
                   límite.
                 </p>
                 <p style={{ marginBottom: 0 }}>
-                  Hoy, esa idea se traduce en repostería apasionante de
-                  experimentación continua, procesos artesanales e ingredientes
-                  de calidad, con el fin de regalarle una pausa reconfortante
-                  al corazón.
+                  Hoy, esa fantasía se hornea en dulces que convierten cualquier
+                  momento en una pausa reconfortante.
                 </p>
               </div>
             </div>
@@ -359,6 +342,7 @@ export default function App() {
                       <div key={item.id} className="item">
                         <div className="row">
                           <span className="nm">{item.name}</span>
+                          {/* Precio de Caja Delulu comentado temporalmente:
                           {item.showPrice && (
                             <span className="pr">
                               {formatCookiePrice(
@@ -368,6 +352,7 @@ export default function App() {
                               )}
                             </span>
                           )}
+                          */}
                         </div>
                         {item.desc && <p className="dsc">{item.desc}</p>}
                       </div>
@@ -389,7 +374,7 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              6. INGREDIENTES QUERIDOS (#ingredientes — Inspiración Lavoratti)
+              6. QUERIDOS INGREDIENTES (#ingredientes — Inspiración Lavoratti)
               ================================================================== */}
           <IngredientsSection />
 
@@ -400,7 +385,7 @@ export default function App() {
             <h2>Te esperamos</h2>
             <div className="visit">
               <div>
-                <p className="big">Envía tu mensaje</p>
+                <p className="big">¿Te gustaría un dulcito?</p>
                 <p>
                   Hacer tu pedido es muy fácil: usa el formulario para generar
                   tu mensaje de WhatsApp automáticamente o escribe directamente
@@ -410,7 +395,7 @@ export default function App() {
 
                 <div className="acts">
                   <button type="button" onClick={handleOpenStore}>
-                    Crea tu pedido
+                    Crear pedido
                   </button>
                   <button
                     type="button"
