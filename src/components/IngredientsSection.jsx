@@ -151,17 +151,24 @@ function IngredientArtwork({ id }) {
       );
 
     case 'cacao-100':
-      // Cacao 100%: mazorca de cacao venezolano con surcos y granos internos
+      // Cacao 100%: mazorca de cacao acanalada en rama con hoja botánica y granos de cacao tostados
       return (
         <svg {...baseProps}>
-          <path d="M50 14 C28 28 24 56 38 82 C45 90 55 90 62 82 C76 56 72 28 50 14 Z" />
-          <path d="M50 14 V88" />
-          <path d="M39 22 C31 46 31 62 41 82" />
-          <path d="M61 22 C69 46 69 62 59 82" />
-          <ellipse cx="45" cy="46" rx="3.5" ry="5.5" />
-          <ellipse cx="55" cy="46" rx="3.5" ry="5.5" />
-          <ellipse cx="45" cy="60" rx="3.5" ry="5.5" />
-          <ellipse cx="55" cy="60" rx="3.5" ry="5.5" />
+          {/* Tallo y hoja botánica de cacao */}
+          <path d="M22 24 C36 22 48 24 58 30" />
+          <path d="M36 23 C44 12 64 12 72 24 C60 30 44 28 36 23 Z" />
+          <path d="M38 23 C50 21 60 22 70 24" />
+          {/* Mazorca de cacao acanalada (inclinada) */}
+          <path d="M28 32 C18 44 22 68 42 80 C56 76 66 56 56 36 C48 28 36 28 28 32 Z" />
+          {/* Surcos característicos de la mazorca de cacao */}
+          <path d="M28 32 C34 48 38 64 42 80" />
+          <path d="M36 30 C44 46 46 62 42 80" />
+          <path d="M23 48 C34 46 46 48 59 52" strokeDasharray="2 3" />
+          {/* Dos granos de cacao al costado con su hendidura central */}
+          <ellipse cx="73" cy="62" rx="9" ry="6" transform="rotate(-25 73 62)" />
+          <path d="M66 65 Q73 61 80 59" />
+          <ellipse cx="70" cy="77" rx="8.5" ry="5.5" transform="rotate(15 70 77)" />
+          <path d="M63 75 Q70 77 77 79" />
         </svg>
       );
 
@@ -209,13 +216,22 @@ function IngredientArtwork({ id }) {
       );
 
     case 'jengibre':
-      // Raíz de jengibre: rizoma botánico ramificado con anillos naturales
+      // Raíz de jengibre: rizoma alargado con sus característicos dedos/brotes, anillos transversales y corte circular
       return (
         <svg {...baseProps}>
-          <path d="M24 64 C18 58 20 46 30 46 C32 34 44 30 50 38 C56 26 72 28 72 40 C82 42 84 56 74 62 C76 74 62 80 52 72 C42 80 28 74 24 64 Z" />
-          <path d="M34 52 C38 50 42 52 45 55" />
-          <path d="M54 44 C58 43 62 45 64 48" />
-          <path d="M46 64 C50 62 55 63 58 66" />
+          {/* Cuerpo del rizoma de jengibre con dos dedos superiores y extremo cortado */}
+          <path d="M18 62 C14 56 18 46 26 47 C27 34 33 24 41 26 C47 27 47 36 46 43 C51 33 58 26 65 29 C71 32 69 42 66 49 L78 52 C83 54 83 68 76 70 L52 70 C44 74 34 74 26 68 C21 67 19 65 18 62 Z" />
+          {/* Corte transversal del extremo derecho */}
+          <ellipse cx="77" cy="61" rx="4" ry="8.5" />
+          {/* Anillos de crecimiento característicos de la raíz de jengibre */}
+          <path d="M31 36 C36 35 41 36 45 39" />
+          <path d="M54 38 C59 37 63 39 66 42" />
+          <path d="M28 54 C31 60 31 65 29 69" />
+          <path d="M44 52 C47 58 47 65 45 71" />
+          <path d="M60 52 C62 58 62 64 60 70" />
+          {/* Rodaja de jengibre cortada abajo a la derecha */}
+          <ellipse cx="66" cy="82" rx="9" ry="5.5" />
+          <ellipse cx="66" cy="82" rx="4.5" ry="2.5" strokeDasharray="2 2" />
         </svg>
       );
 
@@ -279,9 +295,9 @@ export default function IngredientsSection() {
     <section id="ingredientes" aria-labelledby="ingredientes-heading">
       <h2 id="ingredientes-heading">Ingredientes favoritos</h2>
       <p className="ing-subtext">
-        Hay ingredientes que siempre son favoritos y habitan detrás de las
-        recetas: unos piden técnica, otros experimento y otros búsqueda, para
-        que, cuando estén presentes, sean protagonistas en cada bocado.
+        Sabores que habitan en el corazón de cada receta: unos piden técnica,
+        otros curiosidad y otros búsqueda, siempre con el fin de que, cuando
+        estén presentes, sean protagonistas en cada bocado.
       </p>
       <div className="ing-wrap">
         <div className="ing-grid" role="list">

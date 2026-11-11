@@ -70,8 +70,8 @@ export default function DeluluTakeoutStore({
     setBoxQty(1);
   };
 
-  const handleConfirmCompletedBox = () => {
-    if (boxSelection.length !== BOX_DELULU_CONFIG.size) return;
+  const commitCurrentBoxToCart = () => {
+    if (boxSelection.length !== BOX_DELULU_CONFIG.size) return false;
 
     // Agrupa los 4 sabores seleccionados para mostrar el detalle de la Caja Delulu
     const countsMap = {};
@@ -102,7 +102,27 @@ export default function DeluluTakeoutStore({
 
     setBoxSelection([]);
     setBoxQty(1);
+    return true;
+  };
+
+  const handleConfirmCompletedBox = () => {
+    if (!commitCurrentBoxToCart()) return;
     setActiveSheetItem(null);
+    setStoreStep('checkout');
+  };
+
+  const handleConfirmAndBuildAnotherBox = () => {
+    if (!commitCurrentBoxToCart()) return;
+    // Mantiene abierto el modal o el armador con 0/4 para armar otra caja de inmediato
+  };
+
+  const handleStartAnotherBox = () => {
+    setBoxSelection([]);
+    setBoxQty(1);
+    setStoreStep('browse');
+    if (ALL_STORE_COOKIES.length > 0) {
+      setActiveSheetItem(ALL_STORE_COOKIES[0]);
+    }
   };
 
   const handleSendWhatsAppCheckout = (e) => {
@@ -275,35 +295,45 @@ export default function DeluluTakeoutStore({
 
               {boxSelection.length === BOX_DELULU_CONFIG.size && (
                 <div className="to-box-complete-bar">
-                  <div className="to-qty">
+                  <div className="to-box-complete-row">
+                    <div className="to-qty">
+                      <button
+                        type="button"
+                        onClick={() => setBoxQty((q) => Math.max(1, q - 1))}
+                      >
+                        −
+                      </button>
+                      <span>{boxQty} {boxQty === 1 ? 'caja' : 'cajas'}</span>
+                      <button
+                        type="button"
+                        onClick={() => setBoxQty((q) => q + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+
                     <button
                       type="button"
-                      onClick={() => setBoxQty((q) => Math.max(1, q - 1))}
+                      className="to-go"
+                      onClick={handleConfirmCompletedBox}
                     >
-                      −
-                    </button>
-                    <span>{boxQty} {boxQty === 1 ? 'caja' : 'cajas'}</span>
-                    <button
-                      type="button"
-                      onClick={() => setBoxQty((q) => q + 1)}
-                    >
-                      +
+                      <span>Cerrar pedido ({boxQty} {boxQty === 1 ? 'caja' : 'cajas'})</span>
+                      <span>
+                        {formatCookiePrice(
+                          BOX_DELULU_CONFIG.priceUsd * boxQty,
+                          currencyMode,
+                          bcvRate
+                        )}
+                      </span>
                     </button>
                   </div>
 
                   <button
                     type="button"
-                    className="to-go"
-                    onClick={handleConfirmCompletedBox}
+                    className="to-another-box-btn"
+                    onClick={handleConfirmAndBuildAnotherBox}
                   >
-                    <span>Agregar {boxQty} {boxQty === 1 ? 'Caja Delulu' : 'Cajas Delulu'}</span>
-                    <span>
-                      {formatCookiePrice(
-                        BOX_DELULU_CONFIG.priceUsd * boxQty,
-                        currencyMode,
-                        bcvRate
-                      )}
-                    </span>
+                    + Armar otra caja
                   </button>
                 </div>
               )}
@@ -559,23 +589,34 @@ export default function DeluluTakeoutStore({
       {/* Barra fija inferior .to-bar */}
       {totalItemsCount > 0 && (
         <div className="to-bar">
-          <button
-            type="button"
-            onClick={() =>
-              storeStep === 'browse'
-                ? setStoreStep('checkout')
-                : handleSendWhatsAppCheckout({ preventDefault: () => {} })
-            }
-          >
-            <span>
-              {storeStep === 'browse'
-                ? `Ver pedido (${totalItemsCount} ${totalItemsCount === 1 ? 'caja' : 'cajas'})`
-                : `Enviar por WhatsApp (${totalItemsCount} ${totalItemsCount === 1 ? 'caja' : 'cajas'})`}
-            </span>
-            <span>
-              {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)} →
-            </span>
-          </button>
+          <div className="to-bar-inner">
+            <button
+              type="button"
+              className="to-bar-main"
+              onClick={() =>
+                storeStep === 'browse'
+                  ? setStoreStep('checkout')
+                  : handleSendWhatsAppCheckout({ preventDefault: () => {} })
+              }
+            >
+              <span>
+                {storeStep === 'browse'
+                  ? `Cerrar pedido (${totalItemsCount} ${totalItemsCount === 1 ? 'caja' : 'cajas'})`
+                  : `Enviar por WhatsApp (${totalItemsCount} ${totalItemsCount === 1 ? 'caja' : 'cajas'})`}
+              </span>
+              <span>
+                {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)} →
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className="to-another-box-btn"
+              onClick={handleStartAnotherBox}
+            >
+              + Armar otra caja
+            </button>
+          </div>
         </div>
       )}
 
@@ -651,41 +692,53 @@ export default function DeluluTakeoutStore({
             </fieldset>
 
             <div className="to-sheetbar">
-              <div className="to-qty">
+              <div className="to-sheetbar-row">
+                <div className="to-qty">
+                  <button
+                    type="button"
+                    onClick={() => setBoxQty((q) => Math.max(1, q - 1))}
+                  >
+                    −
+                  </button>
+                  <span>{boxQty}</span>
+                  <button
+                    type="button"
+                    onClick={() => setBoxQty((q) => q + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => setBoxQty((q) => Math.max(1, q - 1))}
+                  className="to-go"
+                  disabled={boxSelection.length !== BOX_DELULU_CONFIG.size}
+                  onClick={handleConfirmCompletedBox}
                 >
-                  −
-                </button>
-                <span>{boxQty}</span>
-                <button
-                  type="button"
-                  onClick={() => setBoxQty((q) => q + 1)}
-                >
-                  +
+                  <span>
+                    {boxSelection.length === BOX_DELULU_CONFIG.size
+                      ? `Cerrar pedido (${boxQty} ${boxQty === 1 ? 'caja' : 'cajas'})`
+                      : `Elige ${BOX_DELULU_CONFIG.size - boxSelection.length} más`}
+                  </span>
+                  <span>
+                    {formatCookiePrice(
+                      BOX_DELULU_CONFIG.priceUsd * boxQty,
+                      currencyMode,
+                      bcvRate
+                    )}
+                  </span>
                 </button>
               </div>
 
-              <button
-                type="button"
-                className="to-go"
-                disabled={boxSelection.length !== BOX_DELULU_CONFIG.size}
-                onClick={handleConfirmCompletedBox}
-              >
-                <span>
-                  {boxSelection.length === BOX_DELULU_CONFIG.size
-                    ? `Agregar ${boxQty} ${boxQty === 1 ? 'Caja' : 'Cajas'}`
-                    : `Elige ${BOX_DELULU_CONFIG.size - boxSelection.length} más`}
-                </span>
-                <span>
-                  {formatCookiePrice(
-                    BOX_DELULU_CONFIG.priceUsd * boxQty,
-                    currencyMode,
-                    bcvRate
-                  )}
-                </span>
-              </button>
+              {boxSelection.length === BOX_DELULU_CONFIG.size && (
+                <button
+                  type="button"
+                  className="to-another-box-btn"
+                  onClick={handleConfirmAndBuildAnotherBox}
+                >
+                  + Armar otra caja
+                </button>
+              )}
             </div>
           </div>
         </div>
