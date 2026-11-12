@@ -490,9 +490,9 @@ function IngredientArtwork({ id }) {
 export default function IngredientsSection() {
   return (
     <section id="ingredientes" aria-labelledby="ingredientes-heading">
-      <h2 id="ingredientes-heading">Los favoritos</h2>
+      <h2 id="ingredientes-heading">Ingredientes</h2>
       <p className="ing-subtext">
-        Los ingredientes protagonistas en cada bocado.
+        Los protagonistas más queridos…
       </p>
       <div className="ing-wrap">
         <div className="ing-grid" role="list">

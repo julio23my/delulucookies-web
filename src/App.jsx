@@ -185,11 +185,11 @@ export default function App() {
           <button
             type="button"
             className="order"
-            onClick={handleOpenStore}
+            disabled
+            aria-disabled="true"
+            title="Próximamente!"
           >
-            <span className="ot">
-              Crear pedido{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
-            </span>
+            <span className="ot">Crear pedido (Próximamente!)</span>
           </button>
         </nav>
       </div>
@@ -245,7 +245,7 @@ export default function App() {
             <h1>Horneado con alma para saborear con calma.</h1>
 
             <p>
-              Hecho a mano con amor —sin prisas ni atajos— para regalar una
+              Hecho a mano con amor, sin prisas ni atajos, para regalar una
               experiencia artesanal inolvidable desde el primer bocado.
             </p>
           </div>
@@ -278,9 +278,10 @@ export default function App() {
                   límite.
                 </p>
                 <p style={{ marginBottom: 0 }}>
-                  Hoy, esa fantasía toma forma de repostería artesanal y
-                  apasionada, donde cada ingrediente y cada detalle buscan crear
-                  una reconfortante pausa.
+                  Hoy, esa fantasía y años de amor a la repostería toman forma
+                  de artesanía apasionada, experimentación continua, procesos
+                  pacientes, ingredientes de calidad y detalles intencionales
+                  que se encuentran en cada bocado.
                 </p>
               </div>
             </div>
@@ -362,18 +363,18 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              6. LOS FAVORITOS (#ingredientes — Inspiración Lavoratti)
+              6. INGREDIENTES (#ingredientes — Inspiración Lavoratti)
               ================================================================== */}
           <IngredientsSection />
 
           {/* ==================================================================
-              7. LA PUERTA ESTÁ ABIERTA (#visit — imagen delulu-esperamos-1)
+              7. PEDIDOS (#visit — imagen delulu-esperamos-1)
               ================================================================== */}
           <section id="visit">
-            <h2>La puerta está abierta</h2>
+            <h2>Pedidos</h2>
             <div className="visit">
               <div>
-                <p className="big">¡Envía un mensaje!</p>
+                <p className="big">La puerta está abierta</p>
                 <p>
                   Hacer tu pedido es muy fácil: usa el formulario para generar
                   tu mensaje de WhatsApp automáticamente o escribe directamente
@@ -382,16 +383,21 @@ export default function App() {
                 </p>
 
                 <div className="acts">
-                  <button type="button" onClick={handleOpenStore}>
-                    Crear pedido
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    title="Próximamente!"
+                  >
+                    Crear pedido (Próximamente!)
                   </button>
                   <button
                     type="button"
                     disabled
                     aria-disabled="true"
-                    title="Próximamente"
+                    title="Próximamente!"
                   >
-                    WhatsApp (Próximamente)
+                    WhatsApp (Próximamente!)
                   </button>
                   <a
                     href="https://www.instagram.com/delulucookies.ve/"
@@ -433,9 +439,9 @@ export default function App() {
             <span
               className="footer-disabled-link"
               aria-disabled="true"
-              title="Próximamente"
+              title="Próximamente!"
             >
-              WhatsApp
+              WhatsApp (Próximamente!)
             </span>{' '}
             ·{' '}
             <a

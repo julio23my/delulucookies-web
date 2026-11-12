@@ -39,20 +39,18 @@ export default function LinkHubView({ onEnterMainSite, onOpenStore }) {
           </div>
         </div>
 
-        {/* Pila de Botones de Redirección (sin opción de Instagram, Crear pedido habilitado) */}
+        {/* Pila de Botones de Redirección (Crear pedido y WhatsApp deshabilitados con Próximamente!) */}
         <div className="linkhub-links-stack">
           <button
             type="button"
             className="linkhub-action-btn"
-            onClick={onOpenStore}
+            disabled
+            aria-disabled="true"
+            title="Próximamente!"
           >
             <div>
-              <span className="linkhub-btn-title">Crear pedido</span>
-              <span className="linkhub-btn-subtitle">
-                Arma tu Caja Delulu de 4 galletas y envía a WhatsApp
-              </span>
+              <span className="linkhub-btn-title">Crear pedido (Próximamente!)</span>
             </div>
-            <ArrowUpRight size={18} />
           </button>
 
           <button
@@ -60,10 +58,10 @@ export default function LinkHubView({ onEnterMainSite, onOpenStore }) {
             className="linkhub-action-btn"
             disabled
             aria-disabled="true"
-            title="Próximamente"
+            title="Próximamente!"
           >
             <div>
-              <span className="linkhub-btn-title">WhatsApp (Próximamente)</span>
+              <span className="linkhub-btn-title">WhatsApp (Próximamente!)</span>
             </div>
           </button>
         </div>
@@ -101,8 +99,8 @@ export default function LinkHubView({ onEnterMainSite, onOpenStore }) {
               className="social-circle-link is-disabled"
               disabled
               aria-disabled="true"
-              aria-label="WhatsApp (Próximamente)"
-              title="WhatsApp (Próximamente)"
+              aria-label="WhatsApp (Próximamente!)"
+              title="WhatsApp (Próximamente!)"
             >
               <svg
                 width="18"
