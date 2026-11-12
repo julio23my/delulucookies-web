@@ -4,8 +4,9 @@ import LinkHubView from './components/LinkHubView';
 import IngredientsSection from './components/IngredientsSection';
 import {
   ENV_CONFIG,
+  BOX_DELULU_CONFIG,
   HOME_MENU_COOKIES,
-  formatCookiePrice,
+  // formatCookiePrice, // Comentado temporalmente junto al precio de Caja Delulu
   getStoreOpenStatus,
 } from './data/cookiesData';
 
@@ -21,11 +22,15 @@ export default function App() {
   const [isVideoPaused, setIsVideoPaused] = useState(false);
   const videoRef = useRef(null);
 
-  // El carrito inicia vacío
-  const [cartItems, setCartItems] = useState([]);
+  // Cajas Delulu en construcción y armadas
+  const [boxes, setBoxes] = useState([
+    { id: 'box-1', cookies: [], quantity: 1 },
+  ]);
 
   const openStatus = getStoreOpenStatus();
-  const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalCartCount = boxes
+    .filter((b) => b.cookies.length === BOX_DELULU_CONFIG.size)
+    .reduce((sum, b) => sum + b.quantity, 0);
 
   // Asegurar que el video esté siempre en loop, sin sonido (mute) y en slow motion (65%)
   useEffect(() => {
@@ -95,36 +100,6 @@ export default function App() {
     setIsVideoPaused((prev) => !prev);
   };
 
-  const handleAddToCart = (newItem, qtyToAdd = 1) => {
-    setCartItems((prev) => {
-      const idx = prev.findIndex((item) => item.cartKey === newItem.cartKey);
-      if (idx > -1) {
-        const next = [...prev];
-        next[idx] = { ...next[idx], quantity: next[idx].quantity + qtyToAdd };
-        return next;
-      }
-      return [
-        ...prev,
-        {
-          ...newItem,
-          quantity: qtyToAdd,
-        },
-      ];
-    });
-  };
-
-  const handleUpdateQty = (cartKey, newQty) => {
-    if (newQty <= 0) {
-      setCartItems((prev) => prev.filter((item) => item.cartKey !== cartKey));
-      return;
-    }
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.cartKey === cartKey ? { ...item, quantity: newQty } : item
-      )
-    );
-  };
-
   const handleEnterMainSite = (sectionId = 'top') => {
     setViewMode('home');
     setTimeout(() => {
@@ -162,15 +137,13 @@ export default function App() {
     );
   }
 
-  // Si el usuario entra a la tienda ("Crea tu pedido"), mostramos la tienda de delulucookies
+  // Si el usuario entra a la tienda ("Crear pedido"), mostramos la tienda de delulucookies
   if (viewMode === 'store') {
     return (
       <DeluluTakeoutStore
         onBackToHome={handleBackToHome}
-        cartItems={cartItems}
-        onAddToCart={handleAddToCart}
-        onUpdateQty={handleUpdateQty}
-        onClearCart={() => setCartItems([])}
+        boxes={boxes}
+        setBoxes={setBoxes}
         currencyMode={currencyMode}
         onToggleCurrency={setCurrencyMode}
         bcvRate={bcvRate}
@@ -181,7 +154,7 @@ export default function App() {
   return (
     <div className="site" id="top">
       {/* ====================================================================
-          1. NAVBAR (4 columnas: logo, links, status, Crea tu pedido)
+          1. NAVBAR (4 columnas: logo, links, status, Crear pedido)
           ==================================================================== */}
       <div className="wrap">
         <nav className="delulu-top-nav" aria-label="Primary">
@@ -215,7 +188,7 @@ export default function App() {
             onClick={handleOpenStore}
           >
             <span className="ot">
-              Crea tu pedido{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
+              Crear pedido{totalCartCount > 0 ? ` (${totalCartCount})` : ''}
             </span>
           </button>
         </nav>
@@ -266,15 +239,14 @@ export default function App() {
               ================================================================== */}
           <div className="lede">
             <div className="eyebrow">
-              repostería de autor · san antonio de los altos
+              repostería artesanal · san antonio de los altos
             </div>
 
-            <h1>Cada bocado, hecho a mano con amor, técnica y detalle.</h1>
+            <h1>Horneado con alma para saborear con calma.</h1>
 
             <p>
-              Delulu es una línea de galletas artesanales gorditas y
-              absolutamente deliciosas, que nacen como reinterpretación de las
-              famosas galletas de la ciudad de Nueva York.
+              Hecho a mano con amor —sin prisas ni atajos— para regalar una
+              experiencia artesanal inolvidable desde el primer bocado.
             </p>
           </div>
 
@@ -296,20 +268,19 @@ export default function App() {
               <div>
                 <h3>Delulu es la Solulu</h3>
                 <p>
-                  Delulu —del inglés <em>delusional</em>, es una palabra de
+                  Delulu viene del inglés <em>delusional</em>, un término de
                   internet que describe el acto de abrazar fantasías que
                   desafían la realidad.
                 </p>
                 <p>
-                  Aquí, Delulu es un refugio de optimismo terco contra todo
+                  Aquí significa un refugio de optimismo terco contra todo
                   pronóstico: la decisión de soñar con la imaginación como único
                   límite.
                 </p>
                 <p style={{ marginBottom: 0 }}>
-                  Hoy, esa idea se traduce en repostería apasionante de
-                  experimentación continua, procesos artesanales e ingredientes
-                  de calidad, con el fin de regalarle una pausa reconfortante
-                  al corazón.
+                  Hoy, esa fantasía toma forma de repostería artesanal y
+                  apasionada, donde cada ingrediente y cada detalle buscan crear
+                  una reconfortante pausa.
                 </p>
               </div>
             </div>
@@ -359,6 +330,7 @@ export default function App() {
                       <div key={item.id} className="item">
                         <div className="row">
                           <span className="nm">{item.name}</span>
+                          {/* Precio de la Caja Delulu comentado temporalmente:
                           {item.showPrice && (
                             <span className="pr">
                               {formatCookiePrice(
@@ -368,6 +340,7 @@ export default function App() {
                               )}
                             </span>
                           )}
+                          */}
                         </div>
                         {item.desc && <p className="dsc">{item.desc}</p>}
                       </div>
@@ -389,18 +362,18 @@ export default function App() {
           </section>
 
           {/* ==================================================================
-              6. INGREDIENTES QUERIDOS (#ingredientes — Inspiración Lavoratti)
+              6. LOS FAVORITOS (#ingredientes — Inspiración Lavoratti)
               ================================================================== */}
           <IngredientsSection />
 
           {/* ==================================================================
-              7. TE ESPERAMOS (#visit — imagen delulu-esperamos-1)
+              7. LA PUERTA ESTÁ ABIERTA (#visit — imagen delulu-esperamos-1)
               ================================================================== */}
           <section id="visit">
-            <h2>Te esperamos</h2>
+            <h2>La puerta está abierta</h2>
             <div className="visit">
               <div>
-                <p className="big">Envía tu mensaje</p>
+                <p className="big">¡Envía un mensaje!</p>
                 <p>
                   Hacer tu pedido es muy fácil: usa el formulario para generar
                   tu mensaje de WhatsApp automáticamente o escribe directamente
@@ -410,7 +383,7 @@ export default function App() {
 
                 <div className="acts">
                   <button type="button" onClick={handleOpenStore}>
-                    Crea tu pedido
+                    Crear pedido
                   </button>
                   <button
                     type="button"

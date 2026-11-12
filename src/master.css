@@ -945,6 +945,58 @@ footer p {
   gap: 8px;
 }
 
+.to-bar-floating-pair {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.to-bar .to-bar-btn,
+.to-sheet .to-bar-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 999px;
+  border: 1.5px solid var(--pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.to-bar .to-bar-close-order,
+.to-sheet .to-bar-close-order {
+  background: var(--pink);
+  color: #ffffff;
+}
+
+.to-bar .to-bar-close-order:hover,
+.to-sheet .to-bar-close-order:hover {
+  opacity: 0.92;
+}
+
+.to-bar .to-bar-another-box,
+.to-sheet .to-bar-another-box {
+  background: var(--paper);
+  color: var(--pink);
+}
+
+.to-bar .to-bar-another-box:hover,
+.to-sheet .to-bar-another-box:hover {
+  background: var(--pink);
+  color: #ffffff;
+}
+
 .to-bar .to-bar-main {
   width: 100%;
   height: 50px;
@@ -966,6 +1018,12 @@ footer p {
 
 .to-bar .to-bar-main:hover {
   opacity: 0.92;
+}
+
+@media (max-width: 460px) {
+  .to-bar-floating-pair {
+    grid-template-columns: 1fr;
+  }
 }
 
 .to-shade {
@@ -1536,7 +1594,8 @@ footer p {
   font-family: var(--serif);
   font-size: 17px;
   line-height: 1.2;
-  color: var(--black);
+  color: #d32240;
+  text-transform: lowercase;
   text-align: center;
 }
 
@@ -1561,14 +1620,26 @@ footer p {
 }
 
 /* ==========================================================================
-   ARMADOR DE CAJA DELULU (4 GALLETAS — $15) EN TIENDA
+   ARMADOR DE CAJA DELULU (4 GALLETAS) EN TIENDA
    ========================================================================== */
-.to-box-builder {
+.to-boxes-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   margin-top: 18px;
+}
+
+.to-box-builder {
   background: var(--paper);
   border: 1.5px solid var(--pink);
   border-radius: 14px;
   padding: 18px 20px;
+}
+
+.to-box-builder-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .to-box-builder-head {
@@ -1664,7 +1735,7 @@ footer p {
   justify-content: center;
   padding: 2rem 1.25rem;
   background-color: #fdfbf9;
-  color: var(--ink);
+  color: var(--brown);
   font-family: var(--sans);
 }
 
@@ -1701,10 +1772,10 @@ footer p {
 .linkhub-bio {
   font-family: var(--sans);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--brown);
   max-width: 420px;
   margin: 0 auto;
 }
@@ -1761,9 +1832,9 @@ footer p {
   width: 100%;
   padding: 0.95rem 1.15rem;
   border-radius: 16px;
-  border: 1px solid var(--pink);
+  border: 1.5px solid var(--brown);
   background-color: #fdfbf9;
-  color: var(--pink);
+  color: var(--brown);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1777,23 +1848,27 @@ footer p {
 
 .linkhub-action-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  background-color: var(--pink);
+  background-color: var(--brown);
   color: #ffffff;
 }
 
 .linkhub-btn-title {
+  font-family: var(--sans);
+  font-size: 12px;
   font-weight: 600;
-  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: inherit;
   display: block;
 }
 
 .linkhub-btn-subtitle {
+  font-family: var(--sans);
   font-size: 0.78rem;
   color: inherit;
-  opacity: 0.85;
+  opacity: 0.9;
   display: block;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 .linkhub-footer {

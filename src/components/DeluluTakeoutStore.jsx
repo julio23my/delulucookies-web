@@ -4,31 +4,37 @@ import {
   BOX_DELULU_CONFIG,
   TAKEOUT_STORE_SECTIONS,
   buildWhatsAppUrl,
-  formatCookiePrice,
-  formatDualPrice,
+  // formatCookiePrice, // Comentado temporalmente junto al precio de la Caja Delulu
+  // formatDualPrice,
 } from '../data/cookiesData';
 
 const ALL_STORE_COOKIES = TAKEOUT_STORE_SECTIONS.flatMap((sec) => sec.tiles);
 
+function summarizeBoxCookies(cookies) {
+  const countsMap = {};
+  cookies.forEach((c) => {
+    countsMap[c.name] = (countsMap[c.name] || 0) + 1;
+  });
+  const flavorsSummary = Object.entries(countsMap)
+    .map(([name, count]) => (count > 1 ? `${count}x ${name}` : name))
+    .join(', ');
+  return `4 galletas: ${flavorsSummary}`;
+}
+
 export default function DeluluTakeoutStore({
   onBackToHome,
-  cartItems,
-  onAddToCart,
-  onUpdateQty,
-  onClearCart,
+  boxes,
+  setBoxes,
   currencyMode,
   onToggleCurrency,
-  bcvRate,
+  // bcvRate, // Comentado temporalmente junto al precio de la Caja Delulu
 }) {
-  // Selección actual para armar una Caja Delulu de 4 galletas variadas ($15)
-  const [boxSelection, setBoxSelection] = useState([]);
-  const [boxQty, setBoxQty] = useState(1);
-
-  // Modal de detalle de galleta para armar Caja Delulu con 4 sabores
+  // Modal de detalle de galleta para seleccionar sabores de la caja activa
   const [activeSheetItem, setActiveSheetItem] = useState(null);
 
-  // Vista de revisión de bolsa/checkout dentro de la tienda ('browse' | 'checkout')
+  // Vista dentro de la tienda: 'browse' (armar cajas) | 'checkout' (revisión de pedido)
   const [storeStep, setStoreStep] = useState('browse');
+
   const [whenMode, setWhenMode] = useState('ASAP (aprox. 25 min)');
   const [deliveryType, setDeliveryType] = useState('Delivery');
   const [paymentMethod, setPaymentMethod] = useState('Pago Móvil (Tasa BCV)');
@@ -36,124 +42,209 @@ export default function DeluluTakeoutStore({
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
 
-  const totalItemsCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
-  const totalUsdAmount = cartItems.reduce(
-    (sum, i) => sum + i.unitPrice * i.quantity,
+  // Cajas que ya tienen sus 4 galletas completas
+  const completedBoxes = boxes.filter(
+    (b) => b.cookies.length === BOX_DELULU_CONFIG.size
+  );
+
+  // Total de cajas creadas (considerando duplicación en la vista de revisión)
+  const totalCompletedBoxesCount = completedBoxes.reduce(
+    (sum, b) => sum + b.quantity,
     0
   );
 
-  // Contabiliza cuántas veces está un sabor dentro de la caja actual (máx. 4 galletas en total)
-  const getCountInCurrentBox = (cookieId) =>
-    boxSelection.filter((c) => c.id === cookieId).length;
+  // Índice de la caja activa en construcción (la primera que tenga menos de 4 galletas)
+  const activeBoxIndex = boxes.findIndex(
+    (b) => b.cookies.length < BOX_DELULU_CONFIG.size
+  );
+  const activeBox =
+    activeBoxIndex !== -1 ? boxes[activeBoxIndex] : boxes[boxes.length - 1];
+  const isAllBoxesFull = activeBoxIndex === -1;
 
-  const handleAddCookieToBox = (cookie) => {
-    setBoxSelection((prev) => {
-      if (prev.length >= BOX_DELULU_CONFIG.size) return prev;
-      return [...prev, cookie];
-    });
+  /* Precios de la Caja Delulu comentados temporalmente:
+  const totalUsdAmount = totalCompletedBoxesCount * BOX_DELULU_CONFIG.priceUsd;
+  const boxPriceFormatted = formatCookiePrice(
+    BOX_DELULU_CONFIG.priceUsd,
+    currencyMode,
+    bcvRate
+  );
+  */
+
+  // Contabiliza cuántas veces está un sabor dentro de la caja activa
+  const getCountInActiveBox = (cookieId) => {
+    if (!activeBox) return 0;
+    return activeBox.cookies.filter((c) => c.id === cookieId).length;
   };
 
-  const handleRemoveCookieFromBox = (cookieId) => {
-    setBoxSelection((prev) => {
-      const idx = prev.findIndex((c) => c.id === cookieId);
-      if (idx === -1) return prev;
+  // Añade una galleta a la primera caja que aún no tenga 4 galletas
+  const handleAddCookieToActiveBox = (cookie) => {
+    setBoxes((prev) => {
+      const targetIdx = prev.findIndex(
+        (b) => b.cookies.length < BOX_DELULU_CONFIG.size
+      );
+      if (targetIdx === -1) return prev;
       const next = [...prev];
-      next.splice(idx, 1);
+      next[targetIdx] = {
+        ...next[targetIdx],
+        cookies: [...next[targetIdx].cookies, cookie],
+      };
       return next;
     });
   };
 
-  const handleOpenItemSheet = (item) => {
-    setActiveSheetItem(item);
-    // Si la caja está vacía al abrir el modal, preselecciona esta galleta como la primera de las 4
-    setBoxSelection((prev) => (prev.length === 0 ? [item] : prev));
-    setBoxQty(1);
-  };
-
-  const commitCurrentBoxToCart = () => {
-    if (boxSelection.length !== BOX_DELULU_CONFIG.size) return false;
-
-    // Agrupa los 4 sabores seleccionados para mostrar el detalle de la Caja Delulu
-    const countsMap = {};
-    boxSelection.forEach((c) => {
-      countsMap[c.name] = (countsMap[c.name] || 0) + 1;
-    });
-    const flavorsSummary = Object.entries(countsMap)
-      .map(([name, count]) => (count > 1 ? `${count}x ${name}` : name))
-      .join(', ');
-
-    const sortedIds = boxSelection
-      .map((c) => c.id)
-      .sort()
-      .join('-');
-    const cartKey = `caja-delulu-${sortedIds}`;
-
-    onAddToCart(
-      {
-        cartKey,
-        id: BOX_DELULU_CONFIG.id,
-        name: BOX_DELULU_CONFIG.name,
-        packLabel: `4 galletas: ${flavorsSummary}`,
-        unitPrice: BOX_DELULU_CONFIG.priceUsd,
-        image: boxSelection[0]?.image || '/images/cookie-box.jpg',
-      },
-      boxQty
+  // Quita una galleta de una caja específica (por id de caja e índice/id de galleta)
+  const handleRemoveCookieFromBox = (boxId, cookieId, slotIdx = null) => {
+    setBoxes((prev) =>
+      prev.map((box) => {
+        if (box.id !== boxId) return box;
+        const nextCookies = [...box.cookies];
+        if (slotIdx !== null && slotIdx >= 0 && slotIdx < nextCookies.length) {
+          nextCookies.splice(slotIdx, 1);
+        } else {
+          const foundIdx = nextCookies.findIndex((c) => c.id === cookieId);
+          if (foundIdx === -1) return box;
+          nextCookies.splice(foundIdx, 1);
+        }
+        return { ...box, cookies: nextCookies };
+      })
     );
-
-    setBoxSelection([]);
-    setBoxQty(1);
-    return true;
   };
 
-  const handleConfirmCompletedBox = () => {
-    if (!commitCurrentBoxToCart()) return;
+  // Reinicia las 4 galletas de una caja específica
+  const handleResetBox = (boxId) => {
+    setBoxes((prev) =>
+      prev.map((box) => (box.id === boxId ? { ...box, cookies: [] } : box))
+    );
+  };
+
+  // Elimina una sección de caja si hay más de una caja en pantalla
+  const handleRemoveBoxSection = (boxId) => {
+    setBoxes((prev) => {
+      const filtered = prev.filter((b) => b.id !== boxId);
+      if (filtered.length === 0) {
+        return [{ id: `box-${Date.now()}`, cookies: [], quantity: 1 }];
+      }
+      return filtered;
+    });
+  };
+
+  // Genera una nueva sección para la siguiente caja manteniendo visibles las anteriores
+  const handleBuildAnotherBox = () => {
+    const newBoxId = `box-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2, 6)}`;
+
+    setBoxes((prev) => {
+      // Si ya existe una caja vacía/incompleta, no necesitamos duplicar otra vacía
+      const hasIncomplete = prev.some(
+        (b) => b.cookies.length < BOX_DELULU_CONFIG.size
+      );
+      if (hasIncomplete) return prev;
+      return [...prev, { id: newBoxId, cookies: [], quantity: 1 }];
+    });
+
+    setActiveSheetItem(null);
+    setStoreStep('browse');
+
+    setTimeout(() => {
+      const builderNodes = document.querySelectorAll('.to-box-builder');
+      const lastBuilder = builderNodes[builderNodes.length - 1];
+      if (lastBuilder) {
+        lastBuilder.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 60);
+  };
+
+  // Pasa a la sección de revisión de pedido ("Cerrar pedido")
+  const handleProceedToCheckout = () => {
+    if (completedBoxes.length === 0) return;
+    // Limpia cajas vacías (0/4) sin completar al pasar a la revisión de pedido
+    setBoxes((prev) => {
+      const onlyCompleted = prev.filter(
+        (b) => b.cookies.length === BOX_DELULU_CONFIG.size
+      );
+      return onlyCompleted.length > 0 ? onlyCompleted : prev;
+    });
     setActiveSheetItem(null);
     setStoreStep('checkout');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleConfirmAndBuildAnotherBox = () => {
-    if (!commitCurrentBoxToCart()) return;
-    // Mantiene abierto el modal o el armador con 0/4 para armar otra caja de inmediato
+  // Duplica o reduce la cantidad de una caja (permitido únicamente en la sección de revisión de pedido)
+  const handleUpdateBoxQtyInCheckout = (boxId, newQty) => {
+    setBoxes((prev) => {
+      if (newQty <= 0) {
+        const remaining = prev.filter((b) => b.id !== boxId);
+        if (remaining.length === 0) {
+          return [{ id: `box-${Date.now()}`, cookies: [], quantity: 1 }];
+        }
+        return remaining;
+      }
+      return prev.map((b) =>
+        b.id === boxId ? { ...b, quantity: newQty } : b
+      );
+    });
   };
 
-  const handleStartAnotherBox = () => {
-    setBoxSelection([]);
-    setBoxQty(1);
+  const handleClearAllBoxes = () => {
+    setBoxes([{ id: `box-${Date.now()}`, cookies: [], quantity: 1 }]);
     setStoreStep('browse');
-    if (ALL_STORE_COOKIES.length > 0) {
-      setActiveSheetItem(ALL_STORE_COOKIES[0]);
-    }
+  };
+
+  const handleOpenItemSheet = (item) => {
+    setActiveSheetItem(item);
+    // Si la caja activa está vacía al abrir el modal, preselecciona esta galleta
+    setBoxes((prev) => {
+      const targetIdx = prev.findIndex(
+        (b) => b.cookies.length < BOX_DELULU_CONFIG.size
+      );
+      if (targetIdx === -1) return prev;
+      if (prev[targetIdx].cookies.length === 0) {
+        const next = [...prev];
+        next[targetIdx] = {
+          ...next[targetIdx],
+          cookies: [item],
+        };
+        return next;
+      }
+      return prev;
+    });
   };
 
   const handleSendWhatsAppCheckout = (e) => {
     e.preventDefault();
-    if (cartItems.length === 0) {
+    if (completedBoxes.length === 0) {
       window.open(buildWhatsAppUrl(), '_blank', 'noopener,noreferrer');
       return;
     }
 
-    const lines = cartItems
-      .map(
-        (item) =>
-          `- ${item.quantity}x *${item.name}* (${item.packLabel}) — ${formatDualPrice(
-            item.unitPrice * item.quantity,
-            bcvRate
-          )}`
-      )
+    const lines = completedBoxes
+      .map((box, idx) => {
+        const packLabel = summarizeBoxCookies(box.cookies);
+        return `- ${box.quantity}x *${BOX_DELULU_CONFIG.name} #${idx + 1}* (${packLabel})`;
+        /* Precio de Caja Delulu comentado temporalmente:
+        return `- ${box.quantity}x *${BOX_DELULU_CONFIG.name} #${idx + 1}* (${packLabel}) — ${formatDualPrice(
+          BOX_DELULU_CONFIG.priceUsd * box.quantity,
+          bcvRate
+        )}`;
+        */
+      })
       .join('\n');
 
     const msgParts = [
       `¡Hola *${ENV_CONFIG.brandName}*!`,
-      `Nuevo pedido desde *Crea tu pedido*:`,
+      `Nuevo pedido desde *Crear pedido*:`,
       ``,
       lines,
       ``,
+      /* Totales comentados temporalmente junto al precio de Caja Delulu:
       `*Total en Dólares:* ${formatCookiePrice(totalUsdAmount, 'USD', bcvRate)}`,
       `*Total en Bolívares (BCV Bs. ${bcvRate.toFixed(2)}):* ${formatCookiePrice(
         totalUsdAmount,
         'VES',
         bcvRate
       )}`,
+      */
       `*Entrega:* ${deliveryType} (${whenMode})`,
       `*Método de Pago:* ${paymentMethod}`,
     ];
@@ -169,12 +260,6 @@ export default function DeluluTakeoutStore({
     window.open(buildWhatsAppUrl(msgParts.join('\n')), '_blank', 'noopener,noreferrer');
   };
 
-  const boxPriceFormatted = formatCookiePrice(
-    BOX_DELULU_CONFIG.priceUsd,
-    currencyMode,
-    bcvRate
-  );
-
   return (
     <div className="cm">
       <div className="to-wrap">
@@ -184,9 +269,16 @@ export default function DeluluTakeoutStore({
             <button
               type="button"
               className="to-back-pill"
-              onClick={() => onBackToHome()}
+              onClick={() => {
+                if (storeStep === 'checkout') {
+                  setStoreStep('browse');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                  onBackToHome();
+                }
+              }}
             >
-              ← Inicio
+              {storeStep === 'checkout' ? '← Volver a pedidos' : '← Inicio'}
             </button>
 
             <div
@@ -234,110 +326,111 @@ export default function DeluluTakeoutStore({
           <div className="to-small">
             Presentación única:{' '}
             <strong>
-              Caja Delulu (4 galletas a escoger) · {boxPriceFormatted}
+              Caja Delulu (4 galletas a escoger)
+              {/* · {boxPriceFormatted} */}
             </strong>
           </div>
         </section>
 
         {storeStep === 'browse' ? (
           <>
-            {/* Armador interactivo de Caja Delulu (4 galletas variadas por $15) */}
-            <section className="to-box-builder" aria-label="Armador de Caja Delulu">
-              <div className="to-box-builder-head">
-                <div>
-                  <span className="to-k">Presentación única</span>
-                  <h3>
-                    {BOX_DELULU_CONFIG.name} · {boxPriceFormatted}
-                  </h3>
-                  <p>
-                    Elige 4 galletas del menú para armar tu caja ({boxSelection.length}/{BOX_DELULU_CONFIG.size} seleccionadas)
-                  </p>
-                </div>
-                {boxSelection.length > 0 && (
-                  <button
-                    type="button"
-                    className="to-more"
-                    onClick={() => setBoxSelection([])}
-                  >
-                    Reiniciar caja
-                  </button>
-                )}
-              </div>
+            {/* Secciones dinámicas para cada Caja Delulu (Caja #1, Caja #2, etc. visibles en pantalla) */}
+            <div className="to-boxes-stack">
+              {boxes.map((box, boxIdx) => {
+                const isThisBoxComplete =
+                  box.cookies.length === BOX_DELULU_CONFIG.size;
+                const isCurrentActiveBox = boxIdx === activeBoxIndex;
 
-              <div className="to-box-slots">
-                {Array.from({ length: BOX_DELULU_CONFIG.size }).map((_, idx) => {
-                  const chosen = boxSelection[idx];
-                  return (
-                    <div
-                      key={idx}
-                      className={`to-box-slot ${chosen ? 'filled' : ''}`}
-                    >
-                      {chosen ? (
-                        <>
-                          <span>
-                            {idx + 1}. {chosen.name}
-                          </span>
+                return (
+                  <section
+                    key={box.id}
+                    className={`to-box-builder ${
+                      isThisBoxComplete ? 'is-complete' : ''
+                    } ${isCurrentActiveBox ? 'is-active' : ''}`}
+                    aria-label={`Armador de ${BOX_DELULU_CONFIG.name} ${boxIdx + 1}`}
+                  >
+                    <div className="to-box-builder-head">
+                      <div>
+                        <span className="to-k">
+                          {isThisBoxComplete
+                            ? `Caja #${boxIdx + 1} armada`
+                            : `Armando Caja #${boxIdx + 1}`}
+                        </span>
+                        <h3>
+                          {BOX_DELULU_CONFIG.name} #{boxIdx + 1}
+                          {/* · {boxPriceFormatted} */}
+                        </h3>
+                        <p>
+                          Elige 4 galletas del menú para armar tu caja (
+                          {box.cookies.length}/{BOX_DELULU_CONFIG.size}{' '}
+                          seleccionadas)
+                        </p>
+                      </div>
+
+                      <div className="to-box-builder-actions">
+                        {box.cookies.length > 0 && (
                           <button
                             type="button"
-                            onClick={() => handleRemoveCookieFromBox(chosen.id)}
-                            aria-label={`Quitar ${chosen.name} de la caja`}
+                            className="to-more"
+                            onClick={() => handleResetBox(box.id)}
                           >
-                            ×
+                            Reiniciar caja
                           </button>
-                        </>
-                      ) : (
-                        <span>Espacio {idx + 1} · Elige una galleta</span>
+                        )}
+                        {boxes.length > 1 && (
+                          <button
+                            type="button"
+                            className="to-more to-remove-box-link"
+                            onClick={() => handleRemoveBoxSection(box.id)}
+                          >
+                            Eliminar caja
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="to-box-slots">
+                      {Array.from({ length: BOX_DELULU_CONFIG.size }).map(
+                        (_, slotIdx) => {
+                          const chosen = box.cookies[slotIdx];
+                          return (
+                            <div
+                              key={slotIdx}
+                              className={`to-box-slot ${chosen ? 'filled' : ''}`}
+                            >
+                              {chosen ? (
+                                <>
+                                  <span>
+                                    {slotIdx + 1}. {chosen.name}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleRemoveCookieFromBox(
+                                        box.id,
+                                        chosen.id,
+                                        slotIdx
+                                      )
+                                    }
+                                    aria-label={`Quitar ${chosen.name} de la caja ${boxIdx + 1}`}
+                                  >
+                                    ×
+                                  </button>
+                                </>
+                              ) : (
+                                <span>
+                                  Espacio {slotIdx + 1} · Elige una galleta
+                                </span>
+                              )}
+                            </div>
+                          );
+                        }
                       )}
                     </div>
-                  );
-                })}
-              </div>
-
-              {boxSelection.length === BOX_DELULU_CONFIG.size && (
-                <div className="to-box-complete-bar">
-                  <div className="to-box-complete-row">
-                    <div className="to-qty">
-                      <button
-                        type="button"
-                        onClick={() => setBoxQty((q) => Math.max(1, q - 1))}
-                      >
-                        −
-                      </button>
-                      <span>{boxQty} {boxQty === 1 ? 'caja' : 'cajas'}</span>
-                      <button
-                        type="button"
-                        onClick={() => setBoxQty((q) => q + 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <button
-                      type="button"
-                      className="to-go"
-                      onClick={handleConfirmCompletedBox}
-                    >
-                      <span>Cerrar pedido ({boxQty} {boxQty === 1 ? 'caja' : 'cajas'})</span>
-                      <span>
-                        {formatCookiePrice(
-                          BOX_DELULU_CONFIG.priceUsd * boxQty,
-                          currencyMode,
-                          bcvRate
-                        )}
-                      </span>
-                    </button>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="to-another-box-btn"
-                    onClick={handleConfirmAndBuildAnotherBox}
-                  >
-                    + Armar otra caja
-                  </button>
-                </div>
-              )}
-            </section>
+                  </section>
+                );
+              })}
+            </div>
 
             {/* Chips de navegación rápida .to-chips */}
             <nav className="to-chips" aria-label="Sections">
@@ -348,7 +441,7 @@ export default function DeluluTakeoutStore({
               ))}
             </nav>
 
-            {/* Secciones con cuadrícula .to-tiles (solo para añadir a la Caja Delulu de 4) */}
+            {/* Secciones con cuadrícula .to-tiles (para añadir galletas a la caja activa) */}
             {TAKEOUT_STORE_SECTIONS.map((sec) => (
               <section key={sec.id} id={`store-${sec.id}`} className="to-sec">
                 <h2>{sec.title}</h2>
@@ -356,8 +449,12 @@ export default function DeluluTakeoutStore({
                 {sec.tiles && sec.tiles.length > 0 && (
                   <ul className="to-tiles">
                     {sec.tiles.map((item) => {
-                      const countInBox = getCountInCurrentBox(item.id);
-                      const isBoxFull = boxSelection.length >= BOX_DELULU_CONFIG.size;
+                      const countInActive = getCountInActiveBox(item.id);
+                      const currentActiveCount = activeBox
+                        ? activeBox.cookies.length
+                        : BOX_DELULU_CONFIG.size;
+                      const currentBoxNumber =
+                        activeBoxIndex !== -1 ? activeBoxIndex + 1 : boxes.length;
 
                       return (
                         <li key={item.id}>
@@ -377,8 +474,10 @@ export default function DeluluTakeoutStore({
                           </button>
                           <div className="to-line">
                             <span>{item.name}</span>
-                            {countInBox > 0 && (
-                              <span>{countInBox} en tu caja</span>
+                            {countInActive > 0 && (
+                              <span>
+                                {countInActive} en Caja #{currentBoxNumber}
+                              </span>
                             )}
                           </div>
                           {item.desc && <div className="to-tag">{item.desc}</div>}
@@ -386,12 +485,12 @@ export default function DeluluTakeoutStore({
                           <button
                             type="button"
                             className="to-add"
-                            disabled={isBoxFull}
-                            onClick={() => handleAddCookieToBox(item)}
+                            disabled={isAllBoxesFull}
+                            onClick={() => handleAddCookieToActiveBox(item)}
                           >
-                            {isBoxFull
-                              ? 'Caja completa (4/4)'
-                              : `+ Añadir a Caja (${boxSelection.length}/${BOX_DELULU_CONFIG.size})`}
+                            {isAllBoxesFull
+                              ? `Caja #${boxes.length} completa (4/4)`
+                              : `+ Añadir a Caja #${currentBoxNumber} (${currentActiveCount}/${BOX_DELULU_CONFIG.size})`}
                           </button>
                         </li>
                       );
@@ -403,14 +502,14 @@ export default function DeluluTakeoutStore({
           </>
         ) : (
           /* ==================================================================
-             PASO DE REVISIÓN Y ENVÍO A WHATSAPP (.to-cart / .to-form / .to-sum)
+             PASO DE REVISIÓN Y ENVÍO A WHATSAPP (.to-cart / .to-form)
              ================================================================== */
           <section className="to-sec to-cart">
             <h2>Tu Pedido</h2>
             <p className="to-sub">Revisa tu pedido y envía directo a WhatsApp</p>
 
             <div className="to-box" style={{ marginTop: '14px' }}>
-              {cartItems.length === 0 ? (
+              {completedBoxes.length === 0 ? (
                 <p style={{ margin: 0 }}>
                   No tienes Cajas Delulu en tu orden todavía.{' '}
                   <button
@@ -424,47 +523,64 @@ export default function DeluluTakeoutStore({
                 </p>
               ) : (
                 <ul className="to-lines">
-                  {cartItems.map((item) => (
-                    <li key={item.cartKey}>
-                      <div>
-                        <b>{item.name}</b>
-                        <span>
-                          {item.packLabel} ·{' '}
-                          {formatCookiePrice(
-                            item.unitPrice * item.quantity,
-                            currencyMode,
-                            bcvRate
-                          )}
-                        </span>
-                      </div>
-                      <div className="to-qty sm">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onUpdateQty(item.cartKey, item.quantity - 1)
-                          }
-                        >
-                          −
-                        </button>
-                        <span>{item.quantity}</span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onUpdateQty(item.cartKey, item.quantity + 1)
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
-                    </li>
-                  ))}
+                  {completedBoxes.map((box, idx) => {
+                    const packLabel = summarizeBoxCookies(box.cookies);
+                    return (
+                      <li key={box.id}>
+                        <div>
+                          <b>
+                            {BOX_DELULU_CONFIG.name} #{idx + 1}
+                          </b>
+                          <span>
+                            {packLabel}
+                            {/* Precio de la Caja Delulu comentado temporalmente:
+                            {' · '}
+                            {formatCookiePrice(
+                              BOX_DELULU_CONFIG.priceUsd * box.quantity,
+                              currencyMode,
+                              bcvRate
+                            )}
+                            */}
+                          </span>
+                        </div>
+                        {/* Únicamente en esta sección de revisión está permitido duplicar cada caja */}
+                        <div className="to-qty sm">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleUpdateBoxQtyInCheckout(
+                                box.id,
+                                box.quantity - 1
+                              )
+                            }
+                            aria-label={`Reducir cantidad de ${BOX_DELULU_CONFIG.name} #${idx + 1}`}
+                          >
+                            −
+                          </button>
+                          <span>{box.quantity}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleUpdateBoxQtyInCheckout(
+                                box.id,
+                                box.quantity + 1
+                              )
+                            }
+                            aria-label={`Duplicar ${BOX_DELULU_CONFIG.name} #${idx + 1}`}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
 
               <button
                 type="button"
                 className="to-more"
-                onClick={() => setStoreStep('browse')}
+                onClick={handleBuildAnotherBox}
               >
                 + Armar otra Caja Delulu (4 galletas)
               </button>
@@ -551,6 +667,7 @@ export default function DeluluTakeoutStore({
                 />
               </label>
 
+              {/* Resumen de precios de Caja Delulu comentado temporalmente:
               <div className="to-sum">
                 <div className="m">
                   <span>Subtotal en Dólares (USD)</span>
@@ -571,12 +688,13 @@ export default function DeluluTakeoutStore({
                   </strong>
                 </div>
               </div>
+              */}
 
-              {cartItems.length > 0 && (
+              {completedBoxes.length > 0 && (
                 <button
                   type="button"
                   className="to-notip"
-                  onClick={onClearCart}
+                  onClick={handleClearAllBoxes}
                 >
                   Vaciar mi orden actual
                 </button>
@@ -586,42 +704,57 @@ export default function DeluluTakeoutStore({
         )}
       </div>
 
-      {/* Barra fija inferior .to-bar */}
-      {totalItemsCount > 0 && (
+      {/* Footer flotante (.to-bar):
+          En 'browse' muestra los dos botones flotantes: "Cerrar pedido (X cajas)" y "Armar otra caja".
+          En 'checkout' muestra el botón para enviar el pedido por WhatsApp. */}
+      {totalCompletedBoxesCount > 0 && (
         <div className="to-bar">
-          <div className="to-bar-inner">
-            <button
-              type="button"
-              className="to-bar-main"
-              onClick={() =>
-                storeStep === 'browse'
-                  ? setStoreStep('checkout')
-                  : handleSendWhatsAppCheckout({ preventDefault: () => {} })
-              }
-            >
-              <span>
-                {storeStep === 'browse'
-                  ? `Cerrar pedido (${totalItemsCount} ${totalItemsCount === 1 ? 'caja' : 'cajas'})`
-                  : `Enviar por WhatsApp (${totalItemsCount} ${totalItemsCount === 1 ? 'caja' : 'cajas'})`}
-              </span>
-              <span>
-                {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)} →
-              </span>
-            </button>
+          {storeStep === 'browse' ? (
+            <div className="to-bar-floating-pair">
+              <button
+                type="button"
+                className="to-bar-btn to-bar-close-order"
+                onClick={handleProceedToCheckout}
+              >
+                <span>
+                  Cerrar pedido ({totalCompletedBoxesCount}{' '}
+                  {totalCompletedBoxesCount === 1 ? 'caja' : 'cajas'})
+                </span>
+                {/* <span>{formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)}</span> */}
+              </button>
 
-            <button
-              type="button"
-              className="to-another-box-btn"
-              onClick={handleStartAnotherBox}
-            >
-              + Armar otra caja
-            </button>
-          </div>
+              <button
+                type="button"
+                className="to-bar-btn to-bar-another-box"
+                onClick={handleBuildAnotherBox}
+              >
+                <span>Armar otra caja</span>
+              </button>
+            </div>
+          ) : (
+            <div className="to-bar-inner">
+              <button
+                type="button"
+                className="to-bar-main"
+                onClick={() =>
+                  handleSendWhatsAppCheckout({ preventDefault: () => {} })
+                }
+              >
+                <span>
+                  Enviar por WhatsApp ({totalCompletedBoxesCount}{' '}
+                  {totalCompletedBoxesCount === 1 ? 'caja' : 'cajas'})
+                </span>
+                <span>
+                  {/* {formatCookiePrice(totalUsdAmount, currencyMode, bcvRate)} */} →
+                </span>
+              </button>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Modal / Bottom Sheet para elegir los 4 sabores de la Caja Delulu ($15) */}
-      {activeSheetItem && (
+      {/* Modal / Bottom Sheet para elegir los 4 sabores de la Caja Delulu activa */}
+      {activeSheetItem && activeBox && (
         <div
           className="to-shade"
           onClick={() => setActiveSheetItem(null)}
@@ -645,26 +778,32 @@ export default function DeluluTakeoutStore({
             />
 
             <div className="to-sheethead">
-              <h3>{BOX_DELULU_CONFIG.name}</h3>
-              <span>{boxPriceFormatted}</span>
+              <h3>
+                {BOX_DELULU_CONFIG.name} #
+                {activeBoxIndex !== -1 ? activeBoxIndex + 1 : boxes.length}
+              </h3>
+              {/* <span>{boxPriceFormatted}</span> */}
             </div>
 
             <p className="to-desc">{activeSheetItem.desc}</p>
             <p className="to-fresh">
-              Selecciona 4 galletas variadas para tu caja ({boxSelection.length}/{BOX_DELULU_CONFIG.size})
+              Selecciona 4 galletas variadas para tu caja (
+              {activeBox.cookies.length}/{BOX_DELULU_CONFIG.size})
             </p>
 
             <fieldset className="to-group">
               <legend>
                 <span>Elige tus 4 galletas</span>
                 <i className="req">
-                  {boxSelection.length}/{BOX_DELULU_CONFIG.size} seleccionadas
+                  {activeBox.cookies.length}/{BOX_DELULU_CONFIG.size}{' '}
+                  seleccionadas
                 </i>
               </legend>
 
               {ALL_STORE_COOKIES.map((cookie) => {
-                const count = getCountInCurrentBox(cookie.id);
-                const isFull = boxSelection.length >= BOX_DELULU_CONFIG.size;
+                const count = getCountInActiveBox(cookie.id);
+                const isFull =
+                  activeBox.cookies.length >= BOX_DELULU_CONFIG.size;
 
                 return (
                   <div key={cookie.id} className="to-opt">
@@ -673,7 +812,9 @@ export default function DeluluTakeoutStore({
                       <button
                         type="button"
                         disabled={count === 0}
-                        onClick={() => handleRemoveCookieFromBox(cookie.id)}
+                        onClick={() =>
+                          handleRemoveCookieFromBox(activeBox.id, cookie.id)
+                        }
                       >
                         −
                       </button>
@@ -681,7 +822,7 @@ export default function DeluluTakeoutStore({
                       <button
                         type="button"
                         disabled={isFull}
-                        onClick={() => handleAddCookieToBox(cookie)}
+                        onClick={() => handleAddCookieToActiveBox(cookie)}
                       >
                         +
                       </button>
@@ -692,51 +833,43 @@ export default function DeluluTakeoutStore({
             </fieldset>
 
             <div className="to-sheetbar">
-              <div className="to-sheetbar-row">
-                <div className="to-qty">
+              {activeBox.cookies.length === BOX_DELULU_CONFIG.size ? (
+                <div className="to-bar-floating-pair">
                   <button
                     type="button"
-                    onClick={() => setBoxQty((q) => Math.max(1, q - 1))}
+                    className="to-bar-btn to-bar-close-order"
+                    onClick={handleProceedToCheckout}
                   >
-                    −
+                    <span>
+                      Cerrar pedido ({totalCompletedBoxesCount}{' '}
+                      {totalCompletedBoxesCount === 1 ? 'caja' : 'cajas'})
+                    </span>
                   </button>
-                  <span>{boxQty}</span>
+
                   <button
                     type="button"
-                    onClick={() => setBoxQty((q) => q + 1)}
+                    className="to-bar-btn to-bar-another-box"
+                    onClick={handleBuildAnotherBox}
                   >
-                    +
+                    <span>Armar otra caja</span>
                   </button>
                 </div>
-
+              ) : (
                 <button
                   type="button"
                   className="to-go"
-                  disabled={boxSelection.length !== BOX_DELULU_CONFIG.size}
-                  onClick={handleConfirmCompletedBox}
+                  onClick={() => setActiveSheetItem(null)}
                 >
                   <span>
-                    {boxSelection.length === BOX_DELULU_CONFIG.size
-                      ? `Cerrar pedido (${boxQty} ${boxQty === 1 ? 'caja' : 'cajas'})`
-                      : `Elige ${BOX_DELULU_CONFIG.size - boxSelection.length} más`}
+                    Elige{' '}
+                    {BOX_DELULU_CONFIG.size - activeBox.cookies.length}{' '}
+                    {BOX_DELULU_CONFIG.size - activeBox.cookies.length === 1
+                      ? 'galleta más'
+                      : 'galletas más'}
                   </span>
                   <span>
-                    {formatCookiePrice(
-                      BOX_DELULU_CONFIG.priceUsd * boxQty,
-                      currencyMode,
-                      bcvRate
-                    )}
+                    {activeBox.cookies.length}/{BOX_DELULU_CONFIG.size}
                   </span>
-                </button>
-              </div>
-
-              {boxSelection.length === BOX_DELULU_CONFIG.size && (
-                <button
-                  type="button"
-                  className="to-another-box-btn"
-                  onClick={handleConfirmAndBuildAnotherBox}
-                >
-                  + Armar otra caja
                 </button>
               )}
             </div>
