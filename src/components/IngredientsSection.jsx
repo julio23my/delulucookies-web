@@ -492,7 +492,7 @@ export default function IngredientsSection() {
     <section id="ingredientes" aria-labelledby="ingredientes-heading">
       <h2 id="ingredientes-heading">Ingredientes</h2>
       <p className="ing-subtext">
-        Los protagonistas más queridos…
+        Los protagonistas más queridos
       </p>
       <div className="ing-wrap">
         <div className="ing-grid" role="list">

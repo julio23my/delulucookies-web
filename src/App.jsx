@@ -246,7 +246,7 @@ export default function App() {
 
             <p>
               Hecho a mano con amor, sin prisas ni atajos, para regalar una
-              experiencia artesanal inolvidable desde el primer bocado.
+              experiencia inolvidable desde el primer bocado.
             </p>
           </div>
 
@@ -266,7 +266,7 @@ export default function App() {
                 />
               </div>
               <div>
-                <h3>Delulu es la Solulu</h3>
+                <h3>Delulu es la solulu</h3>
                 <p>
                   Delulu viene del inglés <em>delusional</em>, un término de
                   internet que describe el acto de abrazar fantasías que
@@ -279,9 +279,9 @@ export default function App() {
                 </p>
                 <p style={{ marginBottom: 0 }}>
                   Hoy, esa fantasía y años de amor a la repostería toman forma
-                  de artesanía apasionada, experimentación continua, procesos
-                  pacientes, ingredientes de calidad y detalles intencionales
-                  que se encuentran en cada bocado.
+                  de artesanía apasionada, procesos pacientes, ingredientes de
+                  calidad, experimentación continua, y detalles intencionales
+                  que buscan crear un momento dulce y reconfortante.
                 </p>
               </div>
             </div>

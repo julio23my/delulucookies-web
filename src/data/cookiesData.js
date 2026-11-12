@@ -105,7 +105,7 @@ export function getStoreOpenStatus() {
 // Sin precios individuales en cada galleta; 3ra sección "Presentación" con Caja Delulu ($15)
 // ============================================================================
 export const HOME_MENU_COOKIES = {
-  blurb: 'Galletas estilo NYC: Gorditas y absolutamente deliciosas.',
+  blurb: 'Galletas estilo NYC: gorditas y absolutamente deliciosas',
   sections: [
     {
       title: 'Galletas Clásicas',
