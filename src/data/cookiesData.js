@@ -105,8 +105,7 @@ export function getStoreOpenStatus() {
 // Sin precios individuales en cada galleta; 3ra sección "Presentación" con Caja Delulu ($15)
 // ============================================================================
 export const HOME_MENU_COOKIES = {
-  blurb:
-    'Galletas artesanales gorditas y absolutamente deliciosas, que nacen como reinterpretación de las famosas galletas de la ciudad de Nueva York.',
+  blurb: 'Galletas Artesanales Estilo NYC',
   sections: [
     {
       title: 'Galletas Clásicas',
@@ -174,7 +173,7 @@ export const HOME_MENU_COOKIES = {
           name: 'Caja Delulu',
           desc: '4 galletas a escoger del menú',
           priceUsd: 15,
-          // showPrice: true, // Precio comentado temporalmente
+          showPrice: true,
         },
       ],
     },
@@ -208,27 +207,27 @@ export const LINKHUB_FEATURED_COOKIES = [
 ];
 
 // ============================================================================
-// LISTA DE 18 INGREDIENTES ("Queridos ingredientes" — Inspiración Lavoratti)
+// LISTA DE 18 INGREDIENTES ("Ingredientes queridos" — Inspiración Lavoratti)
 // ============================================================================
 export const INGREDIENTS_LIST = [
-  { id: 'beurre-noisette', name: 'beurre noisette' },
-  { id: 'sal-marina', name: 'sal marina' },
-  { id: 'vainilla', name: 'vainilla' },
-  { id: 'caramelo-salado', name: 'caramelo salado' },
-  { id: 'frangipane', name: 'frangipane' },
-  { id: 'almendras', name: 'almendras' },
-  { id: 'pistacho', name: 'pistacho' },
-  { id: 'avellana', name: 'avellana' },
-  { id: 'chocolate', name: 'chocolate' },
-  { id: 'chocolate-blanco', name: 'chocolate blanco' },
-  { id: 'cacao-100', name: 'cacao 100%' },
-  { id: 'azucar-morena', name: 'azúcar morena' },
-  { id: 'canela', name: 'canela' },
-  { id: 'jengibre', name: 'jengibre' },
-  { id: 'nuez-moscada', name: 'nuez moscada' },
-  { id: 'gingerbread', name: 'gingerbread' },
-  { id: 'amaretto', name: 'amaretto' },
-  { id: 'mantequilla', name: 'mantequilla' },
+  { id: 'beurre-noisette', name: 'Beurre Noisette' },
+  { id: 'sal-marina', name: 'Sal Marina' },
+  { id: 'vainilla', name: 'Vainilla' },
+  { id: 'caramelo-salado', name: 'Caramelo Salado' },
+  { id: 'frangipane', name: 'Frangipane' },
+  { id: 'almendras', name: 'Almendras' },
+  { id: 'pistacho', name: 'Pistacho' },
+  { id: 'avellana', name: 'Avellana' },
+  { id: 'chocolate', name: 'Chocolate' },
+  { id: 'chocolate-blanco', name: 'Chocolate Blanco' },
+  { id: 'cacao-100', name: 'Cacao 100%' },
+  { id: 'azucar-morena', name: 'Azúcar Morena' },
+  { id: 'canela', name: 'Canela' },
+  { id: 'jengibre', name: 'Jengibre' },
+  { id: 'nuez-moscada', name: 'Nuez Moscada' },
+  { id: 'gingerbread', name: 'Gingerbread' },
+  { id: 'amaretto', name: 'Amaretto' },
+  { id: 'mantequilla', name: 'Mantequilla' },
 ];
 
 // ============================================================================
