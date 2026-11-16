@@ -1460,8 +1460,11 @@ footer p {
 
 @media (max-width: 720px) {
   nav.delulu-top-nav {
-    grid-template-columns: 1fr auto;
-    row-gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     padding: 16px 0 14px;
   }
 
@@ -1469,8 +1472,17 @@ footer p {
     display: none;
   }
 
+  nav.delulu-top-nav .delulu-brand {
+    order: 1;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+
   nav.delulu-top-nav .order {
-    padding: 8px 14px;
+    order: 2;
+    margin: 0 auto;
+    padding: 10px 20px;
     line-height: 1.15;
     text-align: center;
   }
@@ -1482,9 +1494,11 @@ footer p {
   }
 
   .status {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    justify-self: start;
+    order: 3;
+    margin: 0 auto;
+    justify-self: center;
+    justify-content: center;
+    text-align: center;
   }
 
   .hvbtn {
@@ -1497,6 +1511,36 @@ footer p {
   .story,
   .visit {
     grid-template-columns: 1fr;
+  }
+
+  #story,
+  #story h2,
+  .story,
+  .story h3,
+  .story p {
+    text-align: center;
+  }
+
+  .story p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #visit,
+  #visit h2,
+  .visit,
+  .visit .big,
+  .visit p {
+    text-align: center;
+  }
+
+  .visit p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .acts {
+    justify-content: center;
   }
 
   .menuwrap {
@@ -1599,7 +1643,7 @@ footer p {
   font-size: inherit;
   font-weight: 400;
   line-height: 1.55;
-  color: var(--black);
+  color: #d32240;
   text-transform: lowercase;
   text-align: center;
 }

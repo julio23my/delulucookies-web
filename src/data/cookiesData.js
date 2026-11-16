@@ -11,7 +11,7 @@ export const ENV_CONFIG = {
   brandHandle: import.meta.env.VITE_BRAND_HANDLE || '@delulucookies.ve',
   brandLocation:
     import.meta.env.VITE_BRAND_LOCATION ||
-    'repostería artesanal · san antonio de los altos',
+    'la magia de lo artesanal',
   instagramUrl:
     import.meta.env.VITE_INSTAGRAM_URL ||
     'https://www.instagram.com/delulucookies.ve/',
@@ -28,8 +28,8 @@ export const ENV_CONFIG = {
 // Configuración única de Caja Delulu (4 galletas variadas a escoger)
 export const BOX_DELULU_CONFIG = {
   id: 'caja-delulu',
-  name: 'Caja Delulu',
-  desc: 'Cajas de 4 galletas a escoger del menú ¡Ármalas tu mismo!',
+  name: 'Caja Delulu (Próximamente!)',
+  desc: 'Caja de 4 galletas a escoger del menú (Clásicas y Rellenas). ¡Ármala tú mismo!',
   size: 4,
   priceUsd: 15,
 };
@@ -105,7 +105,7 @@ export function getStoreOpenStatus() {
 // Sin precios individuales en cada galleta; 3ra sección "Presentación" con Caja Delulu ($15)
 // ============================================================================
 export const HOME_MENU_COOKIES = {
-  blurb: 'Galletas estilo NYC: gorditas y absolutamente deliciosas',
+  blurb: 'Galletas estilo New York: gorditas y absolutamente deliciosas…',
   sections: [
     {
       title: 'Galletas Clásicas',
@@ -117,8 +117,8 @@ export const HOME_MENU_COOKIES = {
           desc: 'Galleta de beurre noisette, chips de chocolate, chips de chocolate blanco y sal marina.',
         },
         {
-          id: 'navidena',
-          name: 'Navideña',
+          id: 'gingerbread',
+          name: 'Gingerbread',
           image: '/images/hero-cookies.jpg',
           desc: 'Galleta de canela, jengibre, nuez moscada, chips de chocolate blanco, y sal marina.',
         },
@@ -127,12 +127,6 @@ export const HOME_MENU_COOKIES = {
           name: 'Cookies & Cream',
           image: '/images/cookie-classic.jpg',
           desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
-        },
-        {
-          id: 'caramelo-salado',
-          name: 'Caramelo Salado',
-          image: '/images/delulu-visit.jpeg',
-          desc: 'Galleta de chips de chocolate, trozos de caramelo salado, y sal marina.',
         },
       ],
     },
@@ -166,12 +160,29 @@ export const HOME_MENU_COOKIES = {
       ],
     },
     {
+      title: 'Ediciones Limitadas',
+      items: [
+        {
+          id: 'lotus',
+          name: 'Lotus',
+          image: '/images/cookie-classic.jpg',
+          desc: 'Galleta de vainilla, chips de chocolate blanco, relleno de mantequilla de galletas caramelizadas Biscoff, y sal marina.',
+        },
+        {
+          id: 'chocolate-dubai',
+          name: 'Chocolate Dubai',
+          image: '/images/hero-cookies.jpg',
+          desc: 'Galleta de chocolate, chips de chocolate, relleno de pistacho y Kadaif, y sal marina.',
+        },
+      ],
+    },
+    {
       title: 'Presentación',
       items: [
         {
           id: 'caja-delulu',
-          name: 'Caja Delulu',
-          desc: 'Cajas de 4 galletas a escoger del menú ¡Ármalas tu mismo!',
+          name: 'Caja Delulu (Próximamente!)',
+          desc: 'Caja de 4 galletas a escoger del menú (Clásicas y Rellenas). ¡Ármala tú mismo!',
           priceUsd: 15,
           // showPrice: true, // Precio de la Caja Delulu comentado temporalmente
         },
@@ -190,8 +201,8 @@ export const LINKHUB_FEATURED_COOKIES = [
     image: '/images/cookie-classic.jpg',
   },
   {
-    id: 'navidena',
-    name: 'Navideña',
+    id: 'gingerbread',
+    name: 'Gingerbread',
     image: '/images/hero-cookies.jpg',
   },
   {
@@ -207,7 +218,7 @@ export const LINKHUB_FEATURED_COOKIES = [
 ];
 
 // ============================================================================
-// LISTA DE 18 INGREDIENTES ("Los favoritos" — Inspiración Lavoratti)
+// LISTA DE INGREDIENTES ("Los favoritos" — Inspiración Lavoratti)
 // ============================================================================
 export const INGREDIENTS_LIST = [
   { id: 'beurre-noisette', name: 'beurre noisette' },
@@ -228,6 +239,8 @@ export const INGREDIENTS_LIST = [
   { id: 'gingerbread', name: 'gingerbread' },
   { id: 'amaretto', name: 'amaretto' },
   { id: 'mantequilla', name: 'mantequilla' },
+  { id: 'lotus-biscoff', name: 'lotus biscoff' },
+  { id: 'mani', name: 'maní' },
 ];
 
 // ============================================================================
@@ -246,8 +259,8 @@ export const TAKEOUT_STORE_SECTIONS = [
         desc: 'Galleta de beurre noisette, chips de chocolate, chips de chocolate blanco y sal marina.',
       },
       {
-        id: 'navidena',
-        name: 'Navideña',
+        id: 'gingerbread',
+        name: 'Gingerbread',
         image: '/images/hero-cookies.jpg',
         desc: 'Galleta de canela, jengibre, nuez moscada, chips de chocolate blanco, y sal marina.',
       },
@@ -256,12 +269,6 @@ export const TAKEOUT_STORE_SECTIONS = [
         name: 'Cookies & Cream',
         image: '/images/cookie-classic.jpg',
         desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
-      },
-      {
-        id: 'caramelo-salado',
-        name: 'Caramelo Salado',
-        image: '/images/delulu-visit.jpeg',
-        desc: 'Galleta de chips de chocolate, trozos de caramelo salado, y sal marina.',
       },
     ],
     rows: [],
@@ -294,6 +301,26 @@ export const TAKEOUT_STORE_SECTIONS = [
         name: 'Choco Avellana',
         image: '/images/cookie-classic.jpg',
         desc: 'Galleta de chips de chocolate, rellena de crema de avellanas, y sal marina.',
+      },
+    ],
+    rows: [],
+  },
+  {
+    id: 'ediciones-limitadas',
+    title: 'Ediciones Limitadas',
+    kind: 'cookies',
+    tiles: [
+      {
+        id: 'lotus',
+        name: 'Lotus',
+        image: '/images/cookie-classic.jpg',
+        desc: 'Galleta de vainilla, chips de chocolate blanco, relleno de mantequilla de galletas caramelizadas Biscoff, y sal marina.',
+      },
+      {
+        id: 'chocolate-dubai',
+        name: 'Chocolate Dubai',
+        image: '/images/hero-cookies.jpg',
+        desc: 'Galleta de chocolate, chips de chocolate, relleno de pistacho y Kadaif, y sal marina.',
       },
     ],
     rows: [],

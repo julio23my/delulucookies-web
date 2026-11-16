@@ -460,6 +460,68 @@ function IngredientArtwork({ id }) {
         </svg>
       );
 
+    case 'lotus-biscoff':
+      // Lotus Biscoff: galleta belga speculoos con borde acanalado festoneado, marco interior, motivo de flor grabado y migajas
+      return (
+        <svg {...baseProps}>
+          {/* Destello aromático de canela y caramelo */}
+          <path d="M22 22 V28 M19 25 H25" />
+          <circle cx="82" cy="22" r="1.1" fill={STROKE_COLOR} />
+          {/* Galleta rectangular de Biscoff con contorno acanalado festoneado */}
+          <rect x="22" y="28" width="56" height="44" rx="4" />
+          {/* Festones en el borde característicos de Lotus */}
+          <path d="M22 34 H19 M22 40 H19 M22 46 H19 M22 52 H19 M22 58 H19 M22 64 H19" />
+          <path d="M78 34 H81 M78 40 H81 M78 46 H81 M78 52 H81 M78 58 H81 M78 64 H81" />
+          <path d="M28 28 V25 M34 28 V25 M40 28 V25 M46 28 V25 M52 28 V25 M58 28 V25 M64 28 V25 M70 28 V25" />
+          <path d="M28 72 V75 M34 72 V75 M40 72 V75 M46 72 V75 M52 72 V75 M58 72 V75 M64 72 V75 M70 72 V75" />
+          {/* Marco interior con esquinas cóncavas */}
+          <rect x="26.5" y="32.5" width="47" height="35" rx="2" strokeDasharray="2.5 1.5" />
+          {/* Motivo floral central grabado estilo Lotus */}
+          <ellipse cx="50" cy="50" rx="9" ry="5.5" />
+          <path d="M50 44.5 C46 47 46 53 50 55.5 C54 53 54 47 50 44.5 Z" />
+          <path d="M41 50 C44 47 48 48 50 50 C48 52 44 53 41 50 Z" />
+          <path d="M59 50 C56 47 52 48 50 50 C52 52 56 53 59 50 Z" />
+          <circle cx="50" cy="50" r="1.5" fill={STROKE_COLOR} />
+          {/* Ramillete ornamental de espigas / hojas a los lados */}
+          <path d="M33 46 C35 50 35 54 33 58" />
+          <path d="M67 46 C65 50 65 54 67 58" />
+          {/* Migajas crujientes de galleta caramelizada al pie */}
+          <circle cx="30" cy="82" r="1.2" fill={STROKE_COLOR} />
+          <circle cx="36" cy="84" r="0.9" fill={STROKE_COLOR} />
+          <circle cx="64" cy="83" r="1.1" fill={STROKE_COLOR} />
+          <circle cx="70" cy="81" r="0.8" fill={STROKE_COLOR} />
+        </svg>
+      );
+
+    case 'mani':
+      // Maní: tarro de cristal de mantequilla de maní cremosa con espátula, vaina de maní y fruto con textura reticulada
+      return (
+        <svg {...baseProps}>
+          {/* Destello mineral superior */}
+          <path d="M18 20 V26 M15 23 H21" />
+          <circle cx="82" cy="20" r="1.1" fill={STROKE_COLOR} />
+          {/* Tarro de mantequilla de maní */}
+          <rect x="25" y="24" width="36" height="7" rx="1.5" />
+          <line x1="28" y1="27" x2="58" y2="27" />
+          <path d="M28 31 L26 36 V72 C26 75 28 77 31 77 H55 C58 77 60 75 60 72 V36 L58 31" />
+          {/* Nivel de crema y remolino */}
+          <path d="M28 42 C34 40 40 44 48 41 C54 39 58 42 58 42" />
+          <path d="M32 50 C38 48 44 52 52 49" strokeDasharray="2 2" />
+          {/* Etiqueta del tarro */}
+          <rect x="30" y="54" width="26" height="18" rx="2" />
+          <ellipse cx="43" cy="63" rx="5" ry="3" />
+          {/* Vaina de maní artesanal a la derecha con cintura estrangulada y reticulado */}
+          <path d="M68 46 C64 50 64 56 67 60 C64 64 64 72 70 78 C76 83 83 81 85 75 C87 69 83 65 79 62 C83 58 84 50 80 45 C75 41 71 42 68 46 Z" />
+          <path d="M67 60 Q73 63 79 62" />
+          {/* Textura de la cáscara del maní */}
+          <path d="M72 47 L76 53 M76 48 L71 54" strokeDasharray="1.5 1.5" />
+          <path d="M72 65 L78 73 M78 66 L71 74" strokeDasharray="1.5 1.5" />
+          {/* Grano de maní suelto en la base */}
+          <ellipse cx="76" cy="83" rx="4" ry="2.5" transform="rotate(-15 76 83)" />
+          <path d="M74 83 H78" />
+        </svg>
+      );
+
     case 'mantequilla':
     default:
       // Mantequilla: bloque de mantequilla francesa con dos porciones cortadas sobre bandeja moldurada y espátula fina
@@ -492,7 +554,7 @@ export default function IngredientsSection() {
     <section id="ingredientes" aria-labelledby="ingredientes-heading">
       <h2 id="ingredientes-heading">Ingredientes</h2>
       <p className="ing-subtext">
-        Los protagonistas más queridos
+        queridos protagonistas.
       </p>
       <div className="ing-wrap">
         <div className="ing-grid" role="list">

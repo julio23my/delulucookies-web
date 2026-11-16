@@ -312,7 +312,7 @@ export default function DeluluTakeoutStore({
             aria-label="Volver al inicio"
           >
             <img
-              src="/images/DELULU - logo.png"
+              src="/images/DELULU - logo - no bg.png"
               alt={ENV_CONFIG.brandName}
               className="delulu-logo-img store-logo-img"
             />
