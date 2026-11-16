@@ -29,7 +29,7 @@ export const ENV_CONFIG = {
 export const BOX_DELULU_CONFIG = {
   id: 'caja-delulu',
   name: 'Caja Delulu (Próximamente!)',
-  desc: 'Caja de 4 galletas a escoger del menú (Clásicas y Rellenas). ¡Ármala tú mismo!',
+  desc: 'Caja de 4 galletas a escoger del menú ¡Ármala tú mismo!',
   size: 4,
   priceUsd: 15,
 };
@@ -166,7 +166,7 @@ export const HOME_MENU_COOKIES = {
           id: 'lotus',
           name: 'Lotus',
           image: '/images/cookie-classic.jpg',
-          desc: 'Galleta de vainilla, chips de chocolate blanco, relleno de mantequilla de galletas caramelizadas Biscoff, y sal marina.',
+          desc: 'Galleta de vainilla, chips de chocolate blanco, relleno de crema Lotus Biscoff, y sal marina.',
         },
         {
           id: 'chocolate-dubai',
@@ -182,7 +182,7 @@ export const HOME_MENU_COOKIES = {
         {
           id: 'caja-delulu',
           name: 'Caja Delulu (Próximamente!)',
-          desc: 'Caja de 4 galletas a escoger del menú (Clásicas y Rellenas). ¡Ármala tú mismo!',
+          desc: 'Caja de 4 galletas a escoger del menú ¡Ármala tú mismo!',
           priceUsd: 15,
           // showPrice: true, // Precio de la Caja Delulu comentado temporalmente
         },
@@ -314,7 +314,7 @@ export const TAKEOUT_STORE_SECTIONS = [
         id: 'lotus',
         name: 'Lotus',
         image: '/images/cookie-classic.jpg',
-        desc: 'Galleta de vainilla, chips de chocolate blanco, relleno de mantequilla de galletas caramelizadas Biscoff, y sal marina.',
+        desc: 'Galleta de vainilla, chips de chocolate blanco, relleno de crema Lotus Biscoff, y sal marina.',
       },
       {
         id: 'chocolate-dubai',

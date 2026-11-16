@@ -242,7 +242,7 @@ export default function App() {
               la magia de lo artesanal
             </div>
 
-            <h1>horneado con alma para saborear con calma.</h1>
+            <h1>Horneado con alma para saborear con calma</h1>
 
             <p>
               Hecho a mano con amor, sin prisas ni atajos, para regalar una
@@ -266,7 +266,7 @@ export default function App() {
                 />
               </div>
               <div>
-                <h3>delulu es la solulu.</h3>
+                <h3>Delulu es la solulu</h3>
                 <p>
                   Delulu viene del inglés <em>delusional</em>, un término de
                   internet que describe el acto de abrazar fantasías que
@@ -374,7 +374,7 @@ export default function App() {
             <h2>Pedidos</h2>
             <div className="visit">
               <div>
-                <p className="big">la puerta está abierta.</p>
+                <p className="big">La puerta está abierta</p>
                 <p>
                   Hacer tu pedido es muy fácil: usa el formulario para generar
                   tu mensaje de WhatsApp automáticamente o escribe directamente
