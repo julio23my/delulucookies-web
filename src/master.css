@@ -303,7 +303,7 @@ nav.delulu-top-nav .links button:hover {
   aspect-ratio: 2 / 1;
   max-height: 70vh;
   overflow: hidden;
-  background: var(--black);
+  background: #fdfbf9;
 }
 
 .hero img,

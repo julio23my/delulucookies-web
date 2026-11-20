@@ -461,64 +461,71 @@ function IngredientArtwork({ id }) {
       );
 
     case 'lotus-biscoff':
-      // Lotus Biscoff: galleta belga speculoos con borde acanalado festoneado, marco interior, motivo de flor grabado y migajas
+      // Lotus Biscoff: dos galletas belgas speculoos inclinadas con borde ondulado continuo, marco biselado, flor de loto y migajas
       return (
         <svg {...baseProps}>
-          {/* Destello aromático de canela y caramelo */}
-          <path d="M22 22 V28 M19 25 H25" />
-          <circle cx="82" cy="22" r="1.1" fill={STROKE_COLOR} />
-          {/* Galleta rectangular de Biscoff con contorno acanalado festoneado */}
-          <rect x="22" y="28" width="56" height="44" rx="4" />
-          {/* Festones en el borde característicos de Lotus */}
-          <path d="M22 34 H19 M22 40 H19 M22 46 H19 M22 52 H19 M22 58 H19 M22 64 H19" />
-          <path d="M78 34 H81 M78 40 H81 M78 46 H81 M78 52 H81 M78 58 H81 M78 64 H81" />
-          <path d="M28 28 V25 M34 28 V25 M40 28 V25 M46 28 V25 M52 28 V25 M58 28 V25 M64 28 V25 M70 28 V25" />
-          <path d="M28 72 V75 M34 72 V75 M40 72 V75 M46 72 V75 M52 72 V75 M58 72 V75 M64 72 V75 M70 72 V75" />
-          {/* Marco interior con esquinas cóncavas */}
-          <rect x="26.5" y="32.5" width="47" height="35" rx="2" strokeDasharray="2.5 1.5" />
-          {/* Motivo floral central grabado estilo Lotus */}
-          <ellipse cx="50" cy="50" rx="9" ry="5.5" />
-          <path d="M50 44.5 C46 47 46 53 50 55.5 C54 53 54 47 50 44.5 Z" />
-          <path d="M41 50 C44 47 48 48 50 50 C48 52 44 53 41 50 Z" />
-          <path d="M59 50 C56 47 52 48 50 50 C52 52 56 53 59 50 Z" />
-          <circle cx="50" cy="50" r="1.5" fill={STROKE_COLOR} />
-          {/* Ramillete ornamental de espigas / hojas a los lados */}
-          <path d="M33 46 C35 50 35 54 33 58" />
-          <path d="M67 46 C65 50 65 54 67 58" />
-          {/* Migajas crujientes de galleta caramelizada al pie */}
-          <circle cx="30" cy="82" r="1.2" fill={STROKE_COLOR} />
-          <circle cx="36" cy="84" r="0.9" fill={STROKE_COLOR} />
-          <circle cx="64" cy="83" r="1.1" fill={STROKE_COLOR} />
-          <circle cx="70" cy="81" r="0.8" fill={STROKE_COLOR} />
+          {/* Destellos de canela y caramelo */}
+          <path d="M18 24 V30 M15 27 H21" />
+          <circle cx="83" cy="24" r="1.1" fill={STROKE_COLOR} />
+          {/* Galleta trasera inclinada asomando por arriba */}
+          <g transform="rotate(14 55 42)">
+            <path d="M36 22 Q41 20 46 22 Q51 20 56 22 Q61 20 66 22 Q71 20 75 23 V44" />
+            <path d="M40 27 H70" strokeDasharray="2 2" />
+          </g>
+          {/* Galleta principal Biscoff con borde ondulado continuo y relieve */}
+          <g transform="rotate(-9 47 56)">
+            <path d="M19 37 Q24 34 29 37 Q34 34 39 37 Q44 34 49 37 Q54 34 59 37 Q64 34 69 37 Q74 34 76 38 Q78 43 76 48 Q78 53 76 58 Q78 63 76 68 Q78 73 74 75 Q69 77 64 75 Q59 77 54 75 Q49 77 44 75 Q39 77 34 75 Q29 77 24 75 Q19 77 18 72 Q16 67 18 62 Q16 57 18 52 Q16 47 18 42 Q16 38 19 37 Z" />
+            {/* Marco interior biselado */}
+            <rect x="23.5" y="41.5" width="47" height="29" rx="2.5" />
+            {/* Cartela ovalada central con flor de loto */}
+            <ellipse cx="47" cy="56" rx="13" ry="8.5" />
+            <path d="M47 50 C44 53.5 44 58.5 47 61.5 C50 58.5 50 53.5 47 50 Z" />
+            <path d="M47 61 C42 60.5 39.5 56.5 41 53 C43.5 54 45.5 57 47 61 Z" />
+            <path d="M47 61 C52 60.5 54.5 56.5 53 53 C50.5 54 48.5 57 47 61 Z" />
+            {/* Puntos de textura horneada */}
+            <circle cx="29" cy="48" r="0.9" fill={STROKE_COLOR} />
+            <circle cx="29" cy="64" r="0.9" fill={STROKE_COLOR} />
+            <circle cx="65" cy="48" r="0.9" fill={STROKE_COLOR} />
+            <circle cx="65" cy="64" r="0.9" fill={STROKE_COLOR} />
+          </g>
+          {/* Migajas crujientes en la base */}
+          <circle cx="32" cy="85" r="1.1" fill={STROKE_COLOR} />
+          <circle cx="38" cy="87" r="0.8" fill={STROKE_COLOR} />
+          <circle cx="66" cy="84" r="1.1" fill={STROKE_COLOR} />
         </svg>
       );
 
     case 'mani':
-      // Maní: tarro de cristal de mantequilla de maní cremosa con espátula, vaina de maní y fruto con textura reticulada
+      // Mantequilla de maní: tarro con tapa estriada, espátula con crema untuosa y dos vainas de maní enteras en primer plano
       return (
         <svg {...baseProps}>
-          {/* Destello mineral superior */}
-          <path d="M18 20 V26 M15 23 H21" />
-          <circle cx="82" cy="20" r="1.1" fill={STROKE_COLOR} />
-          {/* Tarro de mantequilla de maní */}
-          <rect x="25" y="24" width="36" height="7" rx="1.5" />
-          <line x1="28" y1="27" x2="58" y2="27" />
-          <path d="M28 31 L26 36 V72 C26 75 28 77 31 77 H55 C58 77 60 75 60 72 V36 L58 31" />
-          {/* Nivel de crema y remolino */}
-          <path d="M28 42 C34 40 40 44 48 41 C54 39 58 42 58 42" />
-          <path d="M32 50 C38 48 44 52 52 49" strokeDasharray="2 2" />
-          {/* Etiqueta del tarro */}
-          <rect x="30" y="54" width="26" height="18" rx="2" />
-          <ellipse cx="43" cy="63" rx="5" ry="3" />
-          {/* Vaina de maní artesanal a la derecha con cintura estrangulada y reticulado */}
-          <path d="M68 46 C64 50 64 56 67 60 C64 64 64 72 70 78 C76 83 83 81 85 75 C87 69 83 65 79 62 C83 58 84 50 80 45 C75 41 71 42 68 46 Z" />
-          <path d="M67 60 Q73 63 79 62" />
-          {/* Textura de la cáscara del maní */}
-          <path d="M72 47 L76 53 M76 48 L71 54" strokeDasharray="1.5 1.5" />
-          <path d="M72 65 L78 73 M78 66 L71 74" strokeDasharray="1.5 1.5" />
-          {/* Grano de maní suelto en la base */}
-          <ellipse cx="76" cy="83" rx="4" ry="2.5" transform="rotate(-15 76 83)" />
-          <path d="M74 83 H78" />
+          {/* Destellos */}
+          <path d="M16 24 V29 M13.5 26.5 H18.5" />
+          <circle cx="76" cy="22" r="1.1" fill={STROKE_COLOR} />
+          {/* Tapa estriada del tarro */}
+          <rect x="24" y="21" width="32" height="7" rx="2" />
+          <line x1="29" y1="21" x2="29" y2="28" />
+          <line x1="34" y1="21" x2="34" y2="28" />
+          <line x1="39" y1="21" x2="39" y2="28" />
+          <line x1="44" y1="21" x2="44" y2="28" />
+          <line x1="49" y1="21" x2="49" y2="28" />
+          {/* Cuerpo del tarro de vidrio */}
+          <path d="M27 28 L22 35 V74 C22 77 24.5 79 27.5 79 H48" />
+          <path d="M53 28 L58 35 V54" />
+          {/* Remolino de mantequilla cremosa dentro del tarro */}
+          <path d="M24 41 C30 39 36 43 44 40 C50 38 56 41 56 41" />
+          {/* Etiqueta con silueta clara de maní */}
+          <path d="M26 48 H52 V69 H26 Z" />
+          <path d="M35 55 C32 55 31 59 33 61 C31 63 32 66 36 66 C39 66 40 64 41 62 C43 64 46 65 47 62 C49 59 46 56 43 57 C41 58 39 55 35 55 Z" />
+          {/* Vaina de maní grande en primer plano derecho con cintura marcada y retícula */}
+          <path d="M62 56 C55 60 55 68 60 72 C57 76 58 84 65 86 C71 88 76 83 75 77 C79 74 84 69 83 62 C82 55 75 52 69 55 C66 56 64 55 62 56 Z" />
+          <path d="M60 72 Q68 74 75 77" />
+          {/* Textura reticulada característica de la cáscara de maní */}
+          <path d="M62 61 L75 67 M67 57 L78 63 M61 67 L72 72" strokeDasharray="1.8 1.8" />
+          <path d="M62 77 L71 83 M68 76 L62 83" strokeDasharray="1.8 1.8" />
+          {/* Grano de maní pelado al pie */}
+          <ellipse cx="47" cy="84" rx="5.5" ry="3.2" transform="rotate(-12 47 84)" />
+          <path d="M43 84.5 H51" />
         </svg>
       );
 

@@ -9,7 +9,7 @@ export default function LinkHubView({ onEnterMainSite, onOpenStore }) {
         <header className="linkhub-header">
           <div className="linkhub-logo-wrap">
             <img
-              src="/images/DELULU - logo - no bg.png"
+              src="/images/DELULU - transparent.png"
               alt="delulu cookies"
               className="delulu-logo-img"
             />

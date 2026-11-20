@@ -160,7 +160,7 @@ export default function App() {
         <nav className="delulu-top-nav" aria-label="Primary">
           <a href="#top" className="delulu-brand" aria-label={ENV_CONFIG.brandName}>
             <img
-              src="/images/DELULU - logo - no bg.png"
+              src="/images/DELULU - transparent.png"
               alt={ENV_CONFIG.brandName}
               className="delulu-logo-img"
             />
@@ -207,7 +207,6 @@ export default function App() {
             loop
             playsInline
             preload="auto"
-            poster="/images/delulu-nosotros-1.JPG"
             aria-label="delulu cookies loop video"
             onLoadedMetadata={(e) => {
               e.currentTarget.defaultPlaybackRate = 0.65;
@@ -239,14 +238,13 @@ export default function App() {
               ================================================================== */}
           <div className="lede">
             <div className="eyebrow">
-              la magia de lo artesanal
+              magia artesanal
             </div>
 
             <h1>Horneado con alma para saborear con calma</h1>
 
             <p>
-              Hecho a mano con amor, sin prisas ni atajos, para regalar una
-              experiencia inolvidable desde el primer bocado.
+              Sirviendo el confort de lo hecho a mano desde el primer bocado.
             </p>
           </div>
 
@@ -430,7 +428,7 @@ export default function App() {
         <footer>
           <a href="#top" className="footer-wordmark" aria-label={ENV_CONFIG.brandName}>
             <img
-              src="/images/DELULU - logo - no bg.png"
+              src="/images/DELULU - transparent.png"
               alt={ENV_CONFIG.brandName}
               className="delulu-logo-img footer-logo-img"
             />

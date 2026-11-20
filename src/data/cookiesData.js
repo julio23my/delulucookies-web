@@ -11,7 +11,7 @@ export const ENV_CONFIG = {
   brandHandle: import.meta.env.VITE_BRAND_HANDLE || '@delulucookies.ve',
   brandLocation:
     import.meta.env.VITE_BRAND_LOCATION ||
-    'la magia de lo artesanal',
+    'magia artesanal',
   instagramUrl:
     import.meta.env.VITE_INSTAGRAM_URL ||
     'https://www.instagram.com/delulucookies.ve/',
@@ -126,19 +126,13 @@ export const HOME_MENU_COOKIES = {
           id: 'cookies-and-cream',
           name: 'Cookies & Cream',
           image: '/images/cookie-classic.jpg',
-          desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
+          desc: 'Galleta de vainilla y Oreo, chips de chocolate, y chips de chocolate blanco.',
         },
       ],
     },
     {
       title: 'Galletas Rellenas',
       items: [
-        {
-          id: 'almendras',
-          name: 'Almendras',
-          image: '/images/cookie-box.jpg',
-          desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
-        },
         {
           id: 'choco-mani',
           name: 'Choco Maní',
@@ -149,7 +143,7 @@ export const HOME_MENU_COOKIES = {
           id: 'pistacho',
           name: 'Pistacho',
           image: '/images/cookie-pistachio.jpg',
-          desc: 'Galleta de pistacho, chips de chocolate blanco, rellena de crema de pistacho, y sal marina.',
+          desc: 'Galleta de vainilla, chips de chocolate blanco, pistacho, relleno de crema de pistacho, y sal marina.',
         },
         {
           id: 'choco-avellana',
@@ -163,6 +157,12 @@ export const HOME_MENU_COOKIES = {
       title: 'Ediciones Limitadas',
       items: [
         {
+          id: 'almendras',
+          name: 'Almendras',
+          image: '/images/cookie-box.jpg',
+          desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
+        },
+        {
           id: 'lotus',
           name: 'Lotus',
           image: '/images/cookie-classic.jpg',
@@ -172,7 +172,7 @@ export const HOME_MENU_COOKIES = {
           id: 'chocolate-dubai',
           name: 'Chocolate Dubai',
           image: '/images/hero-cookies.jpg',
-          desc: 'Galleta de chocolate, chips de chocolate, relleno de pistacho y Kadaif, y sal marina.',
+          desc: 'Galleta de chocolate, chips de chocolate, relleno de pistacho con kadaif, y sal marina.',
         },
       ],
     },
@@ -268,7 +268,7 @@ export const TAKEOUT_STORE_SECTIONS = [
         id: 'cookies-and-cream',
         name: 'Cookies & Cream',
         image: '/images/cookie-classic.jpg',
-        desc: 'Galleta de Oreo, chips de chocolate, y chips de chocolate blanco.',
+        desc: 'Galleta de vainilla y Oreo, chips de chocolate, y chips de chocolate blanco.',
       },
     ],
     rows: [],
@@ -279,12 +279,6 @@ export const TAKEOUT_STORE_SECTIONS = [
     kind: 'cookies',
     tiles: [
       {
-        id: 'almendras',
-        name: 'Almendras',
-        image: '/images/cookie-box.jpg',
-        desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
-      },
-      {
         id: 'choco-mani',
         name: 'Choco Maní',
         image: '/images/hero-cookies.jpg',
@@ -294,7 +288,7 @@ export const TAKEOUT_STORE_SECTIONS = [
         id: 'pistacho',
         name: 'Pistacho',
         image: '/images/cookie-pistachio.jpg',
-        desc: 'Galleta de pistacho, chips de chocolate blanco, rellena de crema de pistacho, y sal marina.',
+        desc: 'Galleta de vainilla, chips de chocolate blanco, pistacho, relleno de crema de pistacho, y sal marina.',
       },
       {
         id: 'choco-avellana',
@@ -311,6 +305,12 @@ export const TAKEOUT_STORE_SECTIONS = [
     kind: 'cookies',
     tiles: [
       {
+        id: 'almendras',
+        name: 'Almendras',
+        image: '/images/cookie-box.jpg',
+        desc: 'Galleta de almendras, rellena de suave frangipane, y almendras fileteadas.',
+      },
+      {
         id: 'lotus',
         name: 'Lotus',
         image: '/images/cookie-classic.jpg',
@@ -320,7 +320,7 @@ export const TAKEOUT_STORE_SECTIONS = [
         id: 'chocolate-dubai',
         name: 'Chocolate Dubai',
         image: '/images/hero-cookies.jpg',
-        desc: 'Galleta de chocolate, chips de chocolate, relleno de pistacho y Kadaif, y sal marina.',
+        desc: 'Galleta de chocolate, chips de chocolate, relleno de pistacho con kadaif, y sal marina.',
       },
     ],
     rows: [],
